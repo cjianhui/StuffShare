@@ -10,7 +10,7 @@ https://bitnami.com/tag/postgresql
 ## Getting Started
 
 1. Browse to directory: `/apache2/htdocs/`.
-2. Run 'git clone https://github.com/CS2102-T11/stuffshare.git` in the `/htdocs` directory. The `stuffshare` folder should be present in the directory.
+2. Run `git clone https://github.com/CS2102-T11/stuffshare.git` in the `/htdocs` directory. The `stuffshare` folder should be present in the directory.
 3. Launch Bitnami Stack Manager and start both Apache Web Server and Postgres.
 4. Browse to this URL: `localhost:<your-port-number>/stuffshare`. Replace `<your-port-number>` with the port number you start your Apache Web Server. You can find that out by clicking `Configure` for the Apache Web Server in your Bitnami Stack Manager.
 5. Login to your postgres server with the credentials you entered during installation. Click `SQL` on the top left corner. Copy all the contents from `schema.sql` and paste it into the window and click `Execute`. This will create the neccessary tables for this website.
