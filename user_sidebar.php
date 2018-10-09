@@ -17,7 +17,7 @@
 <nav class="navdashboard">
 <ul>
 <li>
-<a href="/user_dashboard.php">
+<a href="./user_dashboard.php">
 <i class="lni-dashboard"></i>
 <span>Dashboard</span>
 </a>
