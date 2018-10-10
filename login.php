@@ -22,40 +22,27 @@
 <link rel="stylesheet" id="colors" href="./assets/css/green.css" type="text/css"></head>
 <body data-gr-c-s-loaded="true">
 
+<?php
 session_start();
 include "connect.php";
-
+echo "here";
 if (isset($_SESSION['key'])) {
     header("Location: ./user_home.php");
-} elseif (isset($_POST['signup'])) {
+} elseif (isset($_POST['login'])) {
     $username             = pg_escape_string($connection, $_POST['username']);
-    $fullname             = pg_escape_string($connection, $_POST['fullname']);
-    $email                = pg_escape_string($connection, $_POST['email']);
-    $phonenumber          = (int) pg_escape_string($connection, $_POST['phonenumber']);
     $password             = pg_escape_string($connection, $_POST['password']);
 
-    $username_query       = "SELECT username FROM account where username='" . $username . "'";
-    $email_query          = "SELECT email FROM account where email='" . $email . "'";
-    $username_result      = pg_query($connection, $username_query);
-    $username_num_results = pg_num_rows($username_result);
-    $email_result         = pg_query($connection, $email_query);
-    $email_num_results    = pg_num_rows($email_result);
-    if ($username_num_results >= 1) {
-        $username_message = "The username (" . $username . ") has already been taken";
-    } elseif ($email_num_results >= 1) {
-        $email_message = "The email (" . $email . ") has already been taken";
-    } else {
-        $signup_query  = "insert into account( username, password, role, full_name, phone, email) values('" . $username . "','" . hash(sha256, $password) . "','user','" . $fullname . "','" . $phonenumber . "', '" . $email . "')";
-        $signup_result = pg_query($connection, $signup_query);
+    $query = "SELECT username FROM account where username='".$username."' and password='".hash(sha256, $password)."'";
+    echo $query;
+    $result = pg_query($connection,$query);
+    $num_results = pg_num_rows($result);
 
-        if ($signup_result) {
-            // Sign up successful
-            $success_message = "<div class='alert alert-success text-center'><strong>Account Created!</strong>< Redirecting../div>";
-            header("refresh:2; url=./user_home.php");
-            $_SESSION['key'] = $username;
-        } else {
-            $message = "Something seems to be wrong, please try later";
-        }
+    if ($num_results < 1) {
+        $message = "<div class='alert alert-danger text-center'><strong>Wrong email or password!</strong> </div>";
+    } else { // login success
+        $message = "<div class='alert alert-success text-center'><strong>Login Success!</strong> Redirecting.. </div>";
+        header("refresh:2; url=./user_home.php");
+        $_SESSION['key'] = $username;
     }
 }
 
@@ -79,6 +66,7 @@ include "header.php";
 </div>
 </div>
 
+<?php echo $message; ?>
 
 <section class="login section-padding">
 <div class="container">
@@ -88,27 +76,34 @@ include "header.php";
 <h3>
 Login Now
 </h3>
-<form role="form" class="login-form">
-<div class="form-group">
-<div class="input-icon">
-<i class="lni-user"></i>
-<input type="text" id="sender-email" class="form-control" name="email" placeholder="Username">
-</div>
-</div>
-<div class="form-group">
-<div class="input-icon">
-<i class="lni-lock"></i>
-<input type="password" class="form-control" placeholder="Password">
-</div>
-</div>
-<div class="form-group mb-3">
-<div class="checkbox">
-<input type="checkbox" name="rememberme" value="rememberme">
-<label>Keep me logged in</label>
-<div class="text-center">
-<button class="btn btn-common log-btn">Submit</button>
-</div>
-</form>
+<form class="login-form" data-toggle="validator" role="form" action="login.php" method="post">
+              <div class="form-group has-feedback">
+                <div class="form-group">
+                  <div class="input-icon">
+                    <i class="lni-user">
+                    </i>
+                    <input type="text" id="username" name="username" class="form-control" placeholder="Username" required>
+                  </div>
+                  <div class="help-block with-errors" >
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="input-icon">
+                    <i class="lni-lock">
+                    </i>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                  </div>
+                  <div class="help-block with-errors">
+                  </div>
+                </div>
+
+                <div class="text-center">
+                  <button class="btn btn-common log-btn" name="login" type="submit">Submit
+                  </button>
+                </div>
+              </div>
+            </form>
 </div>
 </div>
 </div>

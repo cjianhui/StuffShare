@@ -43,7 +43,7 @@ if (isset($_SESSION['key'])) {
 
         if ($signup_result) {
             // Sign up successful
-            $success_message = "<div class='alert alert-success text-center'><strong>Account Created!</strong>< Redirecting../div>";
+            $success_message = "<div class='alert alert-success text-center'><strong>Account Created!</strong> Redirecting.. </div>";
             header("refresh:2; url=./user_home.php");
             $_SESSION['key'] = $username;
         } else {

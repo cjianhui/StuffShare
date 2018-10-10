@@ -23,6 +23,10 @@
 
 <?php
  session_start();
+ include "connect.php";
+ if (!isset($_SESSION['key'])) {
+     header("Location: ./login.php");
+ }
  include "header.php";
 ?>
 
