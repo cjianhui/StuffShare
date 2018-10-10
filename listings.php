@@ -109,43 +109,71 @@ echo "here";
 <li>
 <a href="category.html#">
 <i class="lni-dinner"></i>
-Hotel &amp; Travels <span class="category-counter">(5)</span>
+Electronics <span class="category-counter">(<?php 
+	$query = "SELECT * FROM item WHERE type='Electronics'";
+	$result = pg_query($connection,$query);
+	echo pg_num_rows($result);
+?>)</span>
 </a>
 </li>
 <li>
 <a href="category.html#">
 <i class="lni-control-panel"></i>
-Services <span class="category-counter">(8)</span>
+Tools <span class="category-counter">(<?php 
+	$query = "SELECT * FROM item WHERE type='Tools'";
+	$result = pg_query($connection,$query);
+	echo pg_num_rows($result);
+?>)</span>
 </a>
 </li>
 <li>
 <a href="category.html#">
 <i class="lni-github"></i>
-Pets <span class="category-counter">(2)</span>
+Appliances <span class="category-counter">(<?php 
+	$query = "SELECT * FROM item WHERE type='Appliances'";
+	$result = pg_query($connection,$query);
+	echo pg_num_rows($result);
+?>)</span>
 </a>
 </li>
 <li>
 <a href="category.html#">
 <i class="lni-coffee-cup"></i>
-Restaurants <span class="category-counter">(3)</span>
+Furniture <span class="category-counter">(<?php 
+	$query = "SELECT * FROM item WHERE type='Furniture'";
+	$result = pg_query($connection,$query);
+	echo pg_num_rows($result);
+?>)</span>
 </a>
 </li>
 <li>
 <a href="category.html#">
 <i class="lni-home"></i>
-Real Estate <span class="category-counter">(4)</span>
+Books <span class="category-counter">(<?php 
+	$query = "SELECT * FROM item WHERE type='Books'";
+	$result = pg_query($connection,$query);
+	echo pg_num_rows($result);
+?>)</span>
 </a>
 </li>
 <li>
 <a href="category.html#">
 <i class="lni-pencil"></i>
-Jobs <span class="category-counter">(5)</span>
+Music <span class="category-counter">(<?php 
+	$query = "SELECT * FROM item WHERE type='Music'";
+	$result = pg_query($connection,$query);
+	echo pg_num_rows($result);
+?>)</span>
 </a>
 </li>
 <li>
 <a href="category.html#">
 <i class="lni-display"></i>
-Electronics <span class="category-counter">(9)</span>
+Sports <span class="category-counter">(<?php 
+	$query = "SELECT * FROM item WHERE type='Sports'";
+	$result = pg_query($connection,$query);
+	echo pg_num_rows($result);
+?>)</span>
 </a>
 </li>
 </ul>
@@ -195,8 +223,15 @@ Electronics <span class="category-counter">(9)</span>
 <div class="row">
 
 <?php 
+	// TODO: code for pagination is incomplete
+	$page_size = 6;
+	$page_no = 1;
+	$query = "SELECT * FROM item ORDER BY time_created DESC";
+	$query = "SELECT * FROM item LIMIT 6 OFFSET $page_size*($page_no-1)";
+	$result = pg_query($connection,$query);
 	for ($i=0; $i<6; $i++) {
-		$row = pg_fetch_row($result);  ?>
+		$row = pg_fetch_row($result);
+?>
 
 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 <div class="featured-box">
