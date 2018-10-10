@@ -22,7 +22,12 @@
 <body data-gr-c-s-loaded="true">
 
 <?php
- include "header.php"
+ session_start();
+ include "connect.php";
+ if (!isset($_SESSION['key'])) {
+     header("Location: ./login.php");
+ }
+ include "header.php";
 ?>
 
 

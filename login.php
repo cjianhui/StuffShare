@@ -23,7 +23,30 @@
 <body data-gr-c-s-loaded="true">
 
 <?php
- include "header.php";
+session_start();
+include "connect.php";
+echo "here";
+if (isset($_SESSION['key'])) {
+    header("Location: ./user_home.php");
+} elseif (isset($_POST['login'])) {
+    $username             = pg_escape_string($connection, $_POST['username']);
+    $password             = pg_escape_string($connection, $_POST['password']);
+
+    $query = "SELECT username FROM account where username='".$username."' and password='".hash(sha256, $password)."'";
+    echo $query;
+    $result = pg_query($connection,$query);
+    $num_results = pg_num_rows($result);
+
+    if ($num_results < 1) {
+        $message = "<div class='alert alert-danger text-center'><strong>Wrong email or password!</strong> </div>";
+    } else { // login success
+        $message = "<div class='alert alert-success text-center'><strong>Login Success!</strong> Redirecting.. </div>";
+        header("refresh:2; url=./user_home.php");
+        $_SESSION['key'] = $username;
+    }
+}
+
+include "header.php";
 ?>
 
 
@@ -43,6 +66,7 @@
 </div>
 </div>
 
+<?php echo $message; ?>
 
 <section class="login section-padding">
 <div class="container">
@@ -52,27 +76,34 @@
 <h3>
 Login Now
 </h3>
-<form role="form" class="login-form">
-<div class="form-group">
-<div class="input-icon">
-<i class="lni-user"></i>
-<input type="text" id="sender-email" class="form-control" name="email" placeholder="Username">
-</div>
-</div>
-<div class="form-group">
-<div class="input-icon">
-<i class="lni-lock"></i>
-<input type="password" class="form-control" placeholder="Password">
-</div>
-</div>
-<div class="form-group mb-3">
-<div class="checkbox">
-<input type="checkbox" name="rememberme" value="rememberme">
-<label>Keep me logged in</label>
-<div class="text-center">
-<button class="btn btn-common log-btn">Submit</button>
-</div>
-</form>
+<form class="login-form" data-toggle="validator" role="form" action="login.php" method="post">
+              <div class="form-group has-feedback">
+                <div class="form-group">
+                  <div class="input-icon">
+                    <i class="lni-user">
+                    </i>
+                    <input type="text" id="username" name="username" class="form-control" placeholder="Username" required>
+                  </div>
+                  <div class="help-block with-errors" >
+                  </div>
+                </div>
+
+                <div class="form-group">
+                  <div class="input-icon">
+                    <i class="lni-lock">
+                    </i>
+                    <input type="password" class="form-control" id="password" name="password" placeholder="Password" required>
+                  </div>
+                  <div class="help-block with-errors">
+                  </div>
+                </div>
+
+                <div class="text-center">
+                  <button class="btn btn-common log-btn" name="login" type="submit">Submit
+                  </button>
+                </div>
+              </div>
+            </form>
 </div>
 </div>
 </div>

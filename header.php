@@ -13,16 +13,16 @@
 
 <div class="navbar-header"><div class="slicknav_menu"><liner aria-haspopup="true" tabindex="0" class="slicknav_btn slicknav_collapsed" style=""><span class="slicknav_menutxt"></span><span class="slicknav_icon slicknav_no-text"><span class="slicknav_icon-bar"></span><span class="slicknav_icon-bar"></span><span class="slicknav_icon-bar"></span></span></liner><ul class="slicknav_nav slicknav_hidden" style="display: none;" aria-hidden="true" role="menu">
 <li>
-<a class = "<?php echo ($current_page == "/index.php" ? "active" : "")?> " href="./index.php" role="menuitem" tabindex="-1">Home</a>
+<a class = "<?php echo ($current_page == "/stuffshare/index.php" ? "active" : "")?> " href="./index.php" role="menuitem" tabindex="-1">Home</a>
 </li>
 <li>
-<a class = "<?php echo ($current_page == "/listings.php" ? "active" : "")?> " href="./listings.php" role="menuitem" tabindex="-1">Listings</a>
+<a class = "<?php echo ($current_page == "/stuffshare/listings.php" ? "active" : "")?> " href="./listings.php" role="menuitem" tabindex="-1">Listings</a>
 </li>
  <li>
-  <a class = "<?php echo ($current_page == "/about.html" ? "active" : "")?> " href="./about.php" role="menuitem" tabindex="-1">About Us</a>
+  <a class = "<?php echo ($current_page == "/stuffshare/about.php" ? "active" : "")?> " href="./about.php" role="menuitem" tabindex="-1">About Us</a>
  </li>
 <li>
-<a class = "<?php echo ($current_page == "/contact.html" ? "active" : "")?> " href="./contact.html" role="menuitem" tabindex="-1">Contact Us</a>
+<a class = "<?php echo ($current_page == "/stuffshare/contact.html" ? "active" : "")?> " href="./contact.html" role="menuitem" tabindex="-1">Contact Us</a>
 </li>
 <li class="slicknav_collapsed slicknav_parent"><liner role="menuitem" aria-haspopup="true" tabindex="-1" class="slicknav_item slicknav_row" style="">
 <a tabindex="-1">My Account</a>
@@ -46,22 +46,22 @@
 <div class="collapse navbar-collapse" id="main-navbar">
 <ul class="navbar-nav mr-auto">
 
-<li class="nav-item <?php echo ($current_page == "/index.php" ? "active" : "");?>">
+<li class="nav-item <?php echo ($current_page == "/stuffshare/index.php" ? "active" : "");?>">
 <a class="nav-link" href="./index.php">
 Home
 </a>
 </li>
-<li class="nav-item <?php echo ($current_page == "/listings.php" ? "active" : "");?>">
+<li class="nav-item <?php echo ($current_page == "/stuffshare/listings.php" ? "active" : "");?>">
 <a class="nav-link" href="./listings.php">
 Listings
 </a>
 </li>
-<li class="nav-item <?php echo ($current_page == "/about.html" ? "active" : "");?>">
+<li class="nav-item <?php echo ($current_page == "/stuffshare/about.php" ? "active" : "");?>">
   <a class="nav-link" href="./about.php">
    About
   </a>
 </li>
-<li class="nav-item <?php echo ($current_page == "/contact.html" ? "active" : "");?>">
+<li class="nav-item <?php echo ($current_page == "/stuffshare/contact.html" ? "active" : "");?>">
 <a class="nav-link" href="./contact.html">
 Contact
 </a>
