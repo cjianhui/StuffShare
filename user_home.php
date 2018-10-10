@@ -62,15 +62,21 @@
 <div class="dashboard-box">
 <h2 class="dashbord-title">User Details</h2>
 </div>
+<?php 
+    $temp = $_SESSION['key'];
+    $query = "SELECT * FROM account WHERE username='$temp'";
+    $result = pg_query($connection,$query);
+    $row = pg_fetch_row($result); 
+?>
 <form class="dashboard-wrapper">
 <div class="form-group mb-3">
-<label class="control-label">Name</label>
+<label class="control-label">Name: <?php echo $row[3]; ?></label>
 </div>
 <div class="form-group mb-3">
-<label class="control-label">Email</label>
+<label class="control-label">Email: <?php echo $row[4]; ?></label>
 </div>
 <div class="form-group mb-3">
-<label class="control-label">Phone</label>
+<label class="control-label">Phone: <?php echo $row[5]; ?></label>
 </div>
 </div>
 </div>
