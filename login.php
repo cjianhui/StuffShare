@@ -22,8 +22,44 @@
 <link rel="stylesheet" id="colors" href="./assets/css/green.css" type="text/css"></head>
 <body data-gr-c-s-loaded="true">
 
-<?php
- include "header.php";
+session_start();
+include "connect.php";
+
+if (isset($_SESSION['key'])) {
+    header("Location: ./user_home.php");
+} elseif (isset($_POST['signup'])) {
+    $username             = pg_escape_string($connection, $_POST['username']);
+    $fullname             = pg_escape_string($connection, $_POST['fullname']);
+    $email                = pg_escape_string($connection, $_POST['email']);
+    $phonenumber          = (int) pg_escape_string($connection, $_POST['phonenumber']);
+    $password             = pg_escape_string($connection, $_POST['password']);
+
+    $username_query       = "SELECT username FROM account where username='" . $username . "'";
+    $email_query          = "SELECT email FROM account where email='" . $email . "'";
+    $username_result      = pg_query($connection, $username_query);
+    $username_num_results = pg_num_rows($username_result);
+    $email_result         = pg_query($connection, $email_query);
+    $email_num_results    = pg_num_rows($email_result);
+    if ($username_num_results >= 1) {
+        $username_message = "The username (" . $username . ") has already been taken";
+    } elseif ($email_num_results >= 1) {
+        $email_message = "The email (" . $email . ") has already been taken";
+    } else {
+        $signup_query  = "insert into account( username, password, role, full_name, phone, email) values('" . $username . "','" . hash(sha256, $password) . "','user','" . $fullname . "','" . $phonenumber . "', '" . $email . "')";
+        $signup_result = pg_query($connection, $signup_query);
+
+        if ($signup_result) {
+            // Sign up successful
+            $success_message = "<div class='alert alert-success text-center'><strong>Account Created!</strong>< Redirecting../div>";
+            header("refresh:2; url=./user_home.php");
+            $_SESSION['key'] = $username;
+        } else {
+            $message = "Something seems to be wrong, please try later";
+        }
+    }
+}
+
+include "header.php";
 ?>
 
 

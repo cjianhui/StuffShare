@@ -22,6 +22,7 @@
 <link rel="stylesheet" id="colors" href="./assets/css/green.css" type="text/css"></head>
 
 <?php
+ session_start();
  include "header.php";
 ?>
 
