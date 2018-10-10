@@ -32,13 +32,9 @@
     $item_name = pg_escape_string($connection, $_POST['item_name']);
     $category = pg_escape_string($connection, $_POST['category']);
 
-    if ($_POST['bid_start'] === date("Y-m-d")) {
-      $start_time = date("Y-m-d H:i:s");
-    } else {
-      $start_time = pg_escape_string($connection, $_POST['bid_start'])." 00:00:00";
-    }
+    $start_time = $_POST['bid_start'] === date("Y-m-d") ? date("Y-m-d H:i:s") : pg_escape_string($connection, $_POST['bid_start'])." 00:00:00";
     $end_time = pg_escape_string($connection, $_POST['bid_end'])." 23:59:59";
-
+    
     $borrow_duration = $_POST['borrow_duration'];
     $price = $_POST['price'];
     $address = pg_escape_string($connection, $_POST['address']);
@@ -48,15 +44,18 @@
     
     $img_src = '4eafffb865710396ed50dab3f1b20829.jpg'; // To do
     
-    
     $query = "INSERT INTO item(item_name, time_created, start_price, bid_start, bid_end, 
                               type, description, img_src, borrow_duration, address, username)
               VALUES('".$item_name."','".$time_created."','".$price."','".$start_time."','".$end_time."',
                     '".$category."','".$desc."','".$img_src."','".$borrow_duration."','".$address."',
                     '".$username."')";
     
-    echo($query);
-    $result = pg_query($connection,$query);
+    if ($end_time <= $start_time){
+      $date_error_msg = "<div class='alert alert-danger text-center'><strong>Start date cannot be after end date!</strong> </div>";
+    } else {
+      echo($query);
+      $result = pg_query($connection,$query);
+    }
   }
 
   include "header.php";
@@ -131,20 +130,22 @@
                   <div class="form-group mb-3">
                     <label class="control-label">Bid End</label>
                     <input class="form-control input-md" name="bid_end" required="" type="date" min=
-                    <?php
-                      echo date('Y-m-d');
-                    ?>  
+                      <?php
+                        $date = strtotime("+1 day", strtotime("now"));
+                        echo date("Y-m-d", $date);
+                      ?>  
                     >
+                    <?php echo $date_error_msg;?>
                   </div>
                   
                   <div class="form-group mb-3">
                     <label class="control-label">Borrow Duration</label>
-                    <input class="form-control input-md" name="borrow_duration" placeholder="Number Of Days" required="" type="number">
+                    <input class="form-control input-md" name="borrow_duration" placeholder="Number Of Days" required="" type="number" min="1">
                   </div>
                   
                   <div class="form-group mb-3">
                     <label class="control-label">Starting Bid</label>
-                    <input class="form-control input-md" name="price" placeholder="Starting Bid" required="" type="number">
+                    <input class="form-control input-md" name="price" placeholder="Starting Bid" required="" type="number" min="0">
                   </div>
                   
                   <div class="form-group mb-3">
