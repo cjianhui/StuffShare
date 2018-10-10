@@ -21,6 +21,8 @@
 <body data-gr-c-s-loaded="true">
 
 <?php
+session_start();
+include "connect.php";
 include './header.php';
 ?>
 
