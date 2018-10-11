@@ -194,7 +194,7 @@
 												
 												<div class="product-filter">
 													<div class="short-name">
-														<span>Showing (<?php echo (1+($page_no-1)*$page_size) ?> - <?php echo ($page_no*$page_size) ?> products of <?php 
+														<span>Showing (<?php if ($total_num_pages==0) {echo "0 - 0";} else {echo (1+($page_no-1)*$page_size)." - ".($page_no*$page_size); } ?> products of <?php 
 															$query = "SELECT * FROM item";
 															$result = pg_query($connection,$query);
 															echo pg_num_rows($result);
@@ -234,7 +234,7 @@
 																	<?php 
 																	$query = "SELECT * FROM item ORDER BY time_created DESC LIMIT 6 OFFSET $page_size*($page_no-1)";
 																	$result = pg_query($connection,$query);
-																	for ($i=0; $i<6; $i++) {
+																	for ($i=0; $i<min(6, pg_num_rows($result)); $i++) {
 																		$row = pg_fetch_row($result);
 																		?>
 																		
@@ -277,299 +277,23 @@
 																			</div>
 																		</div>
 																		<?php } ?>
-																		<!-- 
-																			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-																				<div class="featured-box">
-																					<figure>
-																						<div class="icon">
-																							<i class="lni-heart"></i>
-																						</div>
-																						<a href="category.html#"><img class="img-fluid" src="./assets/img/img2.jpg" alt=""></a>
-																					</figure>
-																					<div class="feature-content">
-																						<div class="tg-product">
-																							<a href="category.html#">Loptop &gt; Accessories</a>
-																						</div>
-																						<h4><a href="ads-details.html">Brand New Macbook Pro</a></h4>
-																						<span>Last Updated: 4 hours ago</span>
-																						<ul class="address">
-																							<li>
-																								<a href="category.html#"><i class="lni-map-marker"></i>New York</a>
-																							</li>
-																							<li>
-																								<a href="category.html#"><i class="lni-alarm-clock"></i> 7 Jan, 10:10 pm</a>
-																							</li>
-																							<li>
-																								<a href="category.html#"><i class="lni-user"></i> John Smith</a>
-																							</li>
-																							<li>
-																								<a href="category.html#"><i class="lni-tag"></i> Loptop</a>
-																							</li>
-																						</ul>
-																						<div class="btn-list">
-																							<a class="btn-price" href="category.html#">$ 25</a>
-																							<a class="btn btn-common" href="ads-details.html">
-																								<i class="lni-list"></i>
-																								View Details
-																							</a>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-																				<div class="featured-box">
-																					<figure>
-																						<div class="icon">
-																							<i class="lni-heart"></i>
-																						</div>
-																						<a href="category.html#"><img class="img-fluid" src="./assets/img/img3.jpg" alt=""></a>
-																					</figure>
-																					<div class="feature-content">
-																						<div class="tg-product">
-																							<a href="category.html#">Electronics &gt; Accessories</a>
-																						</div>
-																						<h4><a href="ads-details.html">Canon Photography Camera</a></h4>
-																						<span>Last Updated: 4 hours ago</span>
-																						<ul class="address">
-																							<li>
-																								<a href="category.html#"><i class="lni-map-marker"></i>New York</a>
-																							</li>
-																							<li>
-																								<a href="category.html#"><i class="lni-alarm-clock"></i> 7 Jan, 10:10 pm</a>
-																							</li>
-																							<li>
-																								<a href="category.html#"><i class="lni-user"></i> John Smith</a>
-																							</li>
-																							<li>
-																								<a href="category.html#"><i class="lni-tag"></i> Electronics</a>
-																							</li>
-																						</ul>
-																						<div class="btn-list">
-																							<a class="btn-price" href="category.html#">$ 25</a>
-																							<a class="btn btn-common" href="ads-details.html">
-																								<i class="lni-list"></i>
-																								View Details
-																							</a>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																			<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
-																				<div class="featured-box">
-																					<figure>
-																						<div class="icon">
-																							<i class="lni-heart"></i>
-																						</div>
-																						<a href="category.html#"><img class="img-fluid" src="./assets/img/img4.jpg" alt=""></a>
-																					</figure>
-																					<div class="feature-content">
-																						<div class="tg-product">
-																							<a href="category.html#">Photography &gt; Accessories</a>
-																						</div>
-																						<h4><a href="ads-details.html">Photography Services In USA</a></h4>
-																						<span>Last Updated: 4 hours ago</span>
-																						<ul class="address">
-																							<li>
-																								<a href="category.html#"><i class="lni-map-marker"></i>New York</a>
-																							</li>
-																							<li>
-																								<a href="category.html#"><i class="lni-alarm-clock"></i> 7 Jan, 10:10 pm</a>
-																							</li>
-																							<li>
-																								<a href="category.html#"><i class="lni-user"></i> John Smith</a>
-																							</li>
-																							<li>
-																								<a href="category.html#"><i class="lni-tag"></i>Photography</a>
-																							</li>
-																						</ul>
-																						<div class="btn-list">
-																							<a class="btn-price" href="category.html#">$ 25</a>
-																							<a class="btn btn-common" href="ads-details.html">
-																								<i class="lni-list"></i>
-																								View Details
-																							</a>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																		</div>
-																	</div>
-																	<div id="list-view" class="tab-pane fade">
-																		<div class="row">
-																			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-																				<div class="featured-box">
-																					<figure>
-																						<div class="icon">
-																							<i class="lni-heart"></i>
-																						</div>
-																						<a href="category.html#"><img class="img-fluid" src="./assets/img/img1(1).jpg" alt=""></a>
-																					</figure>
-																					<div class="feature-content">
-																						<div class="tg-product">
-																							<a href="category.html#">Mobiles &gt; Accessories</a>
-																						</div>
-																						<h4><a href="ads-details.html">Apple iPhone X</a></h4>
-																						<span>Last Updated: 4 hours ago</span>
-																						<ul class="address">
-																							<li>
-																								<a href="category.html#"><i class="lni-map-marker"></i>New York</a>
-																							</li>
-																							<li>
-																								<a href="category.html#"><i class="lni-alarm-clock"></i> 7 Jan, 10:10 pm</a>
-																							</li>
-																							<li>
-																								<a href="category.html#"><i class="lni-user"></i> John Smith</a>
-																							</li>
-																							<li>
-																								<a href="category.html#"><i class="lni-tag"></i> Mobile</a>
-																							</li>
-																						</ul>
-																						<div class="btn-list">
-																							<a class="btn-price" href="category.html#">$ 25</a>
-																							<a class="btn btn-common" href="ads-details.html">
-																								<i class="lni-list"></i>
-																								View Details
-																							</a>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-																				<div class="featured-box">
-																					<figure>
-																						<div class="icon">
-																							<i class="lni-heart"></i>
-																						</div>
-																						<a href="category.html#"><img class="img-fluid" src="./assets/img/img2.jpg" alt=""></a>
-																					</figure>
-																					<div class="feature-content">
-																						<div class="tg-product">
-																							<a href="category.html#">Laptop &gt; Accessories</a>
-																						</div>
-																						<h4><a href="ads-details.html">Brand New Macbook Pro</a></h4>
-																						<span>Last Updated: 4 hours ago</span>
-																						<ul class="address">
-																							<li>
-																								<a href="category.html#"><i class="lni-map-marker"></i>New York</a>
-																							</li>
-																							<li>
-																								<a href="category.html#"><i class="lni-alarm-clock"></i> 7 Jan, 10:10 pm</a>
-																							</li>
-																							<li>
-																								<a href="category.html#"><i class="lni-user"></i> John Smith</a>
-																							</li>
-																							<li>
-																								<a href="category.html#"><i class="lni-tag"></i> Laptop</a>
-																							</li>
-																						</ul>
-																						<div class="btn-list">
-																							<a class="btn-price" href="category.html#">$ 25</a>
-																							<a class="btn btn-common" href="ads-details.html">
-																								<i class="lni-list"></i>
-																								View Details
-																							</a>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-																				<div class="featured-box">
-																					<figure>
-																						<div class="icon">
-																							<i class="lni-heart"></i>
-																						</div>
-																						<a href="category.html#"><img class="img-fluid" src="./assets/img/img3.jpg" alt=""></a>
-																					</figure>
-																					<div class="feature-content">
-																						<div class="tg-product">
-																							<a href="category.html#">Electronics &gt; Accessories</a>
-																						</div>
-																						<h4><a href="ads-details.html">Canon Photography Camera</a></h4>
-																						<span>Last Updated: 4 hours ago</span>
-																						<ul class="address">
-																							<li>
-																								<a href="category.html#"><i class="lni-map-marker"></i>New York</a>
-																							</li>
-																							<li>
-																								<a href="category.html#"><i class="lni-alarm-clock"></i> 7 Jan, 10:10 pm</a>
-																							</li>
-																							<li>
-																								<a href="category.html#"><i class="lni-user"></i> John Smith</a>
-																							</li>
-																							<li>
-																								<a href="category.html#"><i class="lni-tag"></i> Electronics</a>
-																							</li>
-																						</ul>
-																						<div class="btn-list">
-																							<a class="btn-price" href="category.html#">$ 25</a>
-																							<a class="btn btn-common" href="ads-details.html">
-																								<i class="lni-list"></i>
-																								View Details
-																							</a>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																			<div class="col-xs-12 col-sm-12 col-md-12 col-lg-12">
-																				<div class="featured-box">
-																					<figure>
-																						<div class="icon">
-																							<i class="lni-heart"></i>
-																						</div>
-																						<a href="category.html#"><img class="img-fluid" src="./assets/img/img4.jpg" alt=""></a>
-																					</figure>
-																					<div class="feature-content">
-																						<div class="tg-product">
-																							<a href="category.html#">Photography &gt; Accessories</a>
-																						</div>
-																						<h4><a href="ads-details.html">Photography Services In USA</a></h4>
-																						<span>Last Updated: 4 hours ago</span>
-																						<ul class="address">
-																							<li>
-																								<a href="category.html#"><i class="lni-map-marker"></i>New York</a>
-																							</li>
-																							<li>
-																								<a href="category.html#"><i class="lni-alarm-clock"></i> 7 Jan, 10:10 pm</a>
-																							</li>
-																							<li>
-																								<a href="category.html#"><i class="lni-user"></i> John Smith</a>
-																							</li>
-																							<li>
-																								<a href="category.html#"><i class="lni-tag"></i>Photography</a>
-																							</li>
-																						</ul>
-																						<div class="btn-list">
-																							<a class="btn-price" href="category.html#">$ 25</a>
-																							<a class="btn btn-common" href="ads-details.html">
-																								<i class="lni-list"></i>
-																								View Details
-																							</a>
-																						</div>
-																					</div>
-																				</div>
-																			</div>
-																		</div>
-																	</div>
-																</div>
-															</div> -->
 															
 															<?php $curr_start_number = $page_no - $page_no%$num_pages_shown; ?>
-															
-															<div class="pagination-bar">
+															<div class="pagination-bar" <?php if($total_num_pages == 0) {echo 'style="display:none;"';} ?>>
 																<nav>
 																	<ul class="pagination">
 																		<li class="page-item <?php if($page_no <= 1) {echo 'disabled';} ?>"><a class="page-link" 
 																			href="<?php if ($page_no == $curr_start_number) {$curr_start_number -= $num_pages_shown; }
-																			echo '?page_no='.($page_no-1) ?>">Previous</a></li>
-																			<li class="page-item <?php if($curr_start_number+1 > $total_num_pages) {echo 'disabled';} ?>"><a class="page-link <?php if($page_no == $curr_start_number+1) {echo 'active';} ?>" 
-																				href="<?php echo '?page_no='.($curr_start_number+1) ?>"><?php echo ($curr_start_number+1) ?></a></li>
-																				<li class="page-item <?php if($curr_start_number+2 > $total_num_pages) {echo 'disabled';} ?>"><a class="page-link <?php if($page_no == $curr_start_number+2) {echo 'active';} ?>" 
-																					href="<?php echo '?page_no='.($curr_start_number+2) ?>"><?php echo ($curr_start_number+2) ?></a></li>
-																					<li class="page-item <?php if($curr_start_number+3 > $total_num_pages) {echo 'disabled';} ?>"><a class="page-link <?php if($page_no == $curr_start_number+3) {echo 'active';} ?>" 
-																						href="<?php echo '?page_no='.($curr_start_number+3) ?>"><?php echo ($curr_start_number+3) ?></a></li>
-																						<li class="page-item  <?php if($page_no >= $total_num_pages) {echo 'disabled';} ?>"><a class="page-link" 
-																							href="<?php if (page_no == $curr_start_number+3) {$curr_start_number += $num_pages_shown; }
-																							echo '?page_no='.($page_no+1) ?>">Next</a></li>
+																				echo '?page_no='.($page_no-1) ?>">Previous</a></li>
+																		<li class="page-item <?php if($curr_start_number+1 > $total_num_pages) {echo 'disabled';} ?>"><a class="page-link <?php if($page_no == $curr_start_number+1) {echo 'active';} ?>" 
+																			href="<?php echo '?page_no='.($curr_start_number+1) ?>"><?php echo ($curr_start_number+1) ?></a></li>
+																		<li class="page-item <?php if($curr_start_number+2 > $total_num_pages) {echo 'disabled';} ?>"><a class="page-link <?php if($page_no == $curr_start_number+2) {echo 'active';} ?>" 
+																			href="<?php echo '?page_no='.($curr_start_number+2) ?>"><?php echo ($curr_start_number+2) ?></a></li>
+																		<li class="page-item <?php if($curr_start_number+3 > $total_num_pages) {echo 'disabled';} ?>"><a class="page-link <?php if($page_no == $curr_start_number+3) {echo 'active';} ?>" 
+																			href="<?php echo '?page_no='.($curr_start_number+3) ?>"><?php echo ($curr_start_number+3) ?></a></li>
+																		<li class="page-item  <?php if($page_no >= $total_num_pages) {echo 'disabled';} ?>"><a class="page-link" 
+																			href="<?php if (page_no == $curr_start_number+3) {$curr_start_number += $num_pages_shown; }
+																				echo '?page_no='.($page_no+1) ?>">Next</a></li>
 																						</ul>
 																					</nav>
 																				</div>
