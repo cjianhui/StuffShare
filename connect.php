@@ -1,4 +1,5 @@
 <?php
+    date_default_timezone_set('Asia/Singapore');
 /* Database credentials. Change accordingly to your settings. */
     $DB_SERVER = 'localhost';
     $DB_PORT = '5432';

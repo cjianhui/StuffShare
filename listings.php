@@ -21,6 +21,23 @@
 <body data-gr-c-s-loaded="true">
 
 <?php
+	include "connect.php";
+	include './header.php';
+
+	$page_size = 6;
+	$num_pages_shown = 3;
+	$curr_start_number = 0;
+
+	$query = "SELECT * FROM item";
+	$result = pg_query($connection,$query);
+	$total_num_pages = ceil(pg_num_rows($result)/$page_size);
+
+	$query_params = parse_url($url, PHP_URL_QUERY);
+	if (isset($_GET['page_no'])) {
+		$page_no = $_GET['page_no'];
+	} else {
+		$page_no = 1;
+	}
 session_start();
 include "connect.php";
 include './header.php';
@@ -100,43 +117,71 @@ include './header.php';
 <li>
 <a href="category.html#">
 <i class="lni-dinner"></i>
-Hotel &amp; Travels <span class="category-counter">(5)</span>
+Electronics <span class="category-counter">(<?php
+	$query = "SELECT * FROM item WHERE type='Electronics'";
+	$result = pg_query($connection,$query);
+	echo pg_num_rows($result);
+?>)</span>
 </a>
 </li>
 <li>
 <a href="category.html#">
 <i class="lni-control-panel"></i>
-Services <span class="category-counter">(8)</span>
+Tools <span class="category-counter">(<?php
+	$query = "SELECT * FROM item WHERE type='Tools'";
+	$result = pg_query($connection,$query);
+	echo pg_num_rows($result);
+?>)</span>
 </a>
 </li>
 <li>
 <a href="category.html#">
 <i class="lni-github"></i>
-Pets <span class="category-counter">(2)</span>
+Appliances <span class="category-counter">(<?php
+	$query = "SELECT * FROM item WHERE type='Appliances'";
+	$result = pg_query($connection,$query);
+	echo pg_num_rows($result);
+?>)</span>
 </a>
 </li>
 <li>
 <a href="category.html#">
 <i class="lni-coffee-cup"></i>
-Restaurants <span class="category-counter">(3)</span>
+Furniture <span class="category-counter">(<?php
+	$query = "SELECT * FROM item WHERE type='Furniture'";
+	$result = pg_query($connection,$query);
+	echo pg_num_rows($result);
+?>)</span>
 </a>
 </li>
 <li>
 <a href="category.html#">
 <i class="lni-home"></i>
-Real Estate <span class="category-counter">(4)</span>
+Books <span class="category-counter">(<?php
+	$query = "SELECT * FROM item WHERE type='Books'";
+	$result = pg_query($connection,$query);
+	echo pg_num_rows($result);
+?>)</span>
 </a>
 </li>
 <li>
 <a href="category.html#">
 <i class="lni-pencil"></i>
-Jobs <span class="category-counter">(5)</span>
+Music <span class="category-counter">(<?php
+	$query = "SELECT * FROM item WHERE type='Music'";
+	$result = pg_query($connection,$query);
+	echo pg_num_rows($result);
+?>)</span>
 </a>
 </li>
 <li>
 <a href="category.html#">
 <i class="lni-display"></i>
-Electronics <span class="category-counter">(9)</span>
+Sports <span class="category-counter">(<?php
+	$query = "SELECT * FROM item WHERE type='Sports'";
+	$result = pg_query($connection,$query);
+	echo pg_num_rows($result);
+?>)</span>
 </a>
 </li>
 </ul>
@@ -153,14 +198,19 @@ Electronics <span class="category-counter">(9)</span>
 
 <div class="product-filter">
 <div class="short-name">
-<span>Showing (1 - 12 products of 7371 products)</span>
+<span>Showing (<?php echo (1+($page_no-1)*$page_size) ?> - <?php echo ($page_no*$page_size) ?> products of <?php
+	$query = "SELECT * FROM item";
+	$result = pg_query($connection,$query);
+	echo pg_num_rows($result);
+?> products)</span>
 </div>
 <div class="Show-item">
 <span>Show Items</span>
 <form class="woocommerce-ordering" method="post">
 <label>
+<!-- TODO: fix sort -->
 <select name="order" class="orderby">
-<option selected="selected" value="menu-order">49 items</option>
+<option selected="selected" value="menu-order">6 items</option>
 <option value="popularity">popularity</option>
 <option value="popularity">Average ration</option>
 <option value="popularity">newness</option>
@@ -184,36 +234,44 @@ Electronics <span class="category-counter">(9)</span>
 <div class="tab-content">
 <div id="grid-view" class="tab-pane fade active show">
 <div class="row">
+
+<?php
+	$query = "SELECT * FROM item ORDER BY time_created DESC LIMIT 6 OFFSET $page_size*($page_no-1)";
+	$result = pg_query($connection,$query);
+	for ($i=0; $i<6; $i++) {
+		$row = pg_fetch_row($result);
+?>
+
 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 <div class="featured-box">
 <figure>
 <div class="icon">
  <i class="lni-heart"></i>
 </div>
-<a href="category.html#"><img class="img-fluid" src="./assets/img/img1(1).jpg" alt=""></a>
+<a href="category.html#"><img class="img-fluid" src="./assets/img/items/<?php echo $row[8]; ?>" alt=""></a>
 </figure>
 <div class="feature-content">
 <div class="tg-product">
-<a href="category.html#">Mobiles &gt; Accessories</a>
+<a href="category.html#"><?php echo $row[6]; ?></a>
 </div>
-<h4><a href="ads-details.html">Apple iPhone X</a></h4>
-<span>Last Updated: 4 hours ago</span>
+<h4><a href="ads-details.html"><?php echo $row[1]; ?></a></h4>
+<span>Created: <?php echo $row[2]; ?></span>
 <ul class="address">
 <li>
-<a href="category.html#"><i class="lni-map-marker"></i>New York</a>
+<a href="category.html#"><i class="lni-map-marker"></i><?php echo $row[10]; ?></a>
 </li>
 <li>
-<a href="category.html#"><i class="lni-alarm-clock"></i> 7 Jan, 10:10 pm</a>
+<a href="category.html#"><i class="lni-alarm-clock"></i><?php echo $row[4]; ?></a>
 </li>
 <li>
-<a href="category.html#"><i class="lni-user"></i> John Smith</a>
+<a href="category.html#"><i class="lni-user"></i><?php echo $row[11]; ?></a>
 </li>
-<li>
+<!-- <li>
 <a href="category.html#"><i class="lni-tag"></i> Mobile</a>
-</li>
+</li> -->
 </ul>
 <div class="btn-list">
-<a class="btn-price" href="category.html#">$ 25</a>
+<a class="btn-price" href="category.html#">$ <?php echo $row[3]; ?></a>
 <a class="btn btn-common" href="ads-details.html">
 <i class="lni-list"></i>
 View Details
@@ -222,6 +280,8 @@ View Details
 </div>
 </div>
 </div>
+<?php } ?>
+<!--
 <div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 <div class="featured-box">
 <figure>
@@ -495,16 +555,25 @@ View Details
 </div>
 </div>
 </div>
-</div>
+</div> -->
 
+<?php $curr_start_number = $page_no - $page_no%$num_pages_shown; ?>
 
 <div class="pagination-bar">
 <nav>
 <ul class="pagination">
-<li class="page-item"><a class="page-link active" href="category.html#">1</a></li>
-<li class="page-item"><a class="page-link" href="category.html#">2</a></li>
-<li class="page-item"><a class="page-link" href="category.html#">3</a></li>
-<li class="page-item"><a class="page-link" href="category.html#">Next</a></li>
+<li class="page-item <?php if($page_no <= 1) {echo 'disabled';} ?>"><a class="page-link"
+	href="<?php if ($page_no == $curr_start_number) {$curr_start_number -= $num_pages_shown; }
+		echo '?page_no='.($page_no-1) ?>">Previous</a></li>
+<li class="page-item <?php if($curr_start_number+1 > $total_num_pages) {echo 'disabled';} ?>"><a class="page-link <?php if($page_no == $curr_start_number+1) {echo 'active';} ?>"
+	href="<?php echo '?page_no='.($curr_start_number+1) ?>"><?php echo ($curr_start_number+1) ?></a></li>
+<li class="page-item <?php if($curr_start_number+2 > $total_num_pages) {echo 'disabled';} ?>"><a class="page-link <?php if($page_no == $curr_start_number+2) {echo 'active';} ?>"
+	href="<?php echo '?page_no='.($curr_start_number+2) ?>"><?php echo ($curr_start_number+2) ?></a></li>
+<li class="page-item <?php if($curr_start_number+3 > $total_num_pages) {echo 'disabled';} ?>"><a class="page-link <?php if($page_no == $curr_start_number+3) {echo 'active';} ?>"
+	href="<?php echo '?page_no='.($curr_start_number+3) ?>"><?php echo ($curr_start_number+3) ?></a></li>
+<li class="page-item  <?php if($page_no >= $total_num_pages) {echo 'disabled';} ?>"><a class="page-link"
+	href="<?php if (page_no == $curr_start_number+3) {$curr_start_number += $num_pages_shown; }
+		echo '?page_no='.($page_no+1) ?>">Next</a></li>
 </ul>
 </nav>
 </div>
@@ -514,6 +583,8 @@ View Details
  </div>
 </div>
 
+</br>
+</br>
 
 <?php
  include 'footer.php';
