@@ -113,7 +113,7 @@
 							<h4 class="widget-title">All Categories</h4>
 							<ul class="categories-list">
 								<li>
-									<a href="category.html#">
+									<a href="./listings.php?category=Electronics">
 										<i class="lni-dinner"></i>
 										Electronics <span class="category-counter">(<?php 
 											$query = "SELECT * FROM item WHERE type='Electronics'";
@@ -123,7 +123,7 @@
 									</a>
 								</li>
 								<li>
-									<a href="category.html#">
+									<a href="./listings.php?category=Tools">
 										<i class="lni-control-panel"></i>
 										Tools <span class="category-counter">(<?php 
 											$query = "SELECT * FROM item WHERE type='Tools'";
@@ -133,7 +133,7 @@
 									</a>
 								</li>
 								<li>
-									<a href="category.html#">
+									<a href="./listings.php?category=Appliances">
 										<i class="lni-github"></i>
 										Appliances <span class="category-counter">(<?php 
 											$query = "SELECT * FROM item WHERE type='Appliances'";
@@ -143,7 +143,7 @@
 									</a>
 								</li>
 								<li>
-									<a href="category.html#">
+									<a href="./listings.php?category=Furniture">
 										<i class="lni-coffee-cup"></i>
 										Furniture <span class="category-counter">(<?php 
 											$query = "SELECT * FROM item WHERE type='Furniture'";
@@ -153,7 +153,7 @@
 									</a>
 								</li>
 								<li>
-									<a href="category.html#">
+									<a href="./listings.php?category=Books">
 										<i class="lni-home"></i>
 										Books <span class="category-counter">(<?php 
 											$query = "SELECT * FROM item WHERE type='Books'";
@@ -163,7 +163,7 @@
 									</a>
 								</li>
 								<li>
-									<a href="category.html#">
+									<a href="./listings.php?category=Music">
 										<i class="lni-pencil"></i>
 										Music <span class="category-counter">(<?php 
 											$query = "SELECT * FROM item WHERE type='Music'";
@@ -173,7 +173,7 @@
 									</a>
 								</li>
 								<li>
-									<a href="category.html#">
+									<a href="./listings.php?category=Sports">
 										<i class="lni-display"></i>
 										Sports <span class="category-counter">(<?php 
 											$query = "SELECT * FROM item WHERE type='Sports'";
@@ -197,7 +197,11 @@
 				<div class="product-filter">
 					<div class="short-name">
 						<span>Showing (<?php if ($total_num_pages==0) {echo "0 - 0";} else {echo (1+($page_no-1)*$page_size)." - ".($page_no*$page_size); } ?> products of <?php 
-							$query = "SELECT * FROM item";
+							if (!isset($_GET['category'])){
+								$query = "SELECT * FROM item";
+							} else {
+								$query = "SELECT * FROM item WHERE type='".$_GET['category']."'";
+							}
 							$result = pg_query($connection,$query);
 							echo pg_num_rows($result);
 							?> products)</span>
@@ -233,7 +237,11 @@
 								<div class="row">
 									
 									<?php 
-									$query = "SELECT * FROM item ORDER BY time_created DESC LIMIT 6 OFFSET $page_size*($page_no-1)";
+									if (!isset($_GET["category"])){
+										$query = "SELECT * FROM item ORDER BY time_created DESC LIMIT 6 OFFSET $page_size*($page_no-1)";
+									} else {
+										$query = "SELECT * FROM item WHERE type='".$_GET['category']."' ORDER BY time_created DESC LIMIT 6 OFFSET $page_size*($page_no-1)";
+									}
 									$result = pg_query($connection,$query);
 									for ($i=0; $i<min(6, pg_num_rows($result)); $i++) {
 										$row = pg_fetch_row($result);
