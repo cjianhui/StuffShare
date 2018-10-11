@@ -65,7 +65,7 @@
                     $query = "SELECT * FROM bid where username='".$uname."'";
                     $result = pg_query($connection, $query);
                   ?>
-                  <h2 class="dashbord-title">My Bids (<?php echo pg_num_rows($result)?>)</h2>
+                  <h2 class="dashbord-title">My Bids (<?= pg_num_rows($result)?>)</h2>
                 </div>
                 <div class="dashboard-wrapper">
                   <nav class="nav-table">
@@ -89,20 +89,20 @@
                         $query = "SELECT * FROM item i, bid b WHERE b.username='".$uname."' AND b.item_id=i.item_id";
                         $result = pg_query($connection,$query);
                         for ($i=0; $i<pg_num_rows($result); $i++) {
-                          $row = pg_fetch_row($result);
+                          $row = pg_fetch_assoc($result);
                           ?>
-                          <td class="photo"><img class="img-fluid" src="./assets/img/items/<?php echo $row[8];?>" alt=""></td>
+                          <td class="photo"><img class="img-fluid" src="./assets/img/items/<?= $row['img_src'];?>" alt=""></td>
                           <td data-title="Title">
-                            <h3><?php echo $row[1];?></h3>
+                            <h3><?= $row['item_name'];?></h3>
                             <!-- <span>Ad ID: ng3D5hAMHPajQrM</span> -->
                           </td>
-                          <td data-title="Category"><span class="adcategories"><?php echo $row[6];?></span></td>
+                          <td data-title="Category"><span class="adcategories"><?= $row['type'];?></span></td>
                           <td data-title="Price">
-                            <h3><?php echo $row[14];?>$</h3>
+                            <h3><?= $row['bid_amount'];?>$</h3>
                           </td>
                           <td data-title="Action">
                             <div class="btns-actions">
-                              <a class="btn-action btn-view" title="View Listing" href="./listing_detail.php?id=<?php echo $row[0]; ?>"><i class="lni-eye"></i></a>
+                              <a class="btn-action btn-view" title="View Listing" href="./listing_detail.php?id=<?= $row['item_id']; ?>"><i class="lni-eye"></i></a>
                               <a class="btn-action btn-edit" title="Edit Bid" href="/user_bids.html#"><i class="lni-pencil"></i></a>
                               <a class="btn-action btn-delete" title="Delete Bid" href="/user_bids.html#"><i class="lni-trash"></i></a>
                             </div>
