@@ -30,17 +30,10 @@ include "connect.php";
   if (isset($_SESSION['key'])) {
     header("Location: ./user_home.php");
   } elseif (isset($_POST['login'])) {
-    $username = pg_escape_string($connection, $_POST['username']);
-    $password = pg_escape_string($connection, $_POST['password']);
-
-    $query = "SELECT username FROM account where username='" . $username . "' and password='" . hash(sha256, $password) . "'";
-    $result = pg_query($connection, $query);
-  } elseif (isset($_POST['login'])) {
     $username             = pg_escape_string($connection, $_POST['username']);
     $password             = pg_escape_string($connection, $_POST['password']);
 
     $query = "SELECT username FROM account where username='".$username."' and password='".hash(sha256, $password)."'";
-    echo $query;
     $result = pg_query($connection,$query);
     $num_results = pg_num_rows($result);
 

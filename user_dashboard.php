@@ -71,11 +71,12 @@
 <div class="icon"><i class="lni-write"></i></div>
 <div class="contentbox">
 <h2><a href="./dashboard.html#">Total Items Posted</a></h2>
-<h3><?php
+<h3>
+<?php
     $query = "SELECT * FROM item WHERE username='$uname'";
 	$result = pg_query($connection,$query);
     echo pg_num_rows($result);
-?> Items Posted</h3>
+?>Items Posted</h3>
 </div>
 </div>
 </div>
@@ -142,7 +143,6 @@
 <a class="btn-action btn-delete" href="./dashboard.html#"><i class="lni-trash"></i></a>
 </div>
 </td>
-<?php } ?>
 
 <!-- </tr>
 <tr data-category="active">
