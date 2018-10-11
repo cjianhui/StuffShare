@@ -53,8 +53,8 @@
       <div class="container">
         <div class="row">
           
-          <?php include "user_sidebar.php" 
-          
+          <?php 
+            include "user_sidebar.php" 
           ?>
           
           <div class="col-sm-12 col-md-8 col-lg-9">
@@ -103,12 +103,12 @@
                     <table class="table dashboardtable tablemyads">
                       <thead>
                         <tr>
-                          <th>
+                          <!-- <th>
                             <span class="checkbox">
                               <input id="checkedall" type="checkbox" name="myads" value="checkall">
                               <label for="checkedall"></label>
                             </span>
-                          </th>
+                          </th> -->
                           <th>Photo</th>
                           <th>Title</th>
                           <th>Category</th>
@@ -121,25 +121,25 @@
                       $query = "SELECT * FROM item WHERE username='$uname' ORDER BY time_created DESC LIMIT 5";
                       $result = pg_query($connection,$query);
                       for ($i=0; $i<min(pg_num_rows($result), 5); $i++) {
-                        $row = pg_fetch_row($result); 
+                        $row = pg_fetch_assoc($result); 
                         ?>
                         <tbody>
                           <tr data-category="active">
-                            <td>
+                            <!-- <td>
                               <span class="checkbox">
                                 <input id="adone" type="checkbox" name="myads" value="myadone">
                                 <label for="adone"></label>
                               </span>
-                            </td>
-                            <td class="photo"><img class="img-fluid" src="./assets/img/items/<?php echo $row[8] ?>" alt=""></td>
+                            </td> -->
+                            <td class="photo"><img class="img-fluid" src="./assets/img/items/<?= $row['img_src'] ?>" alt=""></td>
                             <td data-title="Title">
-                              <h3><?php echo $row[1] ?></h3>
-                              <span>Ad ID: ng3D5hAMHPajQrM</span>
+                              <h3><?= $row['item_name'] ?></h3>
+                              <!-- <span>Ad ID: ng3D5hAMHPajQrM</span> -->
                             </td>
-                            <td data-title="Category"><span class="adcategories"><?php echo $row[6] ?></span></td>
+                            <td data-title="Category"><span class="adcategories"><?= $row['type'] ?></span></td>
                             <td data-title="Ad Status"><span class="adstatus adstatusactive">active</span></td>
                             <td data-title="Price">
-                              <h3><?php echo $row[3] ?>$</h3>
+                              <h3><?= $row['start_price'] ?>$</h3>
                             </td>
                             <td data-title="Action">
                               <div class="btns-actions">
@@ -161,7 +161,7 @@
             
             
             <?php
-            include "footer.php";
+              include "footer.php";
             ?>
             
             
