@@ -43,7 +43,7 @@
     $time_created = date("Y-m-d H:i:s");
     
     $target_dir = './assets/img/items/';
-    $image_file_type = strtolower(explode('.', $_FILES["file"]["name"])[1]);
+    $image_file_type = strtolower(pathinfo($_FILES["file"]["name"], PATHINFO_EXTENSION));
     $img_name = time() . '.' . $image_file_type;
     $target_dest = $target_dir . $img_name;
     
