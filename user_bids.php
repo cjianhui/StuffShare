@@ -94,7 +94,7 @@
                           <td class="photo"><img class="img-fluid" src="./assets/img/items/<?php echo $row[8];?>" alt=""></td>
                           <td data-title="Title">
                             <h3><?php echo $row[1];?></h3>
-                            <span>Ad ID: ng3D5hAMHPajQrM</span>
+                            <!-- <span>Ad ID: ng3D5hAMHPajQrM</span> -->
                           </td>
                           <td data-title="Category"><span class="adcategories"><?php echo $row[6];?></span></td>
                           <td data-title="Price">
