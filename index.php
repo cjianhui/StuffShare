@@ -183,234 +183,57 @@
   <div class="container">
     <h1 class="section-title">Latest Items</h1>
     <div class="row">
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-4">
-        <div class="featured-box">
-          <figure>
-            <div class="icon">
-              <i class="lni-heart"></i>
-            </div>
-            <a href="#"><img class="img-fluid" src="./assets/img/img-12.jpg" alt=""></a>
-          </figure>
-          <div class="feature-content">
-            <div class="tg-product">
-              <a href="#">Furnitures &gt; Office</a>
-            </div>
-            <h4><a href="ads-details.html">Office Furnitures</a></h4>
-            <span>Last Updated: 5 hours ago</span>
-            <ul class="address">
-              <li>
-                <a href="#"><i class="lni-map-marker"></i> New York</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-alarm-clock"></i> 17 Mar, 8:30 pm</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-user"></i> David Givens</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-package"></i> Used</a>
-              </li>
-            </ul>
-            <div class="btn-list">
-              <a class="btn-price" href="#">$ 1280</a>
-              <a class="btn btn-common" href="ads-details.html">
-                <i class="lni-list"></i>
-                View Details
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-4">
-        <div class="featured-box">
-          <figure>
-            <div class="icon">
-              <i class="lni-heart"></i>
-            </div>
-            <a href="#"><img class="img-fluid" src="./assets/img/img2.jpg" alt=""></a>
-          </figure>
-          <div class="feature-content">
-            <div class="tg-product">
-              <a href="#">Loptop &gt; Accessories</a>
-            </div>
-            <h4><a href="ads-details.html">Fresh Macbook Pro 2017</a></h4>
-            <span>Last Updated: 8 hours ago</span>
-            <ul class="address">
-              <li>
-                <a href="#"><i class="lni-map-marker"></i> New York</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-alarm-clock"></i> 7 Mar, 10:10 pm</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-user"></i> John Smith</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-package"></i> Used</a>
-              </li>
-            </ul>
-            <div class="btn-list">
-              <a class="btn-price" href="#">$ 1100</a>
-              <a class="btn btn-common" href="ads-details.html">
-                <i class="lni-list"></i>
-                View Details
-              </a>
+      <?php 
+        $query = "SELECT * FROM item ORDER BY time_created DESC LIMIT 6";
+        $result = pg_query($connection, $query);
+        for ($i=0; $i<min(6, pg_num_rows($result)); $i++){
+          $row = pg_fetch_row($result);
+          ?>
+          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-4">
+            <div class="featured-box">
+              <figure>
+                <div class="icon">
+                  <i class="lni-heart"></i>
+                </div>
+                <a href="./listing_detail.php?id=<?php echo $row[0]; ?>">
+                  <img class="img-fluid" src="./assets/img/items/<?php echo $row[8]; ?>" alt="">
+                </a>
+              </figure>
+              <div class="feature-content">
+                <div class="tg-product">
+                  <a href="./listings.php?category=<?php echo $row[6]; ?>">
+                    <?php echo $row[6]; ?>
+                  </a>
+                </div>
+                <h4><a href="./listing_detail.php?id=<?php echo $row[0]; ?>"><?php echo $row[1]; ?></a></h4>
+                <!-- <span>Last Updated: 5 hours ago</span> -->
+                <ul class="address">
+                  <li>
+                    <a><i class="lni-map-marker"></i><?php echo $row[10]; ?></a>
+                  </li>
+                  <li>
+                    <a><i class="lni-alarm-clock"></i><?php echo $row[9]; ?> days</a>
+                  </li>
+                  <li>
+                    <a><i class="lni-user"></i><?php echo $row[11]; ?></a>
+                  </li>
+                </ul>
+                <div class="btn-list">
+                  <?php
+                    $bid_query = "SELECT MAX(b.bid_amount) FROM bid b WHERE b.item_id=$row[0]";
+                    $bid_result = pg_query($connection, $bid_query);
+                    $top_bid = pg_fetch_row($bid_result);
+                  ?>
+                  <a class="btn-price">Highest Bid: $<b> <?php echo($top_bid[0] === NULL ? $row[3] : $top_bid[0]); ?> </b></a>
+                  <a class="btn btn-common" href="./listing_detail.php?id=<?php echo $row[0]; ?>">
+                    <i class="lni-list"></i>
+                    View Details
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-4">
-        <div class="featured-box">
-          <figure>
-            <div class="icon">
-              <i class="lni-heart"></i>
-            </div>
-            <a href="#"><img class="img-fluid" src="./assets/img/img-11.jpg" alt=""></a>
-          </figure>
-          <div class="feature-content">
-            <div class="tg-product">
-              <a href="#">Electronics &gt; Naturial</a>
-            </div>
-            <h4><a href="ads-details.html">Canon Photography Camera</a></h4>
-            <span>Last Updated: 4 hours ago</span>
-            <ul class="address">
-              <li>
-                <a href="#"><i class="lni-map-marker"></i> Delaware</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-alarm-clock"></i> 7 Feb, 6:10 pm</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-user"></i> Justyna M.</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-package"></i> Used</a>
-              </li>
-            </ul>
-            <div class="btn-list">
-              <a class="btn-price" href="#">$ 205</a>
-              <a class="btn btn-common" href="ads-details.html">
-                <i class="lni-list"></i>
-                View Details
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-4">
-        <div class="featured-box">
-          <figure>
-            <div class="icon">
-              <i class="lni-heart"></i>
-            </div>
-            <a href="#"><img class="img-fluid" src="./assets/img/img6.jpg" alt=""></a>
-          </figure>
-          <div class="feature-content">
-            <div class="tg-product">
-              <a href="#">Mobiles &gt; Accessories</a>
-            </div>
-            <h4><a href="ads-details.html">Apple iPhone X</a></h4>
-            <span>Last Updated: 13 hours ago</span>
-            <ul class="address">
-              <li>
-                <a href="#"><i class="lni-map-marker"></i> Albama</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-alarm-clock"></i> 3 Jan, 9:05 pm</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-user"></i> Mh Arman</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-package"></i> Brand New</a>
-              </li>
-            </ul>
-            <div class="btn-list">
-              <a class="btn-price" href="#">$ 799</a>
-              <a class="btn btn-common" href="ads-details.html">
-                <i class="lni-list"></i>
-                View Details
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-4">
-        <div class="featured-box">
-          <figure>
-            <div class="icon">
-              <i class="lni-heart"></i>
-            </div>
-            <a href="#"><img class="img-fluid" src="./assets/img/img-09.jpg" alt=""></a>
-          </figure>
-          <div class="feature-content">
-            <div class="tg-product">
-              <a href="#">Loptop &gt; Accessories</a>
-            </div>
-            <h4><a href="ads-details.html">Amazing Room for Rent</a></h4>
-            <span>Last Updated: 4 hours ago</span>
-            <ul class="address">
-              <li>
-                <a href="#"><i class="lni-map-marker"></i> Chicago</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-alarm-clock"></i> 1 Jan, 7:00 pm</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-user"></i> Elon Musk</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-package"></i> N/A</a>
-              </li>
-            </ul>
-            <div class="btn-list">
-              <a class="btn-price" href="#">$ 250</a>
-              <a class="btn btn-common" href="ads-details.html">
-                <i class="lni-list"></i>
-                View Details
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-4">
-        <div class="featured-box">
-          <figure>
-            <div class="icon">
-              <i class="lni-heart"></i>
-            </div>
-            <a href="#"><img class="img-fluid" src="./assets/img/img-10.jpg" alt=""></a>
-          </figure>
-          <div class="feature-content">
-            <div class="tg-product">
-              <a href="#">Office &gt; Stationary</a>
-            </div>
-            <h4><a href="ads-details.html">Custom Notebooks</a></h4>
-            <span>Last Updated: 12 hours ago</span>
-            <ul class="address">
-              <li>
-                <a href="#"><i class="lni-map-marker"></i> Washington</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-alarm-clock"></i> 12 Dec, 10:10 pm</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-user"></i> John Smith</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-package"></i> Brand New</a>
-              </li>
-            </ul>
-            <div class="btn-list">
-              <a class="btn-price" href="#">$ 25</a>
-              <a class="btn btn-common" href="ads-details.html">
-                <i class="lni-list"></i>
-                View Details
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
+        <?php } ?>
     </div>
   </div>
 </section>
