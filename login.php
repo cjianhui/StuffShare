@@ -1,6 +1,7 @@
 <!DOCTYPE html>
-<html lang="en" class="gr__preview_uideck_com"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-
+<html lang="en" class="gr__preview_uideck_com">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
@@ -23,20 +24,19 @@
 <body data-gr-c-s-loaded="true">
 
 <?php
-  session_start();
-  include "connect.php";
-  echo "here";
+session_start();
+include "connect.php";
+
   if (isset($_SESSION['key'])) {
     header("Location: ./user_home.php");
   } elseif (isset($_POST['login'])) {
     $username             = pg_escape_string($connection, $_POST['username']);
     $password             = pg_escape_string($connection, $_POST['password']);
-    
+
     $query = "SELECT username FROM account where username='".$username."' and password='".hash(sha256, $password)."'";
-    echo $query;
     $result = pg_query($connection,$query);
     $num_results = pg_num_rows($result);
-    
+
     if ($num_results < 1) {
       $message = "<div class='alert alert-danger text-center'><strong>Wrong email or password!</strong> </div>";
     } else { // login success
@@ -45,6 +45,7 @@
       $_SESSION['key'] = $username;
     }
   }
+
 
   include "header.php";
 ?>
@@ -87,7 +88,7 @@
                 <div class="help-block with-errors" >
                 </div>
               </div>
-              
+
               <div class="form-group">
                 <div class="input-icon">
                   <i class="lni-lock">
@@ -97,7 +98,7 @@
                 <div class="help-block with-errors">
                 </div>
               </div>
-              
+
               <div class="text-center">
                 <button class="btn btn-common log-btn" name="login" type="submit">Submit
                 </button>
