@@ -33,6 +33,7 @@
                 <li><a href="./user_bid_offers.php" role="menuitem" tabindex="-1"><i class="lni-envelope"></i> My Offers</a></li>
                 <li><a href="./login.php" role="menuitem" tabindex="-1"><i class="lni-lock"></i> Log In</a></li>
                 <li><a href="./signup.php" role="menuitem" tabindex="-1"><i class="lni-user"></i> Signup</a></li></ul>
+                <li><a href="./logout.php" role="menuitem" tabindex="-1"><i class="lni-enter"></i> Log Out</a></li></ul>
               </li>
             </ul></div>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
@@ -77,6 +78,7 @@
                   <a class="dropdown-item" href="./user_bid_offers.php"><i class="lni-envelope"></i> My Offers</a>
                   <a class="dropdown-item" href="./login.php"><i class="lni-lock"></i> Log In</a>
                   <a class="dropdown-item" href="./signup.php"><i class="lni-user"></i> Signup</a>
+                  <a class="dropdown-item" href="./logout.php"><i class="lni-enter"></i> Log Out</a>
                 </div>
               </li>
             </ul>
@@ -88,4 +90,4 @@
         
         
       </nav>
-    </head>
+    </header>

@@ -18,7 +18,7 @@
   <link rel="stylesheet" type="text/css" href="./assets/css/main.css">
 
   <link rel="stylesheet" type="text/css" href="./assets/css/responsive.css">
-
+</head>
   <?php
     session_start();
     include './connect.php';
