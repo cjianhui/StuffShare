@@ -187,7 +187,7 @@
         $query = "SELECT * FROM item ORDER BY time_created DESC LIMIT 6";
         $result = pg_query($connection, $query);
         for ($i=0; $i<min(6, pg_num_rows($result)); $i++){
-          $row = pg_fetch_row($result);
+          $row = pg_fetch_assoc($result);
           ?>
           <div class="col-xs-6 col-sm-6 col-md-6 col-lg-4">
             <div class="featured-box">
@@ -195,37 +195,37 @@
                 <div class="icon">
                   <i class="lni-heart"></i>
                 </div>
-                <a href="./listing_detail.php?id=<?php echo $row[0]; ?>">
-                  <img class="img-fluid" src="./assets/img/items/<?php echo $row[8]; ?>" alt="">
+                <a href="./listing_detail.php?id=<?=$row['item_id']; ?>">
+                  <img class="img-fluid" src="./assets/img/items/<?=$row['img_src']; ?>" alt="">
                 </a>
               </figure>
               <div class="feature-content">
                 <div class="tg-product">
-                  <a href="./listings.php?category=<?php echo $row[6]; ?>">
-                    <?php echo $row[6]; ?>
+                  <a href="./listings.php?category=<?=$row['type']; ?>">
+                    <?=$row['type']; ?>
                   </a>
                 </div>
-                <h4><a href="./listing_detail.php?id=<?php echo $row[0]; ?>"><?php echo $row[1]; ?></a></h4>
+                <h4><a href="./listing_detail.php?id=<?=$row['item_id']; ?>"><?=$row['item_name']; ?></a></h4>
                 <!-- <span>Last Updated: 5 hours ago</span> -->
                 <ul class="address">
                   <li>
-                    <a><i class="lni-map-marker"></i><?php echo $row[10]; ?></a>
+                    <a><i class="lni-map-marker"></i><?=$row['address']; ?></a>
                   </li>
                   <li>
-                    <a><i class="lni-alarm-clock"></i><?php echo $row[9]; ?> days</a>
+                    <a><i class="lni-alarm-clock"></i><?=$row['borrow_duration']; ?> days</a>
                   </li>
                   <li>
-                    <a><i class="lni-user"></i><?php echo $row[11]; ?></a>
+                    <a><i class="lni-user"></i><?=$row['username']; ?></a>
                   </li>
                 </ul>
                 <div class="btn-list">
                   <?php
-                    $bid_query = "SELECT MAX(b.bid_amount) FROM bid b WHERE b.item_id=$row[0]";
+                    $bid_query = "SELECT MAX(b.bid_amount) FROM bid b WHERE b.item_id='".$row['item_id']."'";
                     $bid_result = pg_query($connection, $bid_query);
-                    $top_bid = pg_fetch_row($bid_result);
+                    $top_bid = pg_fetch_assoc($bid_result);
                   ?>
-                  <a class="btn-price">Highest Bid: $<b> <?php echo($top_bid[0] === NULL ? $row[3] : $top_bid[0]); ?> </b></a>
-                  <a class="btn btn-common" href="./listing_detail.php?id=<?php echo $row[0]; ?>">
+                  <a class="btn-price">Highest Bid: $<b> <?=($top_bid['max'] === NULL ? $row['start_price'] : $top_bid['max']); ?> </b></a>
+                  <a class="btn btn-common" href="./listing_detail.php?id=<?=$row['item_id']; ?>">
                     <i class="lni-list"></i>
                     View Details
                   </a>
