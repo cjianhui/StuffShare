@@ -83,12 +83,12 @@
                                     <table class="table dashboardtable tablemyads">
                                         <thead>
                                             <tr>
-                                                <th>
+                                                <!-- <th>
                                                     <span class="checkbox">
                                                         <input id="checkedall" type="checkbox" name="myads" value="checkall">
                                                         <label for="checkedall"></label>
                                                     </span>
-                                                </th>
+                                                </th> -->
                                                 <th>Photo</th>
                                                 <th>Title</th>
                                                 <th>Category</th>
