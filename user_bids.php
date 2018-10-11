@@ -27,6 +27,7 @@
       if (!isset($_SESSION['key'])) {
         header("Location: ./login.php");
       }
+      $uname = $_SESSION['key'];
       include "header.php";
     ?>
     
@@ -75,20 +76,39 @@
                   <table class="table dashboardtable tablemyads">
                     <thead>
                       <tr>
-                        <th>
-                          <span class="checkbox">
-                            <input id="checkedall" type="checkbox" name="myads" value="checkall">
-                            <label for="checkedall"></label>
-                          </span>
-                        </th>
                         <th>Photo</th>
                         <th>Title</th>
                         <th>Category</th>
-                        <th>Price</th>
+                        <th>Bid Amount</th>
                         <th>Action</th>
                       </tr>
                     </thead>
                     <tbody>
+                      <tr data-category="active">
+                      <?php
+                        $query = "SELECT * FROM item i, bid b WHERE b.username='".$uname."' AND b.item_id=i.item_id";
+                        $result = pg_query($connection,$query);
+                        for ($i=0; $i<pg_num_rows($result); $i++) {
+                          $row = pg_fetch_row($result);
+                          ?>
+                          <td class="photo"><img class="img-fluid" src="./assets/img/items/<?php echo $row[8];?>" alt=""></td>
+                          <td data-title="Title">
+                            <h3><?php echo $row[1];?></h3>
+                            <span>Ad ID: ng3D5hAMHPajQrM</span>
+                          </td>
+                          <td data-title="Category"><span class="adcategories"><?php echo $row[6];?></span></td>
+                          <td data-title="Price">
+                            <h3><?php echo $row[14];?>$</h3>
+                          </td>
+                          <td data-title="Action">
+                            <div class="btns-actions">
+                              <a class="btn-action btn-view" href="/user_bids.html#"><i class="lni-eye"></i></a>
+                              <a class="btn-action btn-edit" href="/user_bids.html#"><i class="lni-pencil"></i></a>
+                              <a class="btn-action btn-delete" href="/user_bids.html#"><i class="lni-trash"></i></a>
+                            </div>
+                          </td>
+                        </tr>
+                      <?php } ?>
                     </tbody>
                   </table>
                 </div>
