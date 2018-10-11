@@ -20,8 +20,10 @@
 	<body data-gr-c-s-loaded="true">
 		
 		<?php
+      session_start();
       include "connect.php";
-      include './header.php';
+      include 'header.php';
+
       
       $page_size = 6;
       $num_pages_shown = 3;
