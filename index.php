@@ -58,14 +58,14 @@
                     <i class="lni-layers"></i>
                     <div class="tg-select">
                       <select>
-                        <option value="none">Select Categories</option>
-                        <option value="none">Mobiles</option>
-                        <option value="none">Electronics</option>
-                        <option value="none">Training</option>
-                        <option value="none">Real Estate</option>
-                        <option value="none">Services</option>
-                        <option value="none">Training</option>
-                        <option value="none">Vehicles</option>
+                        <option value="" hidden disabled selected>Select Categories</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Tools">Tools</option>
+                        <option value="Appliances">Appliances</option>
+                        <option value="Furniture">Furniture</option>
+                        <option value="Books">Books</option>
+                        <option value="Music">Music</option>
+                        <option value="Sports">Sports</option>
                       </select>
                     </div>
                   </div>
