@@ -1,34 +1,30 @@
 <!DOCTYPE html>
 <html lang="en" class="gr__preview_uideck_com"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-  
+
   <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
-  
+
   <link rel="stylesheet" type="text/css" href="./assets/css/bootstrap.min.css">
-  
+
   <link rel="stylesheet" type="text/css" href="./assets/css/line-icons.css">
-  
+
   <link rel="stylesheet" type="text/css" href="./assets/css/slicknav.css">
-  
+
   <link rel="stylesheet" type="text/css" href="./assets/css/nivo-lightbox.css">
-  
+
   <link rel="stylesheet" type="text/css" href="./assets/css/animate.css">
-  
+
   <link rel="stylesheet" type="text/css" href="./assets/css/owl.carousel.css">
-  
+
   <link rel="stylesheet" type="text/css" href="./assets/css/main.css">
-  
+
   <link rel="stylesheet" type="text/css" href="./assets/css/responsive.css">
-  
+</head>
   <?php
-    /*
     session_start();
-    if (!isset($_SESSION['username']) || empty($_SESSION['username'])) {
-      header('Location: login.php');
-    }
-    */
+    include './connect.php';
     include './header.php';
   ?>
-  
+
   <div id="hero-area">
     <div class="overlay"></div>
     <div class="container">
@@ -82,7 +78,7 @@
       </div>
     </div>
   </div>
-  
+
 </header>
 
 
