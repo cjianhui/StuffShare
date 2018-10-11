@@ -21,18 +21,23 @@
 <body data-gr-c-s-loaded="true">
 
 <?php
-include "connect.php";
-include './header.php';
+	include "connect.php";
+	include './header.php';
 
-echo "here";
 	$page_size = 6;
-	$page_no = 1;
+	$num_pages_shown = 3;
+	$curr_start_number = 0;
 
-  	$query = "SELECT * FROM item ORDER BY time_created DESC";
-  	$query = "SELECT * FROM item LIMIT 6 OFFSET $page_size*($page_no-1)";
-  	echo $query;
+	$query = "SELECT * FROM item";
 	$result = pg_query($connection,$query);
+	$total_num_pages = ceil(pg_num_rows($result)/$page_size);
 
+	$query_params = parse_url($url, PHP_URL_QUERY);
+	if (isset($_GET['page_no'])) {
+		$page_no = $_GET['page_no'];
+	} else {
+		$page_no = 1;
+	}
 ?>
 
 <div id="hero-area">
@@ -190,14 +195,19 @@ Sports <span class="category-counter">(<?php
 
 <div class="product-filter">
 <div class="short-name">
-<span>Showing (1 - 12 products of 7371 products)</span>
+<span>Showing (<?php echo (1+($page_no-1)*$page_size) ?> - <?php echo ($page_no*$page_size) ?> products of <?php 
+	$query = "SELECT * FROM item";
+	$result = pg_query($connection,$query);
+	echo pg_num_rows($result);
+?> products)</span>
 </div>
 <div class="Show-item">
 <span>Show Items</span>
 <form class="woocommerce-ordering" method="post">
 <label>
+<!-- TODO: fix sort -->
 <select name="order" class="orderby">
-<option selected="selected" value="menu-order">49 items</option>
+<option selected="selected" value="menu-order">6 items</option>
 <option value="popularity">popularity</option>
 <option value="popularity">Average ration</option>
 <option value="popularity">newness</option>
@@ -223,11 +233,7 @@ Sports <span class="category-counter">(<?php
 <div class="row">
 
 <?php 
-	// TODO: code for pagination is incomplete
-	$page_size = 6;
-	$page_no = 1;
-	$query = "SELECT * FROM item ORDER BY time_created DESC";
-	$query = "SELECT * FROM item LIMIT 6 OFFSET $page_size*($page_no-1)";
+	$query = "SELECT * FROM item ORDER BY time_created DESC LIMIT 6 OFFSET $page_size*($page_no-1)";
 	$result = pg_query($connection,$query);
 	for ($i=0; $i<6; $i++) {
 		$row = pg_fetch_row($result);
@@ -257,9 +263,9 @@ Sports <span class="category-counter">(<?php
 <li>
 <a href="category.html#"><i class="lni-user"></i><?php echo $row[11]; ?></a>
 </li>
-<li>
-<a href="category.html#"><i class="lni-tag"></i> Mobile</a> <!-- TODO -->
-</li>
+<!-- <li>
+<a href="category.html#"><i class="lni-tag"></i> Mobile</a>  
+</li> -->
 </ul>
 <div class="btn-list">
 <a class="btn-price" href="category.html#">$ <?php echo $row[3]; ?></a>
@@ -548,14 +554,23 @@ View Details
 </div>
 </div> -->
 
+<?php $curr_start_number = $page_no - $page_no%$num_pages_shown; ?>
 
 <div class="pagination-bar">
 <nav>
 <ul class="pagination">
-<li class="page-item"><a class="page-link active" href="#">1</a></li>
-<li class="page-item"><a class="page-link" href="#">2</a></li>
-<li class="page-item"><a class="page-link" href="#">3</a></li>
-<li class="page-item"><a class="page-link" href="#">Next</a></li>
+<li class="page-item <?php if($page_no <= 1) {echo 'disabled';} ?>"><a class="page-link" 
+	href="<?php if ($page_no == $curr_start_number) {$curr_start_number -= $num_pages_shown; }
+		echo '?page_no='.($page_no-1) ?>">Previous</a></li>
+<li class="page-item <?php if($curr_start_number+1 > $total_num_pages) {echo 'disabled';} ?>"><a class="page-link <?php if($page_no == $curr_start_number+1) {echo 'active';} ?>" 
+	href="<?php echo '?page_no='.($curr_start_number+1) ?>"><?php echo ($curr_start_number+1) ?></a></li>
+<li class="page-item <?php if($curr_start_number+2 > $total_num_pages) {echo 'disabled';} ?>"><a class="page-link <?php if($page_no == $curr_start_number+2) {echo 'active';} ?>" 
+	href="<?php echo '?page_no='.($curr_start_number+2) ?>"><?php echo ($curr_start_number+2) ?></a></li>
+<li class="page-item <?php if($curr_start_number+3 > $total_num_pages) {echo 'disabled';} ?>"><a class="page-link <?php if($page_no == $curr_start_number+3) {echo 'active';} ?>" 
+	href="<?php echo '?page_no='.($curr_start_number+3) ?>"><?php echo ($curr_start_number+3) ?></a></li>
+<li class="page-item  <?php if($page_no >= $total_num_pages) {echo 'disabled';} ?>"><a class="page-link" 
+	href="<?php if (page_no == $curr_start_number+3) {$curr_start_number += $num_pages_shown; }
+		echo '?page_no='.($page_no+1) ?>">Next</a></li>
 </ul>
 </nav>
 </div>

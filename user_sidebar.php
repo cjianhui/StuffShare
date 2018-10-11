@@ -2,6 +2,14 @@
 <html>
 <head>
 
+<?php
+ include "connect.php";
+ if (!isset($_SESSION['key'])) {
+     header("Location: ./login.php");
+ }
+ $uname = $_SESSION['key'];
+?>
+
 <div class="col-sm-12 col-md-4 col-lg-3 page-sidebar">
 <aside>
 <div class="sidebar-box">
@@ -10,10 +18,15 @@
 <a href="./user_home.php"><img src="./assets/img/avatar.png" alt=""></a>
 </figure>
 <div class="usercontent">
-<h3>User</h3>
-<h4>Administrator</h4>
+<h3><?php echo $uname ?></h3>
+<h4><?php 
+$query = "SELECT * FROM account WHERE username='$uname'";
+$result = pg_query($connection,$query);
+$row = pg_fetch_row($result); 
+echo $row[2] ?></h4>
 </div>
 </div>
+<br>
 <nav class="navdashboard">
 <ul>
 <li>

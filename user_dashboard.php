@@ -28,6 +28,7 @@
  if (!isset($_SESSION['key'])) {
      header("Location: ./login.php");
  }
+ $uname = $_SESSION['key'];
  include "header.php";
 ?>
 
@@ -52,7 +53,9 @@
 <div class="container">
 <div class="row">
 
-<?php include "user_sidebar.php" ?>
+<?php include "user_sidebar.php" 
+
+?>
 
 <div class="col-sm-12 col-md-8 col-lg-9">
 <div class="page-content">
@@ -67,8 +70,12 @@
 <div class="dashboardbox">
 <div class="icon"><i class="lni-write"></i></div>
 <div class="contentbox">
-<h2><a href="./dashboard.html#">Total Ad Posted</a></h2>
-<h3>480 Add Posted</h3>
+<h2><a href="./dashboard.html#">Total Items Posted</a></h2>
+<h3><?php 
+    $query = "SELECT * FROM item WHERE username='$uname'";
+	$result = pg_query($connection,$query);
+    echo pg_num_rows($result);
+?> Items Posted</h3>
 </div>
 </div>
 </div>
@@ -76,8 +83,9 @@
 <div class="dashboardbox">
 <div class="icon"><i class="lni-add-files"></i></div>
 <div class="contentbox">
-<h2><a href="./dashboard.html#">Featured Ads</a></h2>
-<h3>80 Add Posted</h3>
+<!-- TODO -->
+<h2><a href="./dashboard.html#">Featured Items</a></h2> 
+<h3>80 Items Posted</h3>
 </div>
 </div>
 </div>
@@ -104,11 +112,17 @@
 <th>Photo</th>
 <th>Title</th>
 <th>Category</th>
-<th>Ad Status</th>
+<th>Item Status</th>
 <th>Price</th>
 <th>Action</th>
 </tr>
 </thead>
+<?php 
+    $query = "SELECT * FROM item WHERE username='$uname' ORDER BY time_created DESC LIMIT 5";
+    $result = pg_query($connection,$query);
+    for ($i=0; $i<min(pg_num_rows($result), 5); $i++) {
+        $row = pg_fetch_row($result); 
+?>
 <tbody>
 <tr data-category="active">
 <td>
@@ -117,15 +131,15 @@
 <label for="adone"></label>
 </span>
 </td>
-<td class="photo"><img class="img-fluid" src="./assets/img/img1(2).jpg" alt=""></td>
+<td class="photo"><img class="img-fluid" src="./assets/img/items/<?php echo $row[8] ?>" alt=""></td>
 <td data-title="Title">
-<h3>HP Laptop 6560b core i3 3nd generation</h3>
+<h3><?php echo $row[1] ?></h3>
 <span>Ad ID: ng3D5hAMHPajQrM</span>
 </td>
-<td data-title="Category"><span class="adcategories">Laptops &amp; PCs</span></td>
+<td data-title="Category"><span class="adcategories"><?php echo $row[6] ?></span></td>
 <td data-title="Ad Status"><span class="adstatus adstatusactive">active</span></td>
 <td data-title="Price">
-<h3>139$</h3>
+<h3><?php echo $row[3] ?>$</h3>
 </td>
 <td data-title="Action">
 <div class="btns-actions">
@@ -134,7 +148,9 @@
 <a class="btn-action btn-delete" href="./dashboard.html#"><i class="lni-trash"></i></a>
 </div>
 </td>
-</tr>
+<?php } ?>
+
+<!-- </tr>
 <tr data-category="active">
 <td>
 <span class="checkbox">
@@ -361,7 +377,7 @@
 <a class="btn-action btn-delete" href="./dashboard.html#"><i class="lni-trash"></i></a>
 </div>
 </td>
-</tr>
+</tr> -->
 </tbody>
 </table>
 </div>

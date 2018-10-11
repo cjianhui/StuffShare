@@ -28,6 +28,7 @@
  if (!isset($_SESSION['key'])) {
      header("Location: ./login.php");
  }
+ $uname = $_SESSION['key'];
  include "header.php";
 ?>
 
@@ -65,8 +66,13 @@
 </div>
 <div class="dashboard-wrapper">
 <nav class="nav-table">
+<?php
+    $query = "SELECT * FROM item WHERE username='$uname'";
+    $result = pg_query($connection,$query);
+    $row = pg_fetch_row($result); 
+?>
 <ul>
-<li class="active"><a href="/user_bids.html#">All Listings (42)</a></li>
+<li class="active"><a href="/user_bids.html#">All Listings (<?php echo pg_num_rows($result)?>) </a></li>
 <li><a href="/user_bids.html#">Published (88)</a></li>
 <li><a href="/user_bids.html#">Featured (12)</a></li>
 <li><a href="/user_bids.html#">Sold (02)</a></li>
@@ -93,21 +99,27 @@
 </thead>
 <tbody>
 <tr data-category="active">
-<td>
+<!-- <td>
 <span class="checkbox">
 <input id="adone" type="checkbox" name="myads" value="myadone">
 <label for="adone"></label>
 </span>
-</td>
-<td class="photo"><img class="img-fluid" src="./assets/img/img1(2).jpg" alt=""></td>
+</td> -->
+<?php
+  	$query = "SELECT * FROM item WHERE username='$uname' ORDER BY time_created DESC LIMIT 5";
+    $result = pg_query($connection,$query);
+    for ($i=0; $i<min(5, pg_num_rows($result)); $i++) {
+        $row = pg_fetch_row($result); 
+?>
+<td class="photo"><img class="img-fluid" src="./assets/img/items/<?php echo $row[8] ?>" alt=""></td>
 <td data-title="Title">
-<h3>HP Laptop 6560b core i3 3nd generation</h3>
+<h3><?php echo $row[1] ?></h3>
 <span>Ad ID: ng3D5hAMHPajQrM</span>
 </td>
-<td data-title="Category"><span class="adcategories">Laptops &amp; PCs</span></td>
+<td data-title="Category"><span class="adcategories"><?php echo $row[6] ?></span></td>
 <td data-title="Ad Status"><span class="adstatus adstatusactive">active</span></td>
 <td data-title="Price">
-<h3>139$</h3>
+<h3><?php echo $row[3] ?>$</h3>
 </td>
 <td data-title="Action">
 <div class="btns-actions">
@@ -117,7 +129,8 @@
 </div>
 </td>
 </tr>
-<tr data-category="active">
+<?php } ?>
+<!-- <tr data-category="active">
 <td>
 <span class="checkbox">
 <input id="adtwo" type="checkbox" name="myads" value="myadtwo">
@@ -342,7 +355,7 @@
 <a class="btn-action btn-edit" href="/user_bids.html#"><i class="lni-pencil"></i></a>
  <a class="btn-action btn-delete" href="/user_bids.html#"><i class="lni-trash"></i></a>
 </div>
-</td>
+</td> -->
 </tr>
 </tbody>
 </table>

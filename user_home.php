@@ -63,8 +63,8 @@
 <h2 class="dashbord-title">User Details</h2>
 </div>
 <?php 
-    $temp = $_SESSION['key'];
-    $query = "SELECT * FROM account WHERE username='$temp'";
+    $uname = $_SESSION['key'];
+    $query = "SELECT * FROM account WHERE username='$uname'";
     $result = pg_query($connection,$query);
     $row = pg_fetch_row($result); 
 ?>
@@ -73,10 +73,10 @@
 <label class="control-label">Name: <?php echo $row[3]; ?></label>
 </div>
 <div class="form-group mb-3">
-<label class="control-label">Email: <?php echo $row[4]; ?></label>
+<label class="control-label">Email: <?php echo $row[5]; ?></label>
 </div>
 <div class="form-group mb-3">
-<label class="control-label">Phone: <?php echo $row[5]; ?></label>
+<label class="control-label">Phone: <?php echo $row[4]; ?></label>
 </div>
 </div>
 </div>
