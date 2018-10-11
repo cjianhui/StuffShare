@@ -42,19 +42,32 @@
     
     $time_created = date("Y-m-d H:i:s");
     
-    $img_src = '4eafffb865710396ed50dab3f1b20829.jpg'; // To do
-    
-    $query = "INSERT INTO item(item_name, time_created, start_price, bid_start, bid_end, 
-                              type, description, img_src, borrow_duration, address, username)
-              VALUES('".$item_name."','".$time_created."','".$price."','".$start_time."','".$end_time."',
-                    '".$category."','".$desc."','".$img_src."','".$borrow_duration."','".$address."',
-                    '".$username."')";
+    $target_dir = './assets/img/items/';
+    $image_file_type = strtolower(explode('.', $_FILES["file"]["name"])[1]);
+    $img_name = time() . '.' . $image_file_type;
+    $target_dest = $target_dir . $img_name;
     
     if ($end_time <= $start_time){
       $date_error_msg = "<div class='alert alert-danger text-center'><strong>Start date cannot be after end date!</strong> </div>";
+    } else if ($_FILES["file"]["size"] > 500000){
+      $file_size_error_msg = "<div class='alert alert-danger text-center'><strong>File is too large!</strong> </div>";
+    } else if ($image_file_type !== "jpg" && $image_file_type !== "png" && $image_file_type !== "jpeg") {
+      $file_type_error_msg = "<div class='alert alert-danger text-center'><strong>Only JPG/JPEG/PNG supported!</strong> </div>";
     } else {
-      echo($query);
-      $result = pg_query($connection,$query);
+      if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_dest)) {
+        // echo("File has been uploaded to " . $target_dest);
+        $query = "INSERT INTO item(item_name, time_created, start_price, bid_start, bid_end, 
+                                  type, description, img_src, borrow_duration, address, username)
+                  VALUES('".$item_name."','".$time_created."','".$price."','".$start_time."','".$end_time."',
+                        '".$category."','".$desc."','".$img_name."','".$borrow_duration."','".$address."',
+                        '".$username."')";
+        // echo($query);
+        $result = pg_query($connection,$query);
+        $success_message = "<div class='alert alert-success text-center'><strong>Listing Created!</strong> Redirecting.. </div>";
+        header("refresh:2; url=./listing_detail.php");
+      } else {
+        echo("File upload error");
+      }
     }
   }
 
@@ -92,12 +105,16 @@
         <div class="row page-content">
           <div class="col-xs-12 col-sm-12 col-md-12 col-lg-7">
             <div class="inner-box">
+            <?php echo $success_message;?>
               <div class="dashboard-box">
                 <h2 class="dashbord-title">Item Details</h2>
               </div>
               <div class="dashboard-wrapper">
                 
-                <form name='item_form' method='post'>
+                <form name='item_form' method='post' enctype='multipart/form-data'>
+                  <?php echo $date_error_msg;?>
+                  <?php echo $file_size_error_msg;?>
+                  <?php echo $file_type_error_msg;?>
                   <div class="form-group mb-3">
                     <label class="control-label">Listing Name</label>
                     <input class="form-control input-md" name="item_name" placeholder="Name" required="" type="text">
@@ -135,7 +152,6 @@
                         echo date("Y-m-d", $date);
                       ?>  
                     >
-                    <?php echo $date_error_msg;?>
                   </div>
                   
                   <div class="form-group mb-3">
@@ -163,7 +179,7 @@
                     <span>Or</span>
                     <span class="btn btn-common">Select Files</span>
                     <span>Maximum upload file size: 500 KB</span>
-                    <input id="tg-photogallery" class="tg-fileinput" type="file" name="file">
+                    <input id="tg-photogallery" class="tg-fileinput" type="file" name="file" accept="image/*">
                   </label>
                   <button class="btn btn-common" name="item_form" type="submit">Post Ad</button>
                 </div>
