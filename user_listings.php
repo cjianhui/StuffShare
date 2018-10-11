@@ -199,7 +199,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         class="lni-pencil"></i></a>
                                             <form method="POST" action="user_listings.php?show=<?= $_GET['show'] ?>">
                                                 <input type="hidden" name="delete_id" value="<?= $row['item_id']?>" />
-                                                <button class="btn-action btn-delete lni-trash shadow-none" style="border-style: none" title="Delete Listing"></button>
+                                              <?php
+                                              if(date('d/m/Y H:i:s', strtotime($row['bid_end'])) > $time_now){
+                                                echo "<button class=\"btn-action btn-delete lni-trash shadow-none\" style=\"border-style: none\"
+                                                        title=\"Delete Listing\"></button>";
+                                              }
+                                              ?>
+
                                             </form>
 
                                         </div>

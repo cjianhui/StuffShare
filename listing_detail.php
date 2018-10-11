@@ -163,10 +163,15 @@ $count = pg_fetch_assoc($count_result);
 
                                 <input name="username" type="hidden" value="<?= $row['username'] ?>"/>
                                 <input name="bid_amt" type="number" class="form-control"
-                                       min=<?= ceil($curr_min_bid) + 1 ?> placeholder="<?= ceil($curr_min_bid) + 1 ?>
-                                       onwards">
+                                       min=<?= ceil($curr_min_bid) + 1 ?> placeholder="<?= ceil($curr_min_bid) + 1 ?> onwards">
                                 <span class="input-group-btn">
-          						<button class="btn btn-common btn-reply" type="submit">Bid It!</button>
+                                  <?php
+                                    if(date('d/m/Y H:i:s', strtotime($row['bid_end'])) < date('d/m/Y H:i:s')){
+                                        echo "<button class=\"btn btn-common btn-secondary\" type=\"submit\" disabled>Closed!</button>";
+                                    }else{
+                                        echo "<button class=\"btn btn-common btn-reply\" type=\"submit\">Bid It!</button>";
+                                    }
+                                  ?>
         						</span>
                             </div><!-- /input-group -->
                         </form>
