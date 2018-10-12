@@ -52,7 +52,7 @@
 											<i class="lni-tag"></i>
 											<input type="text" name="customword" class="form-control" placeholder="What are you looking for">
 										</div>
-										<div class="form-group tg-inputwithicon">
+										<!-- <div class="form-group tg-inputwithicon">
 											<i class="lni-map-marker"></i>
 											<div class="tg-select">
 												<select>
@@ -65,7 +65,7 @@
 													<option value="none">Phoenix</option>
 												</select>
 											</div>
-										</div>
+										</div> -->
 										<div class="form-group tg-inputwithicon">
 											<i class="lni-layers"></i>
 											<div class="tg-select">
@@ -198,7 +198,7 @@
 							if ((!isset($_GET["category"]) || $_GET["category"] == "none") && (!isset($_GET["customword"]) || $_GET["customword"] == "")) {
 								// if no search query param
 								$query = "SELECT * FROM item";
-								$temp_result = pg_query($connection,$query_search);
+								$temp_result = pg_query($connection,$query);
 								$total_rows_from_query = pg_num_rows($temp_result);
 								$total_num_pages = ceil($total_rows_from_query/$page_size);
 
