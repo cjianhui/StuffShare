@@ -92,17 +92,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                               $query = "SELECT item_id FROM item WHERE username='$uname' AND bid_end >'$time_now'";
                               $active_ids = pg_fetch_all(pg_query($connection, $query));
-                              $active_count = $all_ids ? count($active_ids) : 0;
+                              $active_count = $active_ids ? count($active_ids) : 0;
 
                               $query = "SELECT DISTINCT i.item_id FROM item i LEFT OUTER JOIN bid b ON i.item_id=b.item_id " .
                                 "WHERE i.username='$uname' AND i.bid_end <'$time_now' AND b.bid_id IS NULL";
                               $closed_ids = pg_fetch_all(pg_query($connection, $query));
-                              $closed_count = $all_ids ? count($closed_ids) : 0;
+                              print("hi ");
+                              print_r($closed_ids);
+                              $closed_count = $closed_ids ? count($closed_ids) : 0;
 
                               $query = "SELECT DISTINCT i.item_id FROM item i LEFT OUTER JOIN bid b ON i.item_id=b.item_id " .
                                 "WHERE i.username='$uname' AND i.bid_end <'$time_now' AND b.bid_id IS NOT NULL";
                               $rented_ids = pg_fetch_all(pg_query($connection, $query));
-                              $rented_count = $all_ids ? count($rented_ids) : 0;
+                              $rented_count = $rented_ids ? count($rented_ids) : 0;
                               ?>
 
                                 <ul>
