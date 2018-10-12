@@ -31,13 +31,33 @@ include "connect.php";
 if (!isset($_SESSION['key'])) {
   header("Location: ./login.php");
 }
+
 $uname = $_SESSION['key'];
+$input_user = pg_escape_string($connection, $_GET['user']);
+
+
+$find_user = "SELECT full_name FROM account WHERE username='$input_user'";
+$result = pg_query($connection, $find_user);
+
+if (pg_num_rows($result) == 0) {
+  header("Location: ./user_listings.php?show=" . $_GET['show'] . "&user=" . $_SESSION['key']);
+}
+
+$full_name = pg_fetch_assoc($result)['full_name'];
+
+if ($uname == $input_user) {
+    $is_owner = true;
+} else{
+    $is_owner = false;
+    $uname = $input_user;
+};
+
 include "header.php";
 ?>
 
 <?php
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  $delete_item = "DELETE FROM item WHERE item_id=".$_POST['delete_id'];
+  $delete_item = "DELETE FROM item WHERE item_id=" . $_POST['delete_id'];
   $delete = pg_query($connection, $delete_item);
 
   if ($delete) {
@@ -54,10 +74,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         <div class="row">
             <div class="col-md-12">
                 <div class="breadcrumb-wrapper">
-                    <h2 class="product-title">My Listings</h2>
+                    <h2 class="product-title"><?= $is_owner ? "My" : $full_name ?> Listings</h2>
                     <ol class="breadcrumb">
                         <li><a href="/user_bids.html#">Home /</a></li>
-                        <li class="current">My Listings</li>
+                        <li class="current"><?= $is_owner ? "My" : $full_name ?> Listings</li>
                     </ol>
                 </div>
             </div>
@@ -77,9 +97,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             <div class="col-sm-12 col-md-8 col-lg-9">
                 <div class="page-content">
                     <div class="inner-box">
-                        <?= $flash ?>
+                      <?= $flash ?>
                         <div class="dashboard-box">
-                            <h2 class="dashbord-title">My Listings</h2>
+                            <h2 class="dashbord-title"><?= $is_owner ? "My" : $full_name ?> Listings</h2>
                         </div>
                         <div class="dashboard-wrapper">
                             <nav class="nav-table">
@@ -107,15 +127,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                 <ul>
                                     <li<?= empty($_GET['show']) ? " class=\"active\"" : "" ?>><a
-                                                href="user_listings.php">All Listings (<?= $all_count ?>) </a></li>
+                                                href="user_listings.php?user=<?= $uname ?>">All Listings
+                                            (<?= $all_count ?>) </a></li>
                                     <li<?= $_GET['show'] == "active" ? " class=\"active\"" : "" ?>><a
-                                                href="user_listings.php?show=active">Active (<?= $active_count ?>) </a>
+                                                href="user_listings.php?show=active&user=<?= $uname ?>">Active
+                                            (<?= $active_count ?>) </a>
                                     </li>
                                     <li<?= $_GET['show'] == "closed" ? " class=\"active\"" : "" ?>><a
-                                                href="user_listings.php?show=closed">Closed (<?= $closed_count ?>) </a>
+                                                href="user_listings.php?show=closed&user=<?= $uname ?>">Closed
+                                            (<?= $closed_count ?>) </a>
                                     </li>
                                     <li<?= $_GET['show'] == "rented" ? " class=\"active\"" : "" ?>><a
-                                                href="user_listings.php?show=rented">Rented (<?= $rented_count ?>) </a>
+                                                href="user_listings.php?show=rented&user=<?= $uname ?>">Rented
+                                            (<?= $rented_count ?>) </a>
                                     </li>
                                 </ul>
                             </nav>
@@ -149,17 +173,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                       $target_ids = array_map('current', $all_ids);
                                   }
 
-                                  $query = "SELECT i.img_src, i.item_name, i.type, i.start_price, i.item_id, i.bid_end, COUNT(b.bid_id) as bidders, MAX(bid_amount) as highest_bid ".
-                                    "FROM item i LEFT OUTER JOIN bid b on i.item_id=b.item_id ".
-                                    "WHERE i.item_id in (".implode(",",$target_ids).") ".
-                                    "GROUP BY i.img_src, i.item_name, i.type, i.start_price, i.item_id ".
+                                  $query = "SELECT i.img_src, i.item_name, i.type, i.start_price, i.item_id, i.bid_end, COUNT(b.bid_id) as bidders, MAX(bid_amount) as highest_bid " .
+                                    "FROM item i LEFT OUTER JOIN bid b on i.item_id=b.item_id " .
+                                    "WHERE i.item_id in (" . implode(",", $target_ids) . ") " .
+                                    "GROUP BY i.img_src, i.item_name, i.type, i.start_price, i.item_id " .
                                     "ORDER BY i.time_created DESC LIMIT 5";
 
                                   $result = pg_query($connection, $query);
 
 
                                   for ($i = 0;
-                                  $i < min(5,pg_num_rows($result));
+                                  $i < min(5, pg_num_rows($result));
                                   $i++) {
                                   $row = pg_fetch_assoc($result);
                                   $row['bidders'] = $row['bidders'] ? $row['bidders'] : 0;
@@ -174,18 +198,19 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <td data-title="Ad Status">
                                       <?php
 
-                                        if (date('d/m/Y H:i:s', strtotime($row['bid_end'])) > $time_now){
-                                            echo "<span class=\"adstatus adstatusactive\">active</span>";
-                                        }elseif ($row['bidders'] != 0){
-                                            echo "<span class=\"adstatus adstatusdeleted\">closed</span>";
-                                        }else{
-                                          echo "<span class=\"adstatus adstatusexpired\">rented</span>";
-                                        }
+                                      if (date('d/m/Y H:i:s', strtotime($row['bid_end'])) > $time_now) {
+                                        echo "<span class=\"adstatus adstatusactive\">active</span>";
+                                      } elseif ($row['bidders'] != 0) {
+                                        echo "<span class=\"adstatus adstatusdeleted\">closed</span>";
+                                      } else {
+                                        echo "<span class=\"adstatus adstatusexpired\">rented</span>";
+                                      }
                                       ?>
 
                                     </td>
                                     <td data-title="Price">
-                                        <h3>$<?= ($row['highest_bid']>$row['start_price']) ? $row['highest_bid'] : $row['start_price'] ?></h3>
+                                        <h3>
+                                            $<?= ($row['highest_bid'] > $row['start_price']) ? $row['highest_bid'] : $row['start_price'] ?></h3>
                                     </td>
                                     <td data-title="Bidders">
                                         <h3><?= $row['bidders'] ?></h3>
@@ -195,18 +220,20 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                             <a class="btn-action btn-view" title="View Listing"
                                                href="./listing_detail.php?id=<?= $row['item_id']; ?>"><i
                                                         class="lni-eye"></i></a>
-                                            <a class="btn-action btn-edit" title="Edit Listing" href="/user_bids.html#"><i
-                                                        class="lni-pencil"></i></a>
-                                            <form method="POST" action="user_listings.php?show=<?= $_GET['show'] ?>">
-                                                <input type="hidden" name="delete_id" value="<?= $row['item_id']?>" />
-                                              <?php
-                                              if(date('d/m/Y H:i:s', strtotime($row['bid_end'])) > $time_now){
-                                                echo "<button class=\"btn-action btn-delete lni-trash shadow-none\" style=\"border-style: none; cursor: pointer\"
-                                                        title=\"Delete Listing\"></button>";
-                                              }
-                                              ?>
 
-                                            </form>
+                                          <?php
+                                          if ((date('d/m/Y H:i:s', strtotime($row['bid_end'])) > $time_now) && $is_owner) {
+                                            ?>
+                                              <a class="btn-action btn-edit" title="Edit Listing"
+                                                 href="/user_bids.html#"><i class="lni-pencil"></i></a>
+
+                                              <form method="POST" action="user_listings.php?show=<?= $_GET['show'] ?>">
+                                                  <input type="hidden" name="delete_id" value="<?= $row['item_id'] ?>"/>
+                                                  <button class="btn-action btn-delete lni-trash shadow-none"
+                                                          style="border-style: none; cursor: pointer" title="Delete Listing"></button>
+
+                                              </form>
+                                          <?php } ?>
 
                                         </div>
                                     </td>
