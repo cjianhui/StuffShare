@@ -103,8 +103,6 @@
                           <td data-title="Action">
                             <div class="btns-actions">
                               <a class="btn-action btn-view" title="View Listing" href="./listing_detail.php?id=<?= $row['item_id']; ?>"><i class="lni-eye"></i></a>
-                              <a class="btn-action btn-edit" title="Edit Bid" href="/user_bids.html#"><i class="lni-pencil"></i></a>
-                              <a class="btn-action btn-delete" title="Delete Bid" href="/user_bids.html#"><i class="lni-trash"></i></a>
                             </div>
                           </td>
                         </tr>
