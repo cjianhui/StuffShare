@@ -206,10 +206,10 @@
 							}
 							else {
 								// user has entered search query param
-								$_GET["category"] == "none" ? $category = "%%" : $category = $_GET["category"];
+								$_GET["category"] == "" ? $category = "none" : $category = $_GET["category"];
 								$customword = $_GET["customword"];
 								
-								if (isset($_GET["category"]) && $_GET["category"] != "none") {
+								if ($category != "none") {
 									$query_search = "SELECT * FROM item 
 										WHERE type='".$category."' AND (LOWER(description) LIKE LOWER('%".$customword."%') OR LOWER(item_name) LIKE LOWER('%".$customword."%'))";							
 								}
@@ -222,7 +222,7 @@
 								$total_num_pages = ceil($total_rows_from_query/$page_size);
 
 								// query for display; offset for pagination
-								if (isset($_GET["category"]) && $_GET["category"] != "none") {
+								if ($category != "none") {
 									$query_search = "SELECT * FROM item 
 										WHERE type='".$category."' AND (LOWER(description) LIKE LOWER('%".$customword."%') OR LOWER(item_name) LIKE LOWER('%".$customword."%'))
 										ORDER BY time_created DESC LIMIT 6 OFFSET $page_size*($page_no-1)";
@@ -318,6 +318,11 @@
 												</div>
 											</div>
 										</div>
+										<?php } 
+											// to keep pagination at bottom, if odd number of listings add empty listing
+											if((6-min(6, pg_num_rows($result)))%2!=0) {
+										?>
+										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6"> </div>
 										<?php } ?>
 							
 								<?php $curr_start_number = $page_no - $page_no%$num_pages_shown; ?>
