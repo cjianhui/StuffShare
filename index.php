@@ -221,7 +221,7 @@
                     $top_bid = pg_fetch_assoc($bid_result);
                   ?>
                   <a class="btn-price">Highest Bid: $<b> <?=($top_bid['max'] === NULL ? $row['start_price'] : $top_bid['max']); ?> </b></a>
-                  <a class="btn btn-common" href="./listing_detail.php?id=<?=$row['item_id']; ?>">
+                  <a class="btn btn-common" style="position:absolute" href="./listing_detail.php?id=<?=$row['item_id']; ?>">
                     <i class="lni-list"></i>
                     View Details
                   </a>
