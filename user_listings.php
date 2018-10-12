@@ -201,7 +201,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                 <input type="hidden" name="delete_id" value="<?= $row['item_id']?>" />
                                               <?php
                                               if(date('d/m/Y H:i:s', strtotime($row['bid_end'])) > $time_now){
-                                                echo "<button class=\"btn-action btn-delete lni-trash shadow-none\" style=\"border-style: none\"
+                                                echo "<button class=\"btn-action btn-delete lni-trash shadow-none\" style=\"border-style: none; cursor: pointer\"
                                                         title=\"Delete Listing\"></button>";
                                               }
                                               ?>
