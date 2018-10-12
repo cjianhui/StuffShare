@@ -57,7 +57,7 @@ if (!isset($_SESSION['key'])) {
                 <div class="breadcrumb-wrapper">
                     <h2 class="product-title">View Users</h2>
                     <ol class="breadcrumb">
-                        <li><a href="./admin_panel">Home /</a></li>
+                        <li><a href="./admin_panel.php">Home /</a></li>
                         <li class="current">View Users</li>
                     </ol>
                 </div>
@@ -134,7 +134,6 @@ if (!isset($_SESSION['key'])) {
                                     </td>
                                     <td data-title=\"Action\">
                                         <div class=\"btns-actions\">
-                                            <a class=\"btn-action btn-view\" href=\"/offermessages.html#\"><i class=\"lni-eye\"></i></a>
                                             <a class=\"btn-action btn-edit\" href=\"/offermessages.html#\"><i class=\"lni-pencil\"></i></a>
                                             <a class=\"btn-action btn-delete\" href=\"/offermessages.html#\"><i class=\"lni-trash\"></i></a>
                                         </div>

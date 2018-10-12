@@ -84,7 +84,7 @@ if (!isset($_SESSION['key'])) {
 						    <span>Showing (<?php if ($total_num_pages == 0) {
                                     echo "0";
                                 } else {
-                                    echo (1 + ($page_no - 1) * $page_size) . " - " . ($page_no * $page_size) . " out of " . $total_bids . " total bids)";
+                                    echo (1 + ($page_no - 1) * $page_size) . " - " . ($total_bids < $page_no*$page_size ? $total_bids : ($page_no * $page_size)) . " out of " . $total_bids . " total bids)";
                                 } ?></span>
                             </div>
                         </div>

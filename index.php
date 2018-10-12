@@ -22,6 +22,15 @@
   <?php
     session_start();
     include './connect.php';
+
+    $query = "SELECT type, COUNT(*) FROM item GROUP BY type";
+    $result = pg_query($connection,$query);
+
+    for ($i = 0; $i < pg_num_rows($result); $i++) {
+        $row = pg_fetch_assoc($result);
+        ${strtolower($row['type']). "_count"} = $row['count']; //dynamically assign category counts to variables
+    }
+
     include './header.php';
   ?>
 
@@ -79,98 +88,85 @@
     </div>
   </div>
 
-</header>
-
 
 <section class="trending-cat section-padding">
   <div class="container">
     <h1 class="section-title">Item Categories</h1>
     <div class="row">
       <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-        <a href="category.html">
+        <a href="./listings.php?category=Electronics">
+          <div class="box">
+            <div class="icon">
+              <img class="img-fluid" src="./assets/img/category/electronics.png" alt="">
+            </div>
+            <h4>Electronics</h4>
+            <strong><?php echo ($electronics_count ? $electronics_count : 0); ?> Items</strong>
+          </div>
+        </a>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+        <a href="./listings.php?category=Tools">
+          <div class="box">
+            <div class="icon">
+              <img class="img-fluid" src="./assets/img/category/tools.png" alt="">
+            </div>
+            <h4>Tools</h4>
+            <strong><?php echo ($tools_count ? $tools_count : 0); ?> Items</strong>
+          </div>
+        </a>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+        <a href="./listings.php?category=Appliances">
+          <div class="box">
+            <div class="icon">
+              <img class="img-fluid" src="./assets/img/category/appliance.png" alt="">
+            </div>
+            <h4>Home Appliances</h4>
+            <strong><?php echo ($appliances_count ? $appliances_count : 0); ?> Items</strong>
+          </div>
+        </a>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+        <a href="./listings.php?category=Furniture">
+          <div class="box">
+            <div class="icon">
+              <img class="img-fluid" src="./assets/img/category/furniture.png" alt="">
+            </div>
+            <h4>Furniture</h4>
+            <strong><?php echo ($furniture_count ? $furniture_count : 0); ?> Items</strong>
+          </div>
+        </a>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+        <a href="./listings.php?category=Books">
+          <div class="box">
+            <div class="icon">
+              <img class="img-fluid" src="./assets/img/category/books.png" alt="">
+            </div>
+            <h4>Books</h4>
+            <strong><?php echo ($books_count ? $books_count : 0); ?> Items</strong>
+          </div>
+        </a>
+      </div>
+      <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
+        <a href="./listings.php?category=Music">
           <div class="box">
             <div class="icon">
               <img class="img-fluid" src="./assets/img/category/music.png" alt="">
             </div>
-            <h4>Vehicle</h4>
-            <strong>189 Ads</strong>
+            <h4>Music</h4>
+            <strong><?php echo ($music_count ? $music_count : 0); ?> Items</strong>
           </div>
         </a>
       </div>
       <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-        <a href="category.html">
+        <a href="./listings.php?category=Sports">
           <div class="box">
             <div class="icon">
-              <img class="img-fluid" src="./assets/img/category/img-2.png" alt="">
+              <img class="img-fluid" src="./assets/img/category/sports.png" alt="">
             </div>
-            <h4>Laptops</h4>
-            <strong>255 Ads</strong>
-          </div>
-        </a>
-      </div>
-      <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-        <a href="category.html">
-          <div class="box">
-            <div class="icon">
-              <img class="img-fluid" src="./assets/img/category/img-3.png" alt="">
-            </div>
-            <h4>Mobiles</h4>
-            <strong>127 Ads</strong>
-          </div>
-        </a>
-      </div>
-      <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-        <a href="category.html">
-          <div class="box">
-            <div class="icon">
-              <img class="img-fluid" src="./assets/img/category/img-4.png" alt="">
-            </div>
-            <h4>Electronics</h4>
-            <strong>69 Ads</strong>
-          </div>
-        </a>
-      </div>
-      <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-        <a href="category.html">
-          <div class="box">
-            <div class="icon">
-              <img class="img-fluid" src="./assets/img/category/img-5.png" alt="">
-            </div>
-            <h4>Computer</h4>
-            <strong>172 Ads</strong>
-          </div>
-        </a>
-      </div>
-      <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-        <a href="category.html">
-          <div class="box">
-            <div class="icon">
-              <img class="img-fluid" src="./assets/img/category/img-6.png" alt="">
-            </div>
-            <h4>Real Estate</h4>
-            <strong>150 Ads</strong>
-          </div>
-        </a>
-      </div>
-      <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-        <a href="category.html">
-          <div class="box">
-            <div class="icon">
-              <img class="img-fluid" src="./assets/img/category/img-7.png" alt="">
-            </div>
-            <h4>Home Appliances</h4>
-            <strong>249 Ads</strong>
-          </div>
-        </a>
-      </div>
-      <div class="col-lg-3 col-md-6 col-sm-6 col-xs-12">
-        <a href="category.html">
-          <div class="box">
-            <div class="icon">
-              <img class="img-fluid" src="./assets/img/category/img-8.png" alt="">
-            </div>
-            <h4>Jobs</h4>
-            <strong>14 9Ads</strong>
+            <h4>Sports</h4>
+            <strong><?php echo ($sports_count ? $sports_count : 0); ?> Items</strong>
           </div>
         </a>
       </div>
