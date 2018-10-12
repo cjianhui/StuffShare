@@ -155,47 +155,22 @@ if (!isset($_SESSION['key'])) {
                                 ?>
                                 </tbody>
                             </table>
-                            <?php $curr_start_number = $page_no - $page_no % $num_pages_shown; ?>
-                            <div class="pagination-bar" <?php if ($total_num_pages == 0) {
-                                echo 'style="display:none;"';
-                            } ?>>
+                            <?php $curr_start_number = $page_no - $page_no%$num_pages_shown; ?>
+                            <div class="pagination-bar" <?php if($total_num_pages == 0) {echo 'style="display:none;"';} ?>>
                                 <nav>
                                     <ul class="pagination">
-                                        <li class="page-item <?php if ($page_no <= 1) {
-                                            echo 'disabled';
-                                        } ?>"><a class="page-link"
-                                                 href="<?php if ($page_no == $curr_start_number) {
-                                                     $curr_start_number -= $num_pages_shown;
-                                                 }
-                                                 echo '?page_no=' . ($page_no - 1) ?>">Previous</a></li>
-                                        <li class="page-item <?php if ($curr_start_number + 1 > $total_num_pages) {
-                                            echo 'disabled';
-                                        } ?>"><a class="page-link <?php if ($page_no == $curr_start_number + 1) {
-                                                echo 'active';
-                                            } ?>"
-                                                 href="<?php echo '?page_no=' . ($curr_start_number + 1) ?>"><?php echo($curr_start_number + 1) ?></a>
-                                        </li>
-                                        <li class="page-item <?php if ($curr_start_number + 2 > $total_num_pages) {
-                                            echo 'disabled';
-                                        } ?>"><a class="page-link <?php if ($page_no == $curr_start_number + 2) {
-                                                echo 'active';
-                                            } ?>"
-                                                 href="<?php echo '?page_no=' . ($curr_start_number + 2) ?>"><?php echo($curr_start_number + 2) ?></a>
-                                        </li>
-                                        <li class="page-item <?php if ($curr_start_number + 3 > $total_num_pages) {
-                                            echo 'disabled';
-                                        } ?>"><a class="page-link <?php if ($page_no == $curr_start_number + 3) {
-                                                echo 'active';
-                                            } ?>"
-                                                 href="<?php echo '?page_no=' . ($curr_start_number + 3) ?>"><?php echo($curr_start_number + 3) ?></a>
-                                        </li>
-                                        <li class="page-item  <?php if ($page_no >= $total_num_pages) {
-                                            echo 'disabled';
-                                        } ?>"><a class="page-link"
-                                                 href="<?php if (page_no == $curr_start_number + 3) {
-                                                     $curr_start_number += $num_pages_shown;
-                                                 }
-                                                 echo '?page_no=' . ($page_no + 1) ?>">Next</a></li>
+                                        <li class="page-item" <?php if($page_no <= 1) {echo 'style="display:none;"';} ?>><a class="page-link"
+                                                                                                                            href="<?php if ($page_no == $curr_start_number) {$curr_start_number -= $num_pages_shown; }
+                                                                                                                            echo '?page_no='.($page_no-1)."&".$search_params ?>">Previous</a></li>
+                                        <li class="page-item" <?php if($curr_start_number+1 > $total_num_pages) {echo 'style="display:none;"';;} ?>><a class="page-link <?php if($page_no == $curr_start_number+1) {echo 'active';} ?>"
+                                                                                                                                                       href="<?= '?page_no='.($curr_start_number+1)."&".$search_params ?>"><?= ($curr_start_number+1) ?></a></li>
+                                        <li class="page-item" <?php if($curr_start_number+2 > $total_num_pages) {echo 'style="display:none;"';} ?>><a class="page-link <?php if($page_no == $curr_start_number+2) {echo 'active';} ?>"
+                                                                                                                                                      href="<?= '?page_no='.($curr_start_number+2)."&".$search_params ?>"><?= ($curr_start_number+2) ?></a></li>
+                                        <li class="page-item" <?php if($curr_start_number+3 > $total_num_pages) {echo 'style="display:none;"';} ?>><a class="page-link <?php if($page_no == $curr_start_number+3) {echo 'active';} ?>"
+                                                                                                                                                      href="<?= '?page_no='.($curr_start_number+3)."&".$search_params ?>"><?= ($curr_start_number+3) ?></a></li>
+                                        <li class="page-item"  <?php if($page_no >= $total_num_pages) {echo 'style="display:none;"';} ?>><a class="page-link"
+                                                                                                                                            href="<?php if (page_no == $curr_start_number+3) {$curr_start_number += $num_pages_shown; }
+                                                                                                                                            echo '?page_no='.($page_no+1)."&".$search_params ?>">Next</a></li>
                                     </ul>
                                 </nav>
                             </div>
