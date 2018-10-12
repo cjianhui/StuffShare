@@ -3,7 +3,6 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link rel="stylesheet" type="text/css" href="./assets/css/bootstrap.min.css">
@@ -65,18 +64,14 @@ if (!isset($_SESSION['key'])) {
 
             if ($update_query_result) {
                 $message = "<div class='alert alert-success text-center'><strong>Update success!</strong></div>";
-                header("refresh:1; url=./user_home.php");
+                header("refresh:1; url=./admin_panel.php");
             } else {
                 $message = "<div class='alert alert-danger text-center'><strong>Oops! Update unsuccessful!</strong></div>";
             }
 
         }
-
-
     }
 }
-include "header.php";
-
 
 ?>
 
@@ -86,9 +81,9 @@ include "header.php";
         <div class="row">
             <div class="col-md-12">
                 <div class="breadcrumb-wrapper">
-                    <h2 class="product-title">Profile Settings</h2>
+                    <h2 class="product-title">Admin Panel</h2>
                     <ol class="breadcrumb">
-                        <li><a href="./index.php">Home /</a></li>
+                        <li><a href="./admin_panel.php">Home /</a></li>
                         <li class="current">Profile Settings</li>
                     </ol>
                 </div>
@@ -104,7 +99,7 @@ include "header.php";
         <div class="row">
 
             <?php
-                include "user_sidebar.php";
+             include "admin_sidebar.php";
             ?>
 
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">
@@ -141,11 +136,6 @@ include "header.php";
         </div>
     </div>
 </div>
-
-
-<?php
-include "footer.php";
-?>
 
 <a href="./user_home.php#" class="back-to-top" style="display: none;">
     <i class="lni-chevron-up"></i>

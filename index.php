@@ -90,7 +90,7 @@
         <a href="category.html">
           <div class="box">
             <div class="icon">
-              <img class="img-fluid" src="./assets/img/category/img-1.png" alt="">
+              <img class="img-fluid" src="./assets/img/category/music.png" alt="">
             </div>
             <h4>Vehicle</h4>
             <strong>189 Ads</strong>

@@ -12,6 +12,11 @@
         $query = "SELECT full_name, role FROM account where username='" . $username . "'";
         $result = pg_query($connection, $query) or die('Query unsuccessful:' . pg_last_error());
         $details = pg_fetch_assoc($result);
+
+        // ensure current user is admin
+        if ($details['role']!='admin') {
+            header("Location: ./user_home.php");
+        }
     }
     ?>
 
@@ -23,42 +28,42 @@
                         <a href="./user_home.php"><img src="./assets/img/avatar.png" alt=""></a>
                     </figure>
                     <div class="usercontent">
-                        <h3 style="text-transform: none"><?= $details['full_name']?></h3>
-                        <h4 style="text-transform: capitalize"><?= $details['role']?></h4>
+                        <h3 style="text-transform: none"><?php echo $details['full_name']?></h3>
+                        <h4 style="text-transform: capitalize"><?php echo $details['role']?></h4>
                     </div>
                 </div>
                 <nav class="navdashboard">
                     <ul>
                         <li>
-                            <a href="./user_dashboard.php">
+                            <a href="./admin_dashboard.php">
                                 <i class="lni-dashboard"></i>
                                 <span>Dashboard</span>
                             </a>
                         </li>
                         <li>
-                            <a href="./user_home.php">
+                            <a href="./admin_panel.php">
                                 <i class="lni-cog"></i>
                                 <span>Profile Settings</span>
                             </a>
                         </li>
                         <li>
-                            <a href="./user_listings.php">
+                            <a href="./view_users.php">
+                                <i class="lni-users"></i>
+                                <span>View All Users</span>
+                            </a>
+                        </li>
+                        <li>
+                            <a href="./view_items.php">
                                 <i class="lni-layers"></i>
-                                <span>My Listings</span>
+                                <span>View All Items</span>
                             </a>
                         </li>
                         <li>
-                            <a href="./user_bid_offers.php">
+                        </li>
+                        <li>
+                            <a href="./view_bids.php">
                                 <i class="lni-envelope"></i>
-                                <span>My Offers</span>
-                            </a>
-                        </li>
-                        <li>
-                        </li>
-                        <li>
-                            <a href="./user_bids.php">
-                                <i class="lni-heart"></i>
-                                <span>My Bids</span>
+                                <span>View All Bids</span>
                             </a>
                         </li>
                         <li>
