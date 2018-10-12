@@ -81,9 +81,14 @@
                   <a class="dropdown-item" href="./user_listings.php"><i class="lni-wallet"></i> My Listings</a>
                   <a class="dropdown-item" href="./user_bids.php"><i class="lni-heart"></i> My Bids</a>
                   <a class="dropdown-item" href="./user_bid_offers.php"><i class="lni-envelope"></i> My Offers</a>
-                  <a class="dropdown-item" href="./login.php"><i class="lni-lock"></i> Log In</a>
-                  <a class="dropdown-item" href="./signup.php"><i class="lni-user"></i> Signup</a>
-                  <a class="dropdown-item" href="./logout.php"><i class="lni-enter"></i> Log Out</a>
+                  <?php
+                    if (!isset($_SESSION['key'])) {
+                    ?>
+                    <a class="dropdown-item" href="./login.php"><i class="lni-lock"></i> Log In</a>
+                    <a class="dropdown-item" href="./signup.php"><i class="lni-user"></i> Signup</a>
+                  <?php } else { ?>
+                    <a class="dropdown-item" href="./logout.php"><i class="lni-enter"></i> Log Out</a>
+                  <?php } ?>
                 </div>
               </li>
             </ul>
