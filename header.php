@@ -16,7 +16,8 @@
           $current_page = $_SERVER['REQUEST_URI']
           ?>
           
-          <div class="navbar-header"><div class="slicknav_menu"><liner aria-haspopup="true" tabindex="0" class="slicknav_btn slicknav_collapsed" style=""><span class="slicknav_menutxt"></span><span class="slicknav_icon slicknav_no-text"><span class="slicknav_icon-bar"></span><span class="slicknav_icon-bar"></span><span class="slicknav_icon-bar"></span></span></liner><ul class="slicknav_nav slicknav_hidden" style="display: none;" aria-hidden="true" role="menu">
+          <div class="navbar-header">
+          <!-- <div class="slicknav_menu"><liner aria-haspopup="true" tabindex="0" class="slicknav_btn slicknav_collapsed" style=""><span class="slicknav_menutxt"></span><span class="slicknav_icon slicknav_no-text"><span class="slicknav_icon-bar"></span><span class="slicknav_icon-bar"></span><span class="slicknav_icon-bar"></span></span></liner><ul class="slicknav_nav slicknav_hidden" style="display: none;" aria-hidden="true" role="menu">
             <li>
               <a class = "<?php echo ($current_page == "/stuffshare/index.php" ? "active" : "")?> " href="./index.php" role="menuitem" tabindex="-1">Home</a>
             </li>
@@ -40,13 +41,14 @@
                 <li><a href="./signup.php" role="menuitem" tabindex="-1"><i class="lni-user"></i> Signup</a></li></ul>
                 <li><a href="./logout.php" role="menuitem" tabindex="-1"><i class="lni-enter"></i> Log Out</a></li></ul>
               </li>
-            </ul></div>
+            </ul>
+            </div>
             <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#main-navbar" aria-controls="main-navbar" aria-expanded="false" aria-label="Toggle navigation">
               <span class="navbar-toggler-icon"></span>
               <span class="lni-menu"></span>
               <span class="lni-menu"></span>
               <span class="lni-menu"></span>
-            </button>
+            </button> -->
             <a href="./index.php" class="navbar-brand"><img src="./assets/img/logo.png" alt=""></a>
           </div>
           <div class="collapse navbar-collapse" id="main-navbar">
@@ -80,7 +82,7 @@
                   <a class="dropdown-item" href="./user_home.php"><i class="lni-home"></i> Account Home</a>
                   <a class="dropdown-item" href="./user_listings.php"><i class="lni-wallet"></i> My Listings</a>
                   <a class="dropdown-item" href="./user_bids.php"><i class="lni-heart"></i> My Bids</a>
-                  <a class="dropdown-item" href="./user_bid_offers.php"><i class="lni-envelope"></i> My Offers</a>
+                  <!-- <a class="dropdown-item" href="./user_bid_offers.php"><i class="lni-envelope"></i> My Offers</a> -->
                   <?php
                     if (!isset($_SESSION['key'])) {
                     ?>
