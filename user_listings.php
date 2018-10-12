@@ -97,8 +97,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               $query = "SELECT DISTINCT i.item_id FROM item i LEFT OUTER JOIN bid b ON i.item_id=b.item_id " .
                                 "WHERE i.username='$uname' AND i.bid_end <'$time_now' AND b.bid_id IS NULL";
                               $closed_ids = pg_fetch_all(pg_query($connection, $query));
-                              print("hi ");
-                              print_r($closed_ids);
                               $closed_count = $closed_ids ? count($closed_ids) : 0;
 
                               $query = "SELECT DISTINCT i.item_id FROM item i LEFT OUTER JOIN bid b ON i.item_id=b.item_id " .
