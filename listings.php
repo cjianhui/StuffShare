@@ -29,18 +29,13 @@
 			$num_pages_shown = 3;
 			$curr_start_number = 0;
 			
-			$query_params = parse_str(parse_url($url, PHP_URL_QUERY), $output);
-			echo "HELO      ".$output[0]." ".$output[1]." ".$output[2];
+			$query_params = parse_str(parse_url($url, PHP_URL_QUERY));
 
 			if (isset($_GET['page_no'])) {
 				$page_no = $_GET['page_no'];
 			} else {
 				$page_no = 1;
 			}
-
-			$query = "SELECT * FROM item";
-			$result = pg_query($connection,$query);
-			$total_num_pages = ceil(pg_num_rows($result)/$page_size);
 
 		?>
 		
@@ -52,7 +47,7 @@
 						<div class="contents-ctg">
 							<div class="search-bar">
 								<fieldset>
-									<form class="search-form" method="get">
+									<form class="search-form" method="GET">
 										<div class="form-group tg-inputwithicon">
 											<i class="lni-tag"></i>
 											<input type="text" name="customword" class="form-control" placeholder="What are you looking for">
@@ -200,37 +195,37 @@
 				<div class="product-filter">
 					<div class="short-name">
 						<?php 
-							if (!isset($_GET["category"]) || $_GET["category"] == "none"){
-								$customword = $_GET["customword"];
-
-								$query_search = "SELECT * FROM item 
-										WHERE LOWER(description) LIKE LOWER('%".$customword."%') OR LOWER(item_name) LIKE LOWER('%".$customword."%')
-										ORDER BY time_created DESC LIMIT 6 OFFSET $page_size*($page_no-1)";
-								echo $query_search;
-								$search_params = "customword=".$customword;
-								$result = pg_query($connection,$query_search);
-								$total_num_pages = ceil(pg_num_rows($result)/$page_size);
-
-							} else if (isset($_GET["customword"])) {
-								$category = $_GET["category"];
-								$customword = $_GET["customword"];
-
-								$query_search = "SELECT * FROM item 
-										WHERE type='".$category."' AND LOWER(description) LIKE LOWER('%".$customword."%') OR LOWER(item_name) LIKE LOWER('%".$customword."%') 
-										ORDER BY time_created DESC LIMIT 6 OFFSET $page_size*($page_no-1)";
-								echo $query_search;
-								$search_params = "customword=".$customword."&category=".$category;
-			
-								$result = pg_query($connection,$query_search);
-								$total_num_pages = ceil(pg_num_rows($result)/$page_size);
-							} else {
+							if ((!isset($_GET["category"]) || $_GET["category"] == "none") && (!isset($_GET["customword"]) || $_GET["customword"] == "")) {
+								// if no search query param
 								$query = "SELECT * FROM item";
-								echo $query;
+								$temp_result = pg_query($connection,$query_search);
+								$total_rows_from_query = pg_num_rows($temp_result);
+								$total_num_pages = ceil($total_rows_from_query/$page_size);
+
+								// query for display; offset for pagination
+								$query = "SELECT * FROM item ORDER BY time_created DESC OFFSET $page_size*($page_no-1)";
 								$result = pg_query($connection,$query);
-								$total_num_pages = ceil(pg_num_rows($result)/$page_size);
+							}
+							else {
+								// user has entered search query param
+								$_GET["category"] == "none" ? $category = "%%" : $category = $_GET["category"];
+								$customword = $_GET["customword"];
+
+								$query_search = "SELECT * FROM item 
+										WHERE type='".$category."' AND (LOWER(description) LIKE LOWER('%".$customword."%') OR LOWER(item_name) LIKE LOWER('%".$customword."%'))";
+								$temp_result = pg_query($connection,$query_search);
+								$total_rows_from_query = pg_num_rows($temp_result);
+								$total_num_pages = ceil($total_rows_from_query/$page_size);
+
+								// query for display; offset for pagination
+								$query_search = "SELECT * FROM item 
+										WHERE type='".$category."' AND (LOWER(description) LIKE LOWER('%".$customword."%') OR LOWER(item_name) LIKE LOWER('%".$customword."%')) 
+										ORDER BY time_created DESC LIMIT 6 OFFSET $page_size*($page_no-1)";
+								$search_params = "customword=".$customword."&category=".$category;
+								$result = pg_query($connection,$query_search);
 							}
 						?>
-						<span>Showing (<?= min(1+($page_no-1)*$page_size, pg_num_rows($result))." - ".min($page_no*$page_size, pg_num_rows($result)); ?> products of <?= pg_num_rows($result);?> products)</span>
+						<span>Showing (<?= min(1+($page_no-1)*$page_size, $total_rows_from_query)." - ".min($page_no*$page_size, $total_rows_from_query); ?> products of <?= $total_rows_from_query ?> products)</span>
 						</div>
 						<div class="Show-item">
 							<span>Show Items</span>
