@@ -138,7 +138,7 @@ $count = pg_fetch_assoc($count_result);
                     <div class="ads-details-info">
                         <h2><?= $row['item_name'] ?></h2>
                         <div class="details-meta">
-                            <span><i class="lni-alarm-clock"></i> <?= $row['borrow_duration'] ?> <?= $row['borrow_duration']==1 ? day : days  ?></span>
+                            <span><i class="lni-alarm-clock"></i> <?= $row['borrow_duration'] ?> <?= $row['borrow_duration'] == 1 ? day : days ?></span>
                             <span><i class="lni-map-marker"></i> <?= $row['address'] ?></span>
                             <span><i class="lni-eye"></i> <?= $count['count'] ?> bids</span>
                         </div>
@@ -163,14 +163,15 @@ $count = pg_fetch_assoc($count_result);
 
                                 <input name="username" type="hidden" value="<?= $row['username'] ?>"/>
                                 <input name="bid_amt" type="number" class="form-control"
-                                       min=<?= ceil($curr_min_bid) + 1 ?> placeholder="<?= ceil($curr_min_bid) + 1 ?> onwards">
+                                       min=<?= ceil($curr_min_bid) + 1 ?> placeholder="<?= ceil($curr_min_bid) + 1 ?>
+                                       onwards">
                                 <span class="input-group-btn">
                                   <?php
-                                    if(date('d/m/Y H:i:s', strtotime($row['bid_end'])) < date('d/m/Y H:i:s')){
-                                        echo "<button class=\"btn btn-common btn-secondary\" type=\"submit\" disabled>Closed!</button>";
-                                    }else{
-                                        echo "<button class=\"btn btn-common btn-reply\" type=\"submit\">Bid It!</button>";
-                                    }
+                                  if (date('d/m/Y H:i:s', strtotime($row['bid_end'])) < date('d/m/Y H:i:s')) {
+                                    echo "<button class=\"btn btn-common btn-secondary\" type=\"submit\" disabled>Closed!</button>";
+                                  } else {
+                                    echo "<button class=\"btn btn-common btn-reply\" type=\"submit\">Bid It!</button>";
+                                  }
                                   ?>
         						</span>
                             </div><!-- /input-group -->
@@ -178,7 +179,7 @@ $count = pg_fetch_assoc($count_result);
                     </div>
 
                     <div class="advertisement mb-2">
-                        <strong>more from</strong> <?= $row['username'] ?><strong>?</strong>
+                        <strong>more from </strong><a href="user_listings.php?user=<?= $row['username'] ?>"><?= $row['username'] ?></a><strong>?</strong>
                     </div>
                 </div>
             </div>
