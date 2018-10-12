@@ -1185,6 +1185,15 @@ a.back-to-top:hover,a.back-to-top:focus{
     width:100%;
     padding:15px
 }
+
+.admin-filter{
+    margin-bottom:0px;
+    background:#fafafa;
+    display:inline-block;
+    width:100%;
+    padding:15px
+}
+
 .product-filter .nav-tabs{
     float:right;
     margin-right:10px;
