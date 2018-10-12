@@ -35,12 +35,12 @@
             <p>Lend or Borrow Everything From Tools To Mobile Phones And Computers, <br> Or Search For Furniture, Books And More</p>
             <div class="search-bar">
               <fieldset>
-                <form class="search-form">
+                <form class="search-form" method="GET" action="listings.php">
                   <div class="form-group tg-inputwithicon">
                     <i class="lni-tag"></i>
                     <input type="text" name="customword" class="form-control" placeholder="What are you looking for">
                   </div>
-                  <div class="form-group tg-inputwithicon">
+                  <!-- <div class="form-group tg-inputwithicon">
                     <i class="lni-map-marker"></i>
                     <div class="tg-select">
                       <select>
@@ -53,12 +53,12 @@
                         <option value="none">Phoenix</option>
                       </select>
                     </div>
-                  </div>
+                  </div> -->
                   <div class="form-group tg-inputwithicon">
                     <i class="lni-layers"></i>
                     <div class="tg-select">
-                      <select>
-                        <option value="" hidden disabled selected>Select Categories</option>
+                      <select name="category">
+                        <option value="none" hidden disabled selected>Select Categories</option>
                         <option value="Electronics">Electronics</option>
                         <option value="Tools">Tools</option>
                         <option value="Appliances">Appliances</option>
@@ -69,7 +69,7 @@
                       </select>
                     </div>
                   </div>
-                  <button class="btn btn-common" type="button"><i class="lni-search"></i></button>
+                  <button class="btn btn-common" type="submit"><i class="lni-search"></i></button>
                 </form>
               </fieldset>
             </div>

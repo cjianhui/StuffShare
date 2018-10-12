@@ -24,17 +24,15 @@
 			include "connect.php";
 			include 'header.php';
 
-			
 			$page_size = 6;
 			$num_pages_shown = 3;
 			$curr_start_number = 0;
 			
 			$query_params = parse_str(parse_url($url, PHP_URL_QUERY));
 
+			$page_no = 1;
 			if (isset($_GET['page_no'])) {
 				$page_no = $_GET['page_no'];
-			} else {
-				$page_no = 1;
 			}
 
 		?>
@@ -201,7 +199,7 @@
 								$temp_result = pg_query($connection,$query);
 								$total_rows_from_query = pg_num_rows($temp_result);
 								$total_num_pages = ceil($total_rows_from_query/$page_size);
-
+								// echo $query;
 								// query for display; offset for pagination
 								$query = "SELECT * FROM item ORDER BY time_created DESC OFFSET $page_size*($page_no-1)";
 								$result = pg_query($connection,$query);
@@ -210,17 +208,31 @@
 								// user has entered search query param
 								$_GET["category"] == "none" ? $category = "%%" : $category = $_GET["category"];
 								$customword = $_GET["customword"];
-
-								$query_search = "SELECT * FROM item 
-										WHERE type='".$category."' AND (LOWER(description) LIKE LOWER('%".$customword."%') OR LOWER(item_name) LIKE LOWER('%".$customword."%'))";
+								
+								if (isset($_GET["category"]) && $_GET["category"] != "none") {
+									$query_search = "SELECT * FROM item 
+										WHERE type='".$category."' AND (LOWER(description) LIKE LOWER('%".$customword."%') OR LOWER(item_name) LIKE LOWER('%".$customword."%'))";							
+								}
+								else {
+									$query_search = "SELECT * FROM item 
+										WHERE LOWER(description) LIKE LOWER('%".$customword."%') OR LOWER(item_name) LIKE LOWER('%".$customword."%')";
+								}
 								$temp_result = pg_query($connection,$query_search);
 								$total_rows_from_query = pg_num_rows($temp_result);
 								$total_num_pages = ceil($total_rows_from_query/$page_size);
 
 								// query for display; offset for pagination
-								$query_search = "SELECT * FROM item 
-										WHERE type='".$category."' AND (LOWER(description) LIKE LOWER('%".$customword."%') OR LOWER(item_name) LIKE LOWER('%".$customword."%')) 
+								if (isset($_GET["category"]) && $_GET["category"] != "none") {
+									$query_search = "SELECT * FROM item 
+										WHERE type='".$category."' AND (LOWER(description) LIKE LOWER('%".$customword."%') OR LOWER(item_name) LIKE LOWER('%".$customword."%')
 										ORDER BY time_created DESC LIMIT 6 OFFSET $page_size*($page_no-1)";
+									}
+								else {
+									$query_search = "SELECT * FROM item 
+										WHERE LOWER(description) LIKE LOWER('%".$customword."%') OR LOWER(item_name) LIKE LOWER('%".$customword."%')
+										ORDER BY time_created DESC LIMIT 6 OFFSET $page_size*($page_no-1)";
+								}
+								// echo $query_search;
 								$search_params = "customword=".$customword."&category=".$category;
 								$result = pg_query($connection,$query_search);
 							}
@@ -312,16 +324,16 @@
 								<div class="pagination-bar" <?php if($total_num_pages == 0) {echo 'style="display:none;"';} ?>>
 									<nav>
 										<ul class="pagination">
-											<li class="page-item <?php if($page_no <= 1) {echo 'disabled';} ?>"><a class="page-link" 
+											<li class="page-item" <?php if($page_no <= 1) {echo 'style="display:none;"';} ?>><a class="page-link" 
 												href="<?php if ($page_no == $curr_start_number) {$curr_start_number -= $num_pages_shown; }
 													echo '?page_no='.($page_no-1)."&".$search_params ?>">Previous</a></li>
-											<li class="page-item <?php if($curr_start_number+1 > $total_num_pages) {echo 'disabled';} ?>"><a class="page-link <?php if($page_no == $curr_start_number+1) {echo 'active';} ?>" 
+											<li class="page-item" <?php if($curr_start_number+1 > $total_num_pages) {echo 'style="display:none;"';;} ?>><a class="page-link <?php if($page_no == $curr_start_number+1) {echo 'active';} ?>" 
 												href="<?= '?page_no='.($curr_start_number+1)."&".$search_params ?>"><?= ($curr_start_number+1) ?></a></li>
-											<li class="page-item <?php if($curr_start_number+2 > $total_num_pages) {echo 'disabled';} ?>"><a class="page-link <?php if($page_no == $curr_start_number+2) {echo 'active';} ?>" 
+											<li class="page-item" <?php if($curr_start_number+2 > $total_num_pages) {echo 'style="display:none;"';} ?>><a class="page-link <?php if($page_no == $curr_start_number+2) {echo 'active';} ?>" 
 												href="<?= '?page_no='.($curr_start_number+2)."&".$search_params ?>"><?= ($curr_start_number+2) ?></a></li>
-											<li class="page-item <?php if($curr_start_number+3 > $total_num_pages) {echo 'disabled';} ?>"><a class="page-link <?php if($page_no == $curr_start_number+3) {echo 'active';} ?>" 
+											<li class="page-item" <?php if($curr_start_number+3 > $total_num_pages) {echo 'style="display:none;"';} ?>><a class="page-link <?php if($page_no == $curr_start_number+3) {echo 'active';} ?>" 
 												href="<?= '?page_no='.($curr_start_number+3)."&".$search_params ?>"><?= ($curr_start_number+3) ?></a></li>
-											<li class="page-item  <?php if($page_no >= $total_num_pages) {echo 'disabled';} ?>"><a class="page-link" 
+											<li class="page-item"  <?php if($page_no >= $total_num_pages) {echo 'style="display:none;"';} ?>><a class="page-link" 
 												href="<?php if (page_no == $curr_start_number+3) {$curr_start_number += $num_pages_shown; }
 													echo '?page_no='.($page_no+1)."&".$search_params ?>">Next</a></li>
 										</ul>
