@@ -144,6 +144,11 @@ if (!isset($_SESSION['key'])) {
                                 ?>
                                 </tbody>
                             </table>
+                            <?php
+								if(($page_size-min($page_size, pg_num_rows($result)))%2!=0) {
+                                    echo "<div class='col-xs-12 col-sm-12 col-md-6 col-lg-6'> </div>";
+                                }
+                            ?>
                             <?php $curr_start_number = $page_no - $page_no%$num_pages_shown; ?>
                             <div class="pagination-bar" <?php if($total_num_pages == 0) {echo 'style="display:none;"';} ?>>
                                 <nav>
