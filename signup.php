@@ -34,22 +34,26 @@ if (isset($_SESSION['key'])) {
     $email_result = pg_query($connection, $email_query);
     $email_num_results = pg_num_rows($email_result);
     if ($username_num_results >= 1) {
-        $username_message = "The username (" . $username . ") has already been taken";
+        $display = "<div class='alert alert-danger text-center'><strong>The username (" . $username . ") has already been taken</strong></div>";
+        unset($username);
     } elseif ($email_num_results >= 1) {
-        $email_message = "The email (" . $email . ") has already been taken";
+        $display = "<div class='alert alert-danger text-center'><strong>The email (" . $email . ") has already been taken</strong></div>";
+        unset($username);
     } else {
         $signup_query = "insert into account( username, password, role, full_name, phone, email) values('" . $username . "','" . hash(sha256, $password) . "','user','" . $fullname . "','" . $phonenumber . "', '" . $email . "')";
         $signup_result = pg_query($connection, $signup_query);
 
         if ($signup_result) {
             // Sign up successful
-            $message = "<div class='alert alert-success text-center'><strong>Account Created!</strong> Redirecting.. </div>";
+            $display = "<div class='alert alert-success text-center'><strong>Account Created Successfully!</strong></div>";
             header("refresh:2; url=./user_home.php");
             $_SESSION['key'] = $username;
         } else {
-            $message = "Something seems to be wrong, please try later";
+            $display = "<div class='alert alert-danger text-center'><strong>Something seems to be wrong, please try later</strong></div>";
+            unset($username);
         }
     }
+
 }
 
 include "header.php";
@@ -76,7 +80,7 @@ include "header.php";
     </div>
 </div>
 
-<?php echo $message ?>
+<?php echo $display ?>
 
 <section class="register section-padding">
     <div class="container">

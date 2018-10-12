@@ -33,7 +33,7 @@ if (!isset($_SESSION['key'])) {
 
 } else {
     $username = pg_escape_string($connection, $_SESSION['key']);
-    $query = "SELECT full_name, email, phone FROM account where username='" . $username . "'";
+    $query = "SELECT full_name, email, phone, role FROM account where username='" . $username . "'";
     $result = pg_query($connection, $query) or die('Query unsuccessful:' . pg_last_error());
     $row = pg_fetch_row($result);
 
@@ -104,7 +104,7 @@ include "header.php";
         <div class="row">
 
             <?php
-            include "user_sidebar.php";
+                include "user_sidebar.php";
             ?>
 
             <div class="col-xs-12 col-sm-12 col-md-12 col-lg-5">

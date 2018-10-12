@@ -13,7 +13,6 @@
         $result = pg_query($connection, $query) or die('Query unsuccessful:' . pg_last_error());
         $details = pg_fetch_row($result);
     }
-    include "header.php";
     ?>
 
     <div class="col-sm-12 col-md-4 col-lg-3 page-sidebar">
