@@ -224,7 +224,7 @@
 								// query for display; offset for pagination
 								if (isset($_GET["category"]) && $_GET["category"] != "none") {
 									$query_search = "SELECT * FROM item 
-										WHERE type='".$category."' AND (LOWER(description) LIKE LOWER('%".$customword."%') OR LOWER(item_name) LIKE LOWER('%".$customword."%')
+										WHERE type='".$category."' AND (LOWER(description) LIKE LOWER('%".$customword."%') OR LOWER(item_name) LIKE LOWER('%".$customword."%'))
 										ORDER BY time_created DESC LIMIT 6 OFFSET $page_size*($page_no-1)";
 									}
 								else {
