@@ -20,25 +20,28 @@
 	<body data-gr-c-s-loaded="true">
 		
 		<?php
-      session_start();
-      include "connect.php";
-      include 'header.php';
+			session_start();
+			include "connect.php";
+			include 'header.php';
 
-      
-      $page_size = 6;
-      $num_pages_shown = 3;
-      $curr_start_number = 0;
-      
-      $query = "SELECT * FROM item";
-      $result = pg_query($connection,$query);
-      $total_num_pages = ceil(pg_num_rows($result)/$page_size);
-      
-      $query_params = parse_url($url, PHP_URL_QUERY);
-      if (isset($_GET['page_no'])) {
-        $page_no = $_GET['page_no'];
-      } else {
-        $page_no = 1;
-      }
+			
+			$page_size = 6;
+			$num_pages_shown = 3;
+			$curr_start_number = 0;
+			
+			$query_params = parse_str(parse_url($url, PHP_URL_QUERY), $output);
+			echo "HELO      ".$output[0]." ".$output[1]." ".$output[2];
+
+			if (isset($_GET['page_no'])) {
+				$page_no = $_GET['page_no'];
+			} else {
+				$page_no = 1;
+			}
+
+			$query = "SELECT * FROM item";
+			$result = pg_query($connection,$query);
+			$total_num_pages = ceil(pg_num_rows($result)/$page_size);
+
 		?>
 		
 		<div id="hero-area">
@@ -49,7 +52,7 @@
 						<div class="contents-ctg">
 							<div class="search-bar">
 								<fieldset>
-									<form class="search-form">
+									<form class="search-form" method="get">
 										<div class="form-group tg-inputwithicon">
 											<i class="lni-tag"></i>
 											<input type="text" name="customword" class="form-control" placeholder="What are you looking for">
@@ -71,19 +74,19 @@
 										<div class="form-group tg-inputwithicon">
 											<i class="lni-layers"></i>
 											<div class="tg-select">
-												<select>
+												<select name="category">
 													<option value="none">Select Categories</option>
-													<option value="none">Mobiles</option>
-													<option value="none">Electronics</option>
-													<option value="none">Training</option>
-													<option value="none">Real Estate</option>
-													<option value="none">Services</option>
-													<option value="none">Training</option>
-													<option value="none">Vehicles</option>
+													<option value="Electronics">Electronics</option>
+													<option value="Tools">Tools</option>
+													<option value="Appliances">Appliances</option>
+													<option value="Furniture">Furniture</option>
+													<option value="Books">Books</option>
+													<option value="Music">Music</option>
+													<option value="Sports">Sports</option>
 												</select>
 											</div>
 										</div>
-										<button class="btn btn-common" type="button"><i class="lni-search"></i></button>
+										<button class="btn btn-common" type="submit"><i class="lni-search"></i></button>
 									</form>
 								</fieldset>
 							</div>
@@ -196,15 +199,38 @@
 					
 				<div class="product-filter">
 					<div class="short-name">
-						<span>Showing (<?php if ($total_num_pages==0) {echo "0 - 0";} else {echo (1+($page_no-1)*$page_size)." - ".($page_no*$page_size); } ?> products of <?php 
-							if (!isset($_GET['category'])){
-								$query = "SELECT * FROM item";
+						<?php 
+							if (!isset($_GET["category"]) || $_GET["category"] == "none"){
+								$customword = $_GET["customword"];
+
+								$query_search = "SELECT * FROM item 
+										WHERE LOWER(description) LIKE LOWER('%".$customword."%') OR LOWER(item_name) LIKE LOWER('%".$customword."%')
+										ORDER BY time_created DESC LIMIT 6 OFFSET $page_size*($page_no-1)";
+								echo $query_search;
+								$search_params = "customword=".$customword;
+								$result = pg_query($connection,$query_search);
+								$total_num_pages = ceil(pg_num_rows($result)/$page_size);
+
+							} else if (isset($_GET["customword"])) {
+								$category = $_GET["category"];
+								$customword = $_GET["customword"];
+
+								$query_search = "SELECT * FROM item 
+										WHERE type='".$category."' AND LOWER(description) LIKE LOWER('%".$customword."%') OR LOWER(item_name) LIKE LOWER('%".$customword."%') 
+										ORDER BY time_created DESC LIMIT 6 OFFSET $page_size*($page_no-1)";
+								echo $query_search;
+								$search_params = "customword=".$customword."&category=".$category;
+			
+								$result = pg_query($connection,$query_search);
+								$total_num_pages = ceil(pg_num_rows($result)/$page_size);
 							} else {
-								$query = "SELECT * FROM item WHERE type='".$_GET['category']."'";
+								$query = "SELECT * FROM item";
+								echo $query;
+								$result = pg_query($connection,$query);
+								$total_num_pages = ceil(pg_num_rows($result)/$page_size);
 							}
-							$result = pg_query($connection,$query);
-							echo pg_num_rows($result);
-							?> products)</span>
+						?>
+						<span>Showing (<?= min(1+($page_no-1)*$page_size, pg_num_rows($result))." - ".min($page_no*$page_size, pg_num_rows($result)); ?> products of <?= pg_num_rows($result);?> products)</span>
 						</div>
 						<div class="Show-item">
 							<span>Show Items</span>
@@ -235,14 +261,7 @@
 						<div class="tab-content">
 							<div id="grid-view" class="tab-pane fade active show">
 								<div class="row">
-									
 									<?php 
-									if (!isset($_GET["category"])){
-										$query = "SELECT * FROM item ORDER BY time_created DESC LIMIT 6 OFFSET $page_size*($page_no-1)";
-									} else {
-										$query = "SELECT * FROM item WHERE type='".$_GET['category']."' ORDER BY time_created DESC LIMIT 6 OFFSET $page_size*($page_no-1)";
-									}
-									$result = pg_query($connection,$query);
 									for ($i=0; $i<min(6, pg_num_rows($result)); $i++) {
 										$row = pg_fetch_assoc($result);
 										?>
@@ -300,16 +319,16 @@
 										<ul class="pagination">
 											<li class="page-item <?php if($page_no <= 1) {echo 'disabled';} ?>"><a class="page-link" 
 												href="<?php if ($page_no == $curr_start_number) {$curr_start_number -= $num_pages_shown; }
-													echo '?page_no='.($page_no-1) ?>">Previous</a></li>
+													echo '?page_no='.($page_no-1)."&".$search_params ?>">Previous</a></li>
 											<li class="page-item <?php if($curr_start_number+1 > $total_num_pages) {echo 'disabled';} ?>"><a class="page-link <?php if($page_no == $curr_start_number+1) {echo 'active';} ?>" 
-												href="<?= '?page_no='.($curr_start_number+1) ?>"><?= ($curr_start_number+1) ?></a></li>
+												href="<?= '?page_no='.($curr_start_number+1)."&".$search_params ?>"><?= ($curr_start_number+1) ?></a></li>
 											<li class="page-item <?php if($curr_start_number+2 > $total_num_pages) {echo 'disabled';} ?>"><a class="page-link <?php if($page_no == $curr_start_number+2) {echo 'active';} ?>" 
-												href="<?= '?page_no='.($curr_start_number+2) ?>"><?= ($curr_start_number+2) ?></a></li>
+												href="<?= '?page_no='.($curr_start_number+2)."&".$search_params ?>"><?= ($curr_start_number+2) ?></a></li>
 											<li class="page-item <?php if($curr_start_number+3 > $total_num_pages) {echo 'disabled';} ?>"><a class="page-link <?php if($page_no == $curr_start_number+3) {echo 'active';} ?>" 
-												href="<?= '?page_no='.($curr_start_number+3) ?>"><?= ($curr_start_number+3) ?></a></li>
+												href="<?= '?page_no='.($curr_start_number+3)."&".$search_params ?>"><?= ($curr_start_number+3) ?></a></li>
 											<li class="page-item  <?php if($page_no >= $total_num_pages) {echo 'disabled';} ?>"><a class="page-link" 
 												href="<?php if (page_no == $curr_start_number+3) {$curr_start_number += $num_pages_shown; }
-													echo '?page_no='.($page_no+1) ?>">Next</a></li>
+													echo '?page_no='.($page_no+1)."&".$search_params ?>">Next</a></li>
 										</ul>
 									</nav>
 								</div>
