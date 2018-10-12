@@ -58,14 +58,14 @@
                     <i class="lni-layers"></i>
                     <div class="tg-select">
                       <select>
-                        <option value="none">Select Categories</option>
-                        <option value="none">Mobiles</option>
-                        <option value="none">Electronics</option>
-                        <option value="none">Training</option>
-                        <option value="none">Real Estate</option>
-                        <option value="none">Services</option>
-                        <option value="none">Training</option>
-                        <option value="none">Vehicles</option>
+                        <option value="" hidden disabled selected>Select Categories</option>
+                        <option value="Electronics">Electronics</option>
+                        <option value="Tools">Tools</option>
+                        <option value="Appliances">Appliances</option>
+                        <option value="Furniture">Furniture</option>
+                        <option value="Books">Books</option>
+                        <option value="Music">Music</option>
+                        <option value="Sports">Sports</option>
                       </select>
                     </div>
                   </div>
@@ -183,234 +183,57 @@
   <div class="container">
     <h1 class="section-title">Latest Items</h1>
     <div class="row">
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-4">
-        <div class="featured-box">
-          <figure>
-            <div class="icon">
-              <i class="lni-heart"></i>
-            </div>
-            <a href="#"><img class="img-fluid" src="./assets/img/img-12.jpg" alt=""></a>
-          </figure>
-          <div class="feature-content">
-            <div class="tg-product">
-              <a href="#">Furnitures &gt; Office</a>
-            </div>
-            <h4><a href="ads-details.html">Office Furnitures</a></h4>
-            <span>Last Updated: 5 hours ago</span>
-            <ul class="address">
-              <li>
-                <a href="#"><i class="lni-map-marker"></i> New York</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-alarm-clock"></i> 17 Mar, 8:30 pm</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-user"></i> David Givens</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-package"></i> Used</a>
-              </li>
-            </ul>
-            <div class="btn-list">
-              <a class="btn-price" href="#">$ 1280</a>
-              <a class="btn btn-common" href="ads-details.html">
-                <i class="lni-list"></i>
-                View Details
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-4">
-        <div class="featured-box">
-          <figure>
-            <div class="icon">
-              <i class="lni-heart"></i>
-            </div>
-            <a href="#"><img class="img-fluid" src="./assets/img/img2.jpg" alt=""></a>
-          </figure>
-          <div class="feature-content">
-            <div class="tg-product">
-              <a href="#">Loptop &gt; Accessories</a>
-            </div>
-            <h4><a href="ads-details.html">Fresh Macbook Pro 2017</a></h4>
-            <span>Last Updated: 8 hours ago</span>
-            <ul class="address">
-              <li>
-                <a href="#"><i class="lni-map-marker"></i> New York</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-alarm-clock"></i> 7 Mar, 10:10 pm</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-user"></i> John Smith</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-package"></i> Used</a>
-              </li>
-            </ul>
-            <div class="btn-list">
-              <a class="btn-price" href="#">$ 1100</a>
-              <a class="btn btn-common" href="ads-details.html">
-                <i class="lni-list"></i>
-                View Details
-              </a>
+      <?php 
+        $query = "SELECT * FROM item ORDER BY time_created DESC LIMIT 6";
+        $result = pg_query($connection, $query);
+        for ($i=0; $i<min(6, pg_num_rows($result)); $i++){
+          $row = pg_fetch_assoc($result);
+          ?>
+          <div class="col-xs-6 col-sm-6 col-md-6 col-lg-4">
+            <div class="featured-box">
+              <figure>
+                <div class="icon">
+                  <i class="lni-heart"></i>
+                </div>
+                <a href="./listing_detail.php?id=<?=$row['item_id']; ?>">
+                  <img class="img-fluid" src="./assets/img/items/<?=$row['img_src']; ?>" alt="">
+                </a>
+              </figure>
+              <div class="feature-content">
+                <div class="tg-product">
+                  <a href="./listings.php?category=<?=$row['type']; ?>">
+                    <?=$row['type']; ?>
+                  </a>
+                </div>
+                <h4><a href="./listing_detail.php?id=<?=$row['item_id']; ?>"><?=$row['item_name']; ?></a></h4>
+                <!-- <span>Last Updated: 5 hours ago</span> -->
+                <ul class="address">
+                  <li>
+                    <a><i class="lni-map-marker"></i><?=$row['address']; ?></a>
+                  </li>
+                  <li>
+                    <a><i class="lni-alarm-clock"></i><?=$row['borrow_duration']; ?> days</a>
+                  </li>
+                  <li>
+                    <a><i class="lni-user"></i><?=$row['username']; ?></a>
+                  </li>
+                </ul>
+                <div class="btn-list">
+                  <?php
+                    $bid_query = "SELECT MAX(b.bid_amount) FROM bid b WHERE b.item_id='".$row['item_id']."'";
+                    $bid_result = pg_query($connection, $bid_query);
+                    $top_bid = pg_fetch_assoc($bid_result);
+                  ?>
+                  <a class="btn-price">Highest Bid: $<b> <?=($top_bid['max'] === NULL ? $row['start_price'] : $top_bid['max']); ?> </b></a>
+                  <a class="btn btn-common" href="./listing_detail.php?id=<?=$row['item_id']; ?>">
+                    <i class="lni-list"></i>
+                    View Details
+                  </a>
+                </div>
+              </div>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-4">
-        <div class="featured-box">
-          <figure>
-            <div class="icon">
-              <i class="lni-heart"></i>
-            </div>
-            <a href="#"><img class="img-fluid" src="./assets/img/img-11.jpg" alt=""></a>
-          </figure>
-          <div class="feature-content">
-            <div class="tg-product">
-              <a href="#">Electronics &gt; Naturial</a>
-            </div>
-            <h4><a href="ads-details.html">Canon Photography Camera</a></h4>
-            <span>Last Updated: 4 hours ago</span>
-            <ul class="address">
-              <li>
-                <a href="#"><i class="lni-map-marker"></i> Delaware</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-alarm-clock"></i> 7 Feb, 6:10 pm</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-user"></i> Justyna M.</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-package"></i> Used</a>
-              </li>
-            </ul>
-            <div class="btn-list">
-              <a class="btn-price" href="#">$ 205</a>
-              <a class="btn btn-common" href="ads-details.html">
-                <i class="lni-list"></i>
-                View Details
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-4">
-        <div class="featured-box">
-          <figure>
-            <div class="icon">
-              <i class="lni-heart"></i>
-            </div>
-            <a href="#"><img class="img-fluid" src="./assets/img/img6.jpg" alt=""></a>
-          </figure>
-          <div class="feature-content">
-            <div class="tg-product">
-              <a href="#">Mobiles &gt; Accessories</a>
-            </div>
-            <h4><a href="ads-details.html">Apple iPhone X</a></h4>
-            <span>Last Updated: 13 hours ago</span>
-            <ul class="address">
-              <li>
-                <a href="#"><i class="lni-map-marker"></i> Albama</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-alarm-clock"></i> 3 Jan, 9:05 pm</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-user"></i> Mh Arman</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-package"></i> Brand New</a>
-              </li>
-            </ul>
-            <div class="btn-list">
-              <a class="btn-price" href="#">$ 799</a>
-              <a class="btn btn-common" href="ads-details.html">
-                <i class="lni-list"></i>
-                View Details
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-4">
-        <div class="featured-box">
-          <figure>
-            <div class="icon">
-              <i class="lni-heart"></i>
-            </div>
-            <a href="#"><img class="img-fluid" src="./assets/img/img-09.jpg" alt=""></a>
-          </figure>
-          <div class="feature-content">
-            <div class="tg-product">
-              <a href="#">Loptop &gt; Accessories</a>
-            </div>
-            <h4><a href="ads-details.html">Amazing Room for Rent</a></h4>
-            <span>Last Updated: 4 hours ago</span>
-            <ul class="address">
-              <li>
-                <a href="#"><i class="lni-map-marker"></i> Chicago</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-alarm-clock"></i> 1 Jan, 7:00 pm</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-user"></i> Elon Musk</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-package"></i> N/A</a>
-              </li>
-            </ul>
-            <div class="btn-list">
-              <a class="btn-price" href="#">$ 250</a>
-              <a class="btn btn-common" href="ads-details.html">
-                <i class="lni-list"></i>
-                View Details
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
-      <div class="col-xs-6 col-sm-6 col-md-6 col-lg-4">
-        <div class="featured-box">
-          <figure>
-            <div class="icon">
-              <i class="lni-heart"></i>
-            </div>
-            <a href="#"><img class="img-fluid" src="./assets/img/img-10.jpg" alt=""></a>
-          </figure>
-          <div class="feature-content">
-            <div class="tg-product">
-              <a href="#">Office &gt; Stationary</a>
-            </div>
-            <h4><a href="ads-details.html">Custom Notebooks</a></h4>
-            <span>Last Updated: 12 hours ago</span>
-            <ul class="address">
-              <li>
-                <a href="#"><i class="lni-map-marker"></i> Washington</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-alarm-clock"></i> 12 Dec, 10:10 pm</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-user"></i> John Smith</a>
-              </li>
-              <li>
-                <a href="#"><i class="lni-package"></i> Brand New</a>
-              </li>
-            </ul>
-            <div class="btn-list">
-              <a class="btn-price" href="#">$ 25</a>
-              <a class="btn btn-common" href="ads-details.html">
-                <i class="lni-list"></i>
-                View Details
-              </a>
-            </div>
-          </div>
-        </div>
-      </div>
+        <?php } ?>
     </div>
   </div>
 </section>

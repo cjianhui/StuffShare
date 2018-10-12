@@ -11,7 +11,7 @@
         $username = pg_escape_string($connection, $_SESSION['key']);
         $query = "SELECT full_name, role FROM account where username='" . $username . "'";
         $result = pg_query($connection, $query) or die('Query unsuccessful:' . pg_last_error());
-        $details = pg_fetch_row($result);
+        $details = pg_fetch_assoc($result);
     }
     ?>
 
@@ -23,8 +23,8 @@
                         <a href="./user_home.php"><img src="./assets/img/avatar.png" alt=""></a>
                     </figure>
                     <div class="usercontent">
-                        <h3 style="text-transform: none"><?php echo $details[0]?></h3>
-                        <h4 style="text-transform: capitalize"><?php echo $details[1]?></h4>
+                        <h3 style="text-transform: none"><?= $details['full_name']?></h3>
+                        <h4 style="text-transform: capitalize"><?= $details['role']?></h4>
                     </div>
                 </div>
                 <nav class="navdashboard">
