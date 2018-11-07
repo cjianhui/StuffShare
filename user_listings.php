@@ -46,10 +46,10 @@ if (pg_num_rows($result) == 0) {
 $full_name = pg_fetch_assoc($result)['full_name'];
 
 if ($uname == $input_user) {
-    $is_owner = true;
-} else{
-    $is_owner = false;
-    $uname = $input_user;
+  $is_owner = true;
+} else {
+  $is_owner = false;
+  $uname = $input_user;
 };
 
 include "header.php";
@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="breadcrumb-wrapper">
                     <h2 class="product-title"><?= $is_owner ? "My" : $full_name ?> Listings</h2>
                     <ol class="breadcrumb">
-                        <li><a href="/user_bids.html#">Home /</a></li>
+                        <li>Home /</li>
                         <li class="current"><?= $is_owner ? "My" : $full_name ?> Listings</li>
                     </ol>
                 </div>
@@ -105,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                             <nav class="nav-table">
                               <?php
                               date_default_timezone_set('Asia/Singapore');
-                              $time_now = date('d/m/Y H:i:s');
+                              $time_now = date('Y/m/d H:i:s');
                               $query = "SELECT item_id FROM item WHERE username='$uname'";
                               $all_ids = pg_fetch_all(pg_query($connection, $query));
                               $all_count = $all_ids ? count($all_ids) : 0;
@@ -114,13 +114,13 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               $active_ids = pg_fetch_all(pg_query($connection, $query));
                               $active_count = $active_ids ? count($active_ids) : 0;
 
-                              $query = "SELECT DISTINCT i.item_id FROM item i LEFT OUTER JOIN bid b ON i.item_id=b.item_id " .
-                                "WHERE i.username='$uname' AND i.bid_end <'$time_now' AND b.bid_id IS NULL";
+                              $query = "SELECT DISTINCT i.item_id FROM item i " .
+                                "WHERE i.username='$uname' AND i.bid_end <'$time_now' AND i.highest_bid_id IS NULL";
                               $closed_ids = pg_fetch_all(pg_query($connection, $query));
                               $closed_count = $closed_ids ? count($closed_ids) : 0;
 
-                              $query = "SELECT DISTINCT i.item_id FROM item i LEFT OUTER JOIN bid b ON i.item_id=b.item_id " .
-                                "WHERE i.username='$uname' AND i.bid_end <'$time_now' AND b.bid_id IS NOT NULL";
+                              $query = "SELECT DISTINCT i.item_id FROM item i " .
+                                "WHERE i.username='$uname' AND i.bid_end <'$time_now' AND i.highest_bid_id IS NOT NULL";
                               $rented_ids = pg_fetch_all(pg_query($connection, $query));
                               $rented_count = $rented_ids ? count($rented_ids) : 0;
                               ?>
@@ -153,6 +153,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <th>Price</th>
                                     <th>Bidders</th>
                                     <th>Action</th>
+                                    <?php if ($is_owner) {?>
+                                        <th>Highest Bidder</th>
+                                    <?php } ?>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -173,18 +176,16 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                       $target_ids = array_map('current', $all_ids);
                                   }
 
-                                  $query = "SELECT i.img_src, i.item_name, i.type, i.start_price, i.item_id, i.bid_end, COUNT(b.bid_id) as bidders, MAX(bid_amount) as highest_bid " .
-                                    "FROM item i LEFT OUTER JOIN bid b on i.item_id=b.item_id " .
+                                  $query = "SELECT i.img_src, i.item_name, i.type, i.start_price, i.item_id, i.bid_end, COUNT(b.bid_id) as bidders, b1.bid_amount as highest_bid, b1.username as highest_bidder " .
+                                    "FROM item i LEFT OUTER JOIN bid b on i.item_id=b.item_id LEFT OUTER JOIN bid b1 on i.highest_bid_id=b1.bid_id " .
                                     "WHERE i.item_id in (" . implode(",", $target_ids) . ") " .
-                                    "GROUP BY i.img_src, i.item_name, i.type, i.start_price, i.item_id " .
-                                    "ORDER BY i.time_created DESC LIMIT 5";
+                                    "GROUP BY i.img_src, i.item_name, i.type, i.start_price, i.item_id, b1.username, b1.bid_amount " .
+                                    "ORDER BY i.time_created";
+                                  echo $query;
 
                                   $result = pg_query($connection, $query);
 
-
-                                  for ($i = 0;
-                                  $i < min(5, pg_num_rows($result));
-                                  $i++) {
+                                  for ($i = 0; $i < pg_num_rows($result); $i++) {
                                   $row = pg_fetch_assoc($result);
                                   $row['bidders'] = $row['bidders'] ? $row['bidders'] : 0;
                                   ?>
@@ -198,9 +199,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <td data-title="Ad Status">
                                       <?php
 
-                                      if (date('d/m/Y H:i:s', strtotime($row['bid_end'])) > $time_now) {
+                                      if (date('Y/m/d H:i:s', strtotime($row['bid_end'])) > $time_now) {
                                         echo "<span class=\"adstatus adstatusactive\">active</span>";
-                                      } elseif ($row['bidders'] != 0) {
+                                      } elseif ($row['bidders'] == 0) {
                                         echo "<span class=\"adstatus adstatusdeleted\">closed</span>";
                                       } else {
                                         echo "<span class=\"adstatus adstatusexpired\">rented</span>";
@@ -222,21 +223,24 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                         class="lni-eye"></i></a>
 
                                           <?php
-                                          if ((date('d/m/Y H:i:s', strtotime($row['bid_end'])) > $time_now) && $is_owner) {
+                                          if ((date('Y/m/d H:i:s', strtotime($row['bid_end'])) > $time_now) && $is_owner) {
                                             ?>
-                                              <a class="btn-action btn-edit" title="Edit Listing"
-                                                 href="/user_bids.html#"><i class="lni-pencil"></i></a>
-
                                               <form method="POST" action="user_listings.php?show=<?= $_GET['show'] ?>">
                                                   <input type="hidden" name="delete_id" value="<?= $row['item_id'] ?>"/>
                                                   <button class="btn-action btn-delete lni-trash shadow-none"
-                                                          style="border-style: none; cursor: pointer" title="Delete Listing"></button>
+                                                          style="border-style: none; cursor: pointer"
+                                                          title="Delete Listing"></button>
 
                                               </form>
                                           <?php } ?>
 
                                         </div>
                                     </td>
+                                  <?php if ($is_owner) {?>
+                                      <td data-title="Highest">
+                                          <h3><?= $row['highest_bidder'] ?></h3>
+                                      </td>
+                                  <?php } ?>
                                 </tr>
                                 <?php } ?>
                                 </tr>
