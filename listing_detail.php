@@ -167,7 +167,7 @@ $count = pg_fetch_assoc($count_result);
                                        onwards">
                                 <span class="input-group-btn">
                                   <?php
-                                  if (date('d/m/Y H:i:s', strtotime($row['bid_end'])) < date('d/m/Y H:i:s')) {
+                                  if (date('Y/m/d H:i:s', strtotime($row['bid_end'])) < date('Y/m/d H:i:s')) {
                                     echo "<button class=\"btn btn-common btn-secondary\" type=\"submit\" disabled>Closed!</button>";
                                   } else {
                                     echo "<button class=\"btn btn-common btn-reply\" type=\"submit\">Bid It!</button>";
