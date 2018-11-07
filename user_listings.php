@@ -153,9 +153,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <th>Price</th>
                                     <th>Bidders</th>
                                     <th>Action</th>
-                                    <?php if ($is_owner) {?>
-                                        <th>Highest Bidder</th>
-                                    <?php } ?>
+                                  <?php if ($is_owner) { ?>
+                                      <th>Highest Bidder</th>
+                                  <?php } ?>
                                 </tr>
                                 </thead>
                                 <tbody>
@@ -185,7 +185,9 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                   $result = pg_query($connection, $query);
 
-                                  for ($i = 0; $i < pg_num_rows($result); $i++) {
+                                  for ($i = 0;
+                                  $i < pg_num_rows($result);
+                                  $i++) {
                                   $row = pg_fetch_assoc($result);
                                   $row['bidders'] = $row['bidders'] ? $row['bidders'] : 0;
                                   ?>
@@ -236,7 +238,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                         </div>
                                     </td>
-                                  <?php if ($is_owner) {?>
+                                  <?php if ($is_owner) { ?>
                                       <td data-title="Highest">
                                           <h3><?= $row['highest_bidder'] ?></h3>
                                       </td>
