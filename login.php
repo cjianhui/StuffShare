@@ -50,7 +50,8 @@ if (isset($_SESSION['key'])) {
             header("refresh:2; url=./admin_dashboard.php");
         } else {
             $message = "<div class='alert alert-success text-center'><strong>Login Success!</strong> Redirecting.. </div>";
-            header("refresh:2; url=./user_home.php");
+            echo $_SESSION['current_page'];
+            header("refresh:2; url=".$_SESSION['current_page']);
         }
 
     }

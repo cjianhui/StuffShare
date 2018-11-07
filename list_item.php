@@ -26,6 +26,7 @@
 
 <?php
 session_start();
+$_SESSION['current_page'] = $_SERVER['REQUEST_URI'];
 include "connect.php";
 if (!isset($_SESSION['key'])) {
   header("Location: ./login.php");
@@ -89,10 +90,10 @@ include "header.php";
         <div class="row">
             <div class="col-md-12">
                 <div class="breadcrumb-wrapper">
-                    <h2 class="product-title">Profile Settings</h2>
+                    <h2 class="product-title">List Item</h2>
                     <ol class="breadcrumb">
-                        <li><a href="account-profile-setting.html#">Home /</a></li>
-                        <li class="current">Profile Settings</li>
+                        <li><a href="index.php">Home /</a></li>
+                        <li class="current">List Item</li>
                     </ol>
                 </div>
             </div>

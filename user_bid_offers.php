@@ -23,6 +23,7 @@
         
         <?php
             session_start();
+            $_SESSION['current_page'] = $_SERVER['REQUEST_URI'];
             include "connect.php";
             if (!isset($_SESSION['key'])) {
                 header("Location: ./login.php");
