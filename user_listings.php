@@ -76,7 +76,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                 <div class="breadcrumb-wrapper">
                     <h2 class="product-title"><?= $is_owner ? "My" : $full_name ?> Listings</h2>
                     <ol class="breadcrumb">
-                        <li><a href="/user_bids.html#">Home /</a></li>
+                        <li>Home /</li>
                         <li class="current"><?= $is_owner ? "My" : $full_name ?> Listings</li>
                     </ol>
                 </div>
