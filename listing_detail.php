@@ -81,7 +81,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
   } elseif ($_POST['bid_amt'] > $curr_min_bid) {
     date_default_timezone_set('Asia/Singapore');
 
-    $insert_bid = "INSERT INTO bid VALUES(DEFAULT,'" . date('d/m/Y H:i:s') . "'," . $_POST['bid_amt'] . ",'" . $_SESSION['key'] . "'," . $_GET['id'] . ")";
+    $insert_bid = "INSERT INTO bid VALUES(DEFAULT,'" . date('Y/m/d H:i:s') . "'," . $_POST['bid_amt'] . ",'" . $_SESSION['key'] . "'," . $_GET['id'] . ")";
     $write = pg_query($connection, $insert_bid);
 
     if ($write) {
