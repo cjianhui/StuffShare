@@ -82,7 +82,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
   if (empty($_POST['bid_amt'])) {
     // Empty bid
-    $flash = "<div class='alert alert-danger text-center' role='alert'>Bid amount not indicated!</div>";
+    $flash = "<div class='alert alert-danger text-center' role='alert'>Bid amount not indicated</div>";
 
   } else {
     $insert_bid = "INSERT INTO bid VALUES(DEFAULT,'" . $now . "'," . $_POST['bid_amt'] . ",'" . $_SESSION['key'] . "'," . $_GET['id'] . ")";

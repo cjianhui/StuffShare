@@ -65,11 +65,11 @@ CREATE OR REPLACE FUNCTION check_valid_bid() RETURNS TRIGGER AS $check_valid_bid
     WHERE i.item_id = new.item_id;
 
     IF new.time_created < target.bid_start OR target.bid_end < new.time_created THEN
-      RAISE EXCEPTION 'Item not open for bidding' USING HINT = 'Item not open for bidding';
+      RAISE EXCEPTION 'Item not open for bidding';
     ELSIF new.username = target.username THEN
-   	  RAISE EXCEPTION 'Unable to bid for own item' USING HINT = 'Unable to bid for own item';
+   	  RAISE EXCEPTION 'Unable to bid for own item';
    	ELSIF new.bid_amount <= target.curr_bid_amt THEN
-      RAISE EXCEPTION 'Min bid amount not met' USING HINT = 'Min. bid amount not met';
+      RAISE EXCEPTION 'Min bid amount not met';
  	  END IF;
 
     RAISE NOTICE 'Check bid success';
@@ -81,8 +81,15 @@ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION next_highest_bid() RETURNS TRIGGER AS $next_highest_bid$
   DECLARE
+    target RECORD;
     curr_bid RECORD;
   BEGIN
+    SELECT i.item_id, i.bid_end FROM item i INTO target WHERE i.item_id = old.item_id;
+
+    IF target.bid_end < CURRENT_TIMESTAMP THEN
+      RAISE EXCEPTION 'Unable to delete closed bid';
+    END IF;
+
     FOR curr_bid IN
       SELECT b.bid_id
       FROM bid b
