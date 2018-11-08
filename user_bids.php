@@ -61,16 +61,47 @@
             <div class="page-content">
               <div class="inner-box">
                 <div class="dashboard-box">
-                  <?php
-                    $query = "SELECT * FROM bid where username='".$uname."'";
-                    $result = pg_query($connection, $query);
-                  ?>
-                  <h2 class="dashbord-title">My Bids (<?= pg_num_rows($result)?>)</h2>
+                    <?php
+                    $time_now = date('Y/m/d H:i:s');
+                    $query = "SELECT DISTINCT item_id FROM bid WHERE username='$uname'";
+                    $all_ids = pg_fetch_all(pg_query($connection, $query));
+                    $all_count = $all_ids ? count($all_ids) : 0;
+
+                    $query = "SELECT DISTINCT i.item_id FROM item i, bid b WHERE b.username='$uname' AND
+                      i.item_id=b.item_id AND i.bid_end >'$time_now'";
+                    $active_ids = pg_fetch_all(pg_query($connection, $query));
+                    $active_count = $active_ids ? count($active_ids) : 0;
+
+                    $query = "SELECT DISTINCT i.item_id FROM item i, bid b WHERE b.username='$uname' AND
+                      i.item_id=b.item_id AND i.bid_end <'$time_now' AND i.highest_bid_id=b.bid_id";
+                    $won_ids = pg_fetch_all(pg_query($connection, $query));
+                    $won_count = $won_ids ? count($won_ids) : 0;
+
+                    $query = "SELECT DISTINCT i.item_id FROM item i, bid b WHERE b.username='$uname' AND
+                    i.item_id=b.item_id AND i.bid_end <'$time_now' AND i.highest_bid_id<>b.bid_id";
+                    $lost_ids = pg_fetch_all(pg_query($connection, $query));
+                    $lost_count = $lost_ids ? count($lost_ids) : 0;
+                    ?>
+                  <h2 class="dashbord-title">My Bids (<?= $all_count?>)</h2>
                 </div>
                 <div class="dashboard-wrapper">
                   <nav class="nav-table">
                     <ul>
-                      <li class="active"><a href="/user_bids.html#">Featured (12)</a></li>
+                      <li <?= empty($_GET['show']) ? " class=\"active\"" : "" ?>><a
+                                  href="user_bids.php?user=<?= $uname ?>">All Bids
+                              (<?= $all_count ?>) </a></li>
+                      <li <?= $_GET['show'] == "active" ? " class=\"active\"" : "" ?>><a
+                                  href="user_bids.php?show=active&user=<?= $uname ?>">Active
+                              (<?= $active_count ?>) </a>
+                      </li>
+                      <li <?= $_GET['show'] == "won" ? " class=\"active\"" : "" ?>><a
+                                  href="user_bids.php?show=won&user=<?= $uname ?>">Won
+                              (<?= $won_count ?>) </a>
+                      </li>
+                      <li <?= $_GET['show'] == "lost" ? " class=\"active\"" : "" ?>><a
+                                  href="user_bids.php?show=lost&user=<?= $uname ?>">Lost
+                              (<?= $lost_count ?>) </a>
+                      </li>
                     </ul>
                   </nav>
                   <table class="table dashboardtable tablemyads">
@@ -79,6 +110,7 @@
                         <th>Photo</th>
                         <th>Title</th>
                         <th>Category</th>
+                        <th>Ad Status</th>
                         <th>Bid Amount</th>
                         <th>Action</th>
                       </tr>
@@ -86,7 +118,27 @@
                     <tbody>
                       <tr data-category="active">
                       <?php
-                        $query = "SELECT * FROM item i, bid b WHERE b.username='".$uname."' AND b.item_id=i.item_id";
+                        switch ($_GET['show']) {
+                          case "active":
+                            $target_ids = array_map('current', $active_ids);
+                            break;
+                          case "won":
+                            $target_ids = array_map('current', $won_ids);
+                            break;
+                          case "lost":
+                            $target_ids = array_map('current', $lost_ids);
+                            break;
+                          default:
+                            $target_ids = array_map('current', $all_ids);
+                        }
+                        $query = "SELECT i.img_src, i.item_name, i.type, i.bid_end, i.item_id, i.highest_bid_id, x.maxprice, b.username AS highest_bidder FROM ( 
+                          SELECT item_id, MAX(bid_amount) AS maxprice
+                          FROM bid
+                          WHERE item_id IN (" . implode(",", $target_ids) . ") 
+                          GROUP BY item_id) as x
+                        INNER JOIN item i ON i.item_id=x.item_id
+                        INNER JOIN bid b ON i.highest_bid_id=b.bid_id
+                        ORDER BY i.time_created";
                         $result = pg_query($connection,$query);
                         for ($i=0; $i<pg_num_rows($result); $i++) {
                           $row = pg_fetch_assoc($result);
@@ -94,11 +146,27 @@
                           <td class="photo"><img class="img-fluid" src="./assets/img/items/<?= $row['img_src'];?>" alt=""></td>
                           <td data-title="Title">
                             <h3><?= $row['item_name'];?></h3>
-                            <!-- <span>Ad ID: ng3D5hAMHPajQrM</span> -->
                           </td>
                           <td data-title="Category"><span class="adcategories"><?= $row['type'];?></span></td>
-                          <td data-title="Price">
-                            <h3><?= $row['bid_amount'];?>$</h3>
+                          <td data-title="Ad Status">
+                            <?php
+
+                            if (date('Y/m/d H:i:s', strtotime($row['bid_end'])) > $time_now) {
+                              if ($row['highest_bidder'] == $uname){
+                                echo "<span class=\"adstatus adstatussold\">active</span>";
+                              } else {
+                                echo "<span class=\"adstatus adstatusexpired\">outbidded</span>";
+                              }
+                            } elseif ($row['highest_bidder'] == $uname) {
+                              echo "<span class=\"adstatus adstatusactive\">won</span>";
+                            } else {
+                              echo "<span class=\"adstatus adstatusdeleted\">lost</span>";
+                            }
+                            ?>
+
+                          </td>
+                          <td data-title="Your Bid">
+                            <h3><?= $row['maxprice'];?>$</h3>
                           </td>
                           <td data-title="Action">
                             <div class="btns-actions">

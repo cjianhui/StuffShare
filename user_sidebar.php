@@ -48,14 +48,6 @@
                             </a>
                         </li>
                         <li>
-                            <a href="./user_bid_offers.php">
-                                <i class="lni-envelope"></i>
-                                <span>My Offers</span>
-                            </a>
-                        </li>
-                        <li>
-                        </li>
-                        <li>
                             <a href="./user_bids.php">
                                 <i class="lni-heart"></i>
                                 <span>My Bids</span>

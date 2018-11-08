@@ -301,7 +301,7 @@
 													</ul>
 													<div class="btn-list">
 														<?php
-															$bid_query = "SELECT MAX(b.bid_amount) FROM bid b WHERE b.item_id='".$row['item_id']."'";
+															$bid_query = "SELECT b.bid_amount FROM bid b WHERE b.bid_id='".$row['highest_bid_id']."'";
 															$bid_result = pg_query($connection, $bid_query);
 															$top_bid = pg_fetch_assoc($bid_result);
 														?>
