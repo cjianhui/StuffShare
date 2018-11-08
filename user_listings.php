@@ -242,9 +242,60 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                       <td data-title="Highest">
                                           <?php if (isset($row['highest_bidder'])) {
-                                              $highest_bidder = $row['highest_bidder'];
                                               ?>
-                                           <span href="" style="margin-left: -5px" class="tg-btn" data-toggle="modal" data-target="#modalLoginForm">
+                                              <!-- User Contact Information Modal -->
+                                              <div class="modal fade" id="bidwinner<?php echo $i;?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                                                   aria-hidden="true">
+                                                  <?php
+                                                  $winner_username = pg_escape_string($row['highest_bidder']);
+                                                  $query = "SELECT full_name, email, phone FROM account where username='" . $winner_username . "'";
+                                                  $query_result = pg_query($connection, $query) or die('Query unsuccessful:' . pg_last_error());
+                                                  $details = pg_fetch_assoc($query_result);
+
+                                                  ?>
+                                                  <div class="modal-dialog h-100 d-flex flex-column justify-content-center my-0" role="document">
+                                                      <div class="modal-content">
+                                                          <div class="modal-header text-center">
+                                                              <span class="modal-title w-100 font-weight-bold" style="font-size: larger">Contact Information</span>
+                                                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                  <span aria-hidden="true">&times;</span>
+                                                              </button>
+                                                          </div>
+
+                                                          <div class="modal-body mx-3">
+                                                              <div class="form-group">
+                                                                  <div class="input-icon">
+                                                                      <i class="lni-user">
+                                                                      </i>
+                                                                      <label class="control-label">Name</label>
+                                                                      <input type="text" id="username" name="username" class="form-control"
+                                                                             value="<?php echo $details['full_name']?>" readonly>
+                                                                  </div>
+                                                              </div>
+                                                              <div class="form-group">
+                                                                  <div class="input-icon">
+                                                                      <i class="lni-envelope">
+                                                                      </i>
+                                                                      <label class="control-label">Email</label>
+                                                                      <input type="text" class="form-control"
+                                                                             value="<?php echo $details['email']?>" readonly>
+                                                                  </div>
+                                                              </div>
+                                                              <div class="form-group">
+                                                                  <div class="input-icon">
+                                                                      <i class="lni-phone">
+                                                                      </i>
+                                                                      <label class="control-label">Phone</label>
+                                                                      <input type="text" class="form-control"
+                                                                             value="<?php echo $details['phone']?>" readonly>
+                                                                  </div>
+                                                              </div>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </div>
+
+                                           <span style="margin-left: -5px" class="tg-btn" data-toggle="modal" data-target="#bidwinner<?php echo $i;?>">
                                                   <i class="lni-phone-handset"></i><?= $row['highest_bidder'] ?></span>
                                           <?php } ?>
                                       </td>
@@ -261,60 +312,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         </div>
     </div>
 </div>
-<?php
-if (isset($highest_bidder)) {
-    $winner_username = pg_escape_string($highest_bidder);
-    $query = "SELECT full_name, email, phone FROM account where username='" . $winner_username . "'";
-    $result = pg_query($connection, $query) or die('Query unsuccessful:' . pg_last_error());
-    $details = pg_fetch_assoc($result);
-}
-?>
 
-
-<div class="modal fade" id="modalLoginForm" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
-     aria-hidden="true">
-    <div class="modal-dialog h-100 d-flex flex-column justify-content-center my-0" role="document">
-        <div class="modal-content">
-            <div class="modal-header text-center">
-                <span class="modal-title w-100 font-weight-bold" style="font-size: larger">Contact Information</span>
-                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                    <span aria-hidden="true">&times;</span>
-                </button>
-            </div>
-
-            <div class="modal-body mx-3">
-
-                <div class="form-group">
-                    <div class="input-icon">
-                        <i class="lni-user">
-                        </i>
-                        <label class="control-label">Name</label>
-                        <input type="text" id="username" name="username" class="form-control"
-                               value="<?php echo $details['full_name']?>" readonly>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-icon">
-                        <i class="lni-envelope">
-                        </i>
-                        <label class="control-label">Email</label>
-                        <input type="text" class="form-control"
-                               value="<?php echo $details['email']?>" readonly>
-                    </div>
-                </div>
-                <div class="form-group">
-                    <div class="input-icon">
-                        <i class="lni-phone">
-                        </i>
-                        <label class="control-label">Phone</label>
-                        <input type="text" class="form-control"
-                               value="<?php echo $details['phone']?>" readonly>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-</div>
 
 <?php
 include "footer.php";
