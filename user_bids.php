@@ -131,13 +131,13 @@
                           default:
                             $target_ids = array_map('current', $all_ids);
                         }
-                        $query = "SELECT i.img_src, i.item_name, i.type, i.bid_end, i.item_id, x.maxprice FROM ( 
+                        $query = "SELECT i.img_src, i.item_name, i.type, i.bid_end, i.item_id, i.highest_bid_id, x.maxprice, b.username AS highest_bidder FROM ( 
                           SELECT item_id, MAX(bid_amount) AS maxprice
                           FROM bid
                           WHERE item_id IN (" . implode(",", $target_ids) . ") 
                           GROUP BY item_id) as x
-                        INNER JOIN item i ON i.item_id=x.item_id";
-                        echo($query);
+                        INNER JOIN item i ON i.item_id=x.item_id
+                        INNER JOIN bid b ON i.highest_bid_id=b.bid_id";
                         $result = pg_query($connection,$query);
                         for ($i=0; $i<pg_num_rows($result); $i++) {
                           $row = pg_fetch_assoc($result);
@@ -151,11 +151,15 @@
                             <?php
 
                             if (date('Y/m/d H:i:s', strtotime($row['bid_end'])) > $time_now) {
-                              echo "<span class=\"adstatus adstatusactive\">active</span>";
-                            } elseif ($row['bidders'] == 0) {
-                              echo "<span class=\"adstatus adstatusdeleted\">closed</span>";
+                              if ($row['highest_bidder'] == $uname){
+                                echo "<span class=\"adstatus adstatussold\">active</span>";
+                              } else {
+                                echo "<span class=\"adstatus adstatusexpired\">outbidded</span>";
+                              }
+                            } elseif ($row['highest_bidder'] == $uname) {
+                              echo "<span class=\"adstatus adstatusactive\">won</span>";
                             } else {
-                              echo "<span class=\"adstatus adstatusexpired\">rented</span>";
+                              echo "<span class=\"adstatus adstatusdeleted\">lost</span>";
                             }
                             ?>
 
