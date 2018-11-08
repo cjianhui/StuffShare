@@ -61,16 +61,47 @@
             <div class="page-content">
               <div class="inner-box">
                 <div class="dashboard-box">
-                  <?php
-                    $query = "SELECT * FROM bid where username='".$uname."'";
-                    $result = pg_query($connection, $query);
-                  ?>
-                  <h2 class="dashbord-title">My Bids (<?= pg_num_rows($result)?>)</h2>
+                    <?php
+                    $time_now = date('Y/m/d H:i:s');
+                    $query = "SELECT item_id FROM bid WHERE username='$uname'";
+                    $all_ids = pg_fetch_all(pg_query($connection, $query));
+                    $all_count = $all_ids ? count($all_ids) : 0;
+
+                    $query = "SELECT i.item_id FROM item i, bid b WHERE b.username='$uname' AND
+                      i.item_id=b.item_id AND i.bid_end >'$time_now'";
+                    $active_ids = pg_fetch_all(pg_query($connection, $query));
+                    $active_count = $active_ids ? count($active_ids) : 0;
+
+                    $query = "SELECT DISTINCT i.item_id FROM item i, bid b WHERE b.username='$uname' AND
+                      i.item_id=b.item_id AND i.bid_end <'$time_now' AND i.highest_bid_id=b.bid_id";
+                    $won_ids = pg_fetch_all(pg_query($connection, $query));
+                    $won_count = $won_ids ? count($won_ids) : 0;
+
+                    $query = "SELECT DISTINCT i.item_id FROM item i, bid b WHERE b.username='$uname' AND
+                    i.item_id=b.item_id AND i.bid_end <'$time_now' AND i.highest_bid_id<>b.bid_id";
+                    $lost_ids = pg_fetch_all(pg_query($connection, $query));
+                    $lost_count = $lost_ids ? count($lost_ids) : 0;
+                    ?>
+                  <h2 class="dashbord-title">My Bids (<?= $all_count?>)</h2>
                 </div>
                 <div class="dashboard-wrapper">
                   <nav class="nav-table">
                     <ul>
-                      <li class="active"><a href="/user_bids.html#">Featured (12)</a></li>
+                      <li <?= empty($_GET['show']) ? " class=\"active\"" : "" ?>><a
+                                  href="user_bids.php?user=<?= $uname ?>">All Bids
+                              (<?= $all_count ?>) </a></li>
+                      <li <?= $_GET['show'] == "active" ? " class=\"active\"" : "" ?>><a
+                                  href="user_bids.php?show=active&user=<?= $uname ?>">Active
+                              (<?= $active_count ?>) </a>
+                      </li>
+                      <li <?= $_GET['show'] == "won" ? " class=\"active\"" : "" ?>><a
+                                  href="user_bids.php?show=won&user=<?= $uname ?>">Won
+                              (<?= $won_count ?>) </a>
+                      </li>
+                      <li <?= $_GET['show'] == "lost" ? " class=\"active\"" : "" ?>><a
+                                  href="user_bids.php?show=lost&user=<?= $uname ?>">Lost
+                              (<?= $lost_count ?>) </a>
+                      </li>
                     </ul>
                   </nav>
                   <table class="table dashboardtable tablemyads">

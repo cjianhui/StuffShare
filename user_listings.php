@@ -104,7 +104,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="dashboard-wrapper">
                             <nav class="nav-table">
                               <?php
-                              date_default_timezone_set('Asia/Singapore');
                               $time_now = date('Y/m/d H:i:s');
                               $query = "SELECT item_id FROM item WHERE username='$uname'";
                               $all_ids = pg_fetch_all(pg_query($connection, $query));
@@ -126,18 +125,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               ?>
 
                                 <ul>
-                                    <li<?= empty($_GET['show']) ? " class=\"active\"" : "" ?>><a
+                                    <li <?= empty($_GET['show']) ? " class=\"active\"" : "" ?>><a
                                                 href="user_listings.php?user=<?= $uname ?>">All Listings
                                             (<?= $all_count ?>) </a></li>
-                                    <li<?= $_GET['show'] == "active" ? " class=\"active\"" : "" ?>><a
+                                    <li <?= $_GET['show'] == "active" ? " class=\"active\"" : "" ?>><a
                                                 href="user_listings.php?show=active&user=<?= $uname ?>">Active
                                             (<?= $active_count ?>) </a>
                                     </li>
-                                    <li<?= $_GET['show'] == "closed" ? " class=\"active\"" : "" ?>><a
+                                    <li <?= $_GET['show'] == "closed" ? " class=\"active\"" : "" ?>><a
                                                 href="user_listings.php?show=closed&user=<?= $uname ?>">Closed
                                             (<?= $closed_count ?>) </a>
                                     </li>
-                                    <li<?= $_GET['show'] == "rented" ? " class=\"active\"" : "" ?>><a
+                                    <li <?= $_GET['show'] == "rented" ? " class=\"active\"" : "" ?>><a
                                                 href="user_listings.php?show=rented&user=<?= $uname ?>">Rented
                                             (<?= $rented_count ?>) </a>
                                     </li>
@@ -195,7 +194,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                            src="./assets/img/items/<?= $row['img_src'] ?>" alt=""></td>
                                     <td data-title="Title">
                                         <h3><?= $row['item_name'] ?></h3>
-                                        <!-- <span>Ad ID: ng3D5hAMHPajQrM</span> -->
                                     </td>
                                     <td data-title="Category"><span class="adcategories"><?= $row['type'] ?></span></td>
                                     <td data-title="Ad Status">
