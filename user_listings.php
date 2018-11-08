@@ -180,7 +180,6 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     "WHERE i.item_id in (" . implode(",", $target_ids) . ") " .
                                     "GROUP BY i.img_src, i.item_name, i.type, i.start_price, i.item_id, b1.username, b1.bid_amount " .
                                     "ORDER BY i.time_created";
-                                //   echo $query;
 
                                   $result = pg_query($connection, $query);
 
