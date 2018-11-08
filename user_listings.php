@@ -86,6 +86,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     </div>
 </div>
 
+
 <div id="content" class="section-padding">
     <div class="container">
         <div class="row">
@@ -95,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           ?>
 
             <div class="col-sm-12 col-md-8 col-lg-9">
-                <div style="width:950px">
+                <div class="page-content">
                     <div class="inner-box">
                       <?= $flash ?>
                         <div class="dashboard-box">
@@ -181,13 +182,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     "WHERE i.item_id in (" . implode(",", $target_ids) . ") " .
                                     "GROUP BY i.img_src, i.item_name, i.type, i.start_price, i.item_id, b1.username, b1.bid_amount " .
                                     "ORDER BY i.time_created";
-                                  #echo $query;
 
                                   $result = pg_query($connection, $query);
 
-                                  for ($i = 0;
-                                  $i < pg_num_rows($result);
-                                  $i++) {
+                                  for ($i = 0; $i < pg_num_rows($result); $i++) {
                                   $row = pg_fetch_assoc($result);
                                   $row['bidders'] = $row['bidders'] ? $row['bidders'] : 0;
                                   ?>
@@ -195,18 +193,17 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                                            src="./assets/img/items/<?= $row['img_src'] ?>" alt=""></td>
                                     <td data-title="Title">
                                         <h3><?= $row['item_name'] ?></h3>
-                                        <!-- <span>Ad ID: ng3D5hAMHPajQrM</span> -->
                                     </td>
                                     <td data-title="Category"><span class="adcategories"><?= $row['type'] ?></span></td>
                                     <td data-title="Ad Status">
                                       <?php
 
                                       if (date('Y/m/d H:i:s', strtotime($row['bid_end'])) > $time_now) {
-                                        echo "<span class=\"adstatus adstatusactive\">active</span>";
+                                        echo "<span class=\"adstatus adstatussold\">active</span>";
                                       } elseif ($row['bidders'] == 0) {
                                         echo "<span class=\"adstatus adstatusdeleted\">closed</span>";
                                       } else {
-                                        echo "<span class=\"adstatus adstatusexpired\">rented</span>";
+                                        echo "<span class=\"adstatus adstatusactive\">rented</span>";
                                       }
                                       ?>
 
@@ -311,6 +308,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             </div>
         </div>
     </div>
+</div>
 </div>
 
 

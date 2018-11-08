@@ -1,3 +1,7 @@
+/*============================
+Insert Accounts
+============================*/
+
 INSERT INTO account VALUES('eldriclim','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3','user','Eldriclim',92733303,'eldriclim@yahoo.com');
 INSERT INTO account VALUES('cjianhui','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3','user','Cjianhui',92315620,'cjianhui@outlook.com');
 INSERT INTO account VALUES('marlene','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3','user','Marlene',97684103,'marlene@outlook.com');
@@ -66,4 +70,5 @@ INSERT INTO account VALUES('sharleen','a665a45920422f9d417e4867efdc4fb8a04a1f3ff
 INSERT INTO account VALUES('sixta','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3','user','Sixta',94653205,'sixta@hotmail.com');
 INSERT INTO account VALUES('bernarda','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3','user','Bernarda',99185599,'bernarda@yahoo.com');
 INSERT INTO account VALUES('kimberely','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3','user','Kimberely',99994248,'kimberely@gmail.com');
+INSERT INTO account VALUES('freida','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3','user','Freida',93082001,'freida@outlook.com');
 INSERT INTO account VALUES('admin','a665a45920422f9d417e4867efdc4fb8a04a1f3fff1fa07e998e86f7f7a27ae3','admin','Jan',93082001,'admin@outlook.com');
