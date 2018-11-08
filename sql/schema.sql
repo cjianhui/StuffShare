@@ -96,14 +96,8 @@ LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION next_highest_bid() RETURNS TRIGGER AS $next_highest_bid$
   DECLARE
-    target RECORD;
     curr_bid RECORD;
   BEGIN
-    SELECT i.item_id, i.bid_end FROM item i INTO target WHERE i.item_id = old.item_id;
-
-    IF target.bid_end < CURRENT_TIMESTAMP THEN
-      RAISE EXCEPTION 'Unable to delete closed bid';
-    END IF;
 
     FOR curr_bid IN
       SELECT b.bid_id
@@ -139,7 +133,7 @@ CREATE TRIGGER before_bid_insert BEFORE INSERT ON bid
 CREATE TRIGGER after_bid_insert AFTER INSERT ON bid
   FOR EACH ROW EXECUTE PROCEDURE update_highest_bid();
 
-CREATE TRIGGER before_bid_delete before DELETE ON bid
+CREATE TRIGGER before_bid_delete BEFORE DELETE ON bid
   FOR EACH ROW EXECUTE PROCEDURE check_open_bidding();
 
 CREATE TRIGGER after_bid_delete AFTER DELETE ON bid
