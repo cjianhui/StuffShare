@@ -99,75 +99,56 @@
 					<aside>
 						<div class="widget categories">
 							<h4 class="widget-title">All Categories</h4>
+							<?php
+								$query = "SELECT type, COUNT(*) FROM item GROUP BY type";
+								$result = pg_query($connection, $query);
+
+								for ($i = 0; $i < pg_num_rows($result); $i++) {
+										$row = pg_fetch_assoc($result);
+										${strtolower($row['type']). "_count"} = $row['count']; //dynamically assign category counts to variables
+								}
+							?>
 							<ul class="categories-list">
 								<li>
 									<a href="./listings.php?category=Electronics">
 										<i class="lni-dinner"></i>
-										Electronics <span class="category-counter">(<?php 
-											$query = "SELECT * FROM item WHERE type='Electronics' AND bid_end>'".date('Y/m/d H:i:s')."'";
-											$result = pg_query($connection,$query);
-											echo pg_num_rows($result);
-											?>)</span>
+										Electronics <span class="category-counter">(<?=	$electronics_count ? $electronics_count : 0 ?>)</span>
 									</a>
 								</li>
 								<li>
 									<a href="./listings.php?category=Tools">
 										<i class="lni-control-panel"></i>
-										Tools <span class="category-counter">(<?php 
-											$query = "SELECT * FROM item WHERE type='Tools' AND bid_end>'".date('Y/m/d H:i:s')."'";
-											$result = pg_query($connection,$query);
-											echo pg_num_rows($result);
-											?>)</span>
+										Tools <span class="category-counter">(<?= $tools_count ? $tools_count : 0 ?>)</span>
 									</a>
 								</li>
 								<li>
 									<a href="./listings.php?category=Appliances">
 										<i class="lni-github"></i>
-										Appliances <span class="category-counter">(<?php 
-											$query = "SELECT * FROM item WHERE type='Appliances' AND bid_end>'".date('Y/m/d H:i:s')."'";
-											$result = pg_query($connection,$query);
-											echo pg_num_rows($result);
-											?>)</span>
+										Appliances <span class="category-counter">(<?= $appliances_count ? $appliances_count : 0 ?>)</span>
 									</a>
 								</li>
 								<li>
 									<a href="./listings.php?category=Furniture">
 										<i class="lni-coffee-cup"></i>
-										Furniture <span class="category-counter">(<?php 
-											$query = "SELECT * FROM item WHERE type='Furniture' AND bid_end>'".date('Y/m/d H:i:s')."'";
-											$result = pg_query($connection,$query);
-											echo pg_num_rows($result);
-											?>)</span>
+										Furniture <span class="category-counter">(<?= $furniture_count ? $furniture_count : 0 ?>)</span>
 									</a>
 								</li>
 								<li>
 									<a href="./listings.php?category=Books">
 										<i class="lni-home"></i>
-										Books <span class="category-counter">(<?php 
-											$query = "SELECT * FROM item WHERE type='Books' AND bid_end>'".date('Y/m/d H:i:s')."'";
-											$result = pg_query($connection,$query);
-											echo pg_num_rows($result);
-											?>)</span>
+										Books <span class="category-counter">(<?= $books_count? $books_count : 0 ?>)</span>
 									</a>
 								</li>
 								<li>
 									<a href="./listings.php?category=Music">
 										<i class="lni-pencil"></i>
-										Music <span class="category-counter">(<?php 
-											$query = "SELECT * FROM item WHERE type='Music' AND bid_end>'".date('Y/m/d H:i:s')."'";
-											$result = pg_query($connection,$query);
-											echo pg_num_rows($result);
-											?>)</span>
+										Music <span class="category-counter">(<?= $music_count ? $music_count : 0 ?>)</span>
 									</a>
 								</li>
 								<li>
 									<a href="./listings.php?category=Sports">
 										<i class="lni-display"></i>
-										Sports <span class="category-counter">(<?php 
-											$query = "SELECT * FROM item WHERE type='Sports' AND bid_end>'".date('Y/m/d H:i:s')."'";
-											$result = pg_query($connection,$query);
-											echo pg_num_rows($result);
-											?>)</span>
+										Sports <span class="category-counter">(<?= $sports_count ? $sports_count : 0 ?>)</span>
 									</a>
 								</li>
 							</ul>
