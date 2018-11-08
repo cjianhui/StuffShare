@@ -45,8 +45,9 @@ Create Functions
 
 CREATE OR REPLACE FUNCTION update_highest_bid() RETURNS TRIGGER AS $update_highest_bid$
   BEGIN
-    UPDATE ITEM SET highest_bid_id = new.bid_id where item_id = new.item_id;
-    RAISE NOTICE 'Updated highest bid';
+    UPDATE item SET highest_bid_id = new.bid_id where item_id = new.item_id;
+
+    RAISE NOTICE 'Updated highest_bid_id to %', new.bid_id;
 
 	  RETURN new;
   END
@@ -60,7 +61,7 @@ CREATE OR REPLACE FUNCTION check_valid_bid() RETURNS TRIGGER AS $check_valid_bid
     SELECT i.highest_bid_id, i.bid_start, i.bid_end, i.username,
     CASE WHEN i.highest_bid_id IS NULL THEN i.start_price ELSE b.bid_amount END AS curr_bid_amt
     INTO STRICT target
-    FROM item i LEFT OUTER JOIN bid b on i.highest_bid_id = b.bid_id
+    FROM item i LEFT OUTER JOIN bid b ON i.highest_bid_id = b.bid_id
     WHERE i.item_id = new.item_id;
 
     IF new.time_created < target.bid_start OR target.bid_end < new.time_created THEN
@@ -71,11 +72,39 @@ CREATE OR REPLACE FUNCTION check_valid_bid() RETURNS TRIGGER AS $check_valid_bid
       RAISE EXCEPTION 'Min bid amount not met' USING HINT = 'Min. bid amount not met';
  	  END IF;
 
-    RAISE NOTICE 'Check success';
+    RAISE NOTICE 'Check bid success';
 
     RETURN new;
   END
 $check_valid_bid$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION next_highest_bid() RETURNS TRIGGER AS $next_highest_bid$
+  DECLARE
+    curr_bid RECORD;
+  BEGIN
+    FOR curr_bid IN
+      SELECT b.bid_id
+      FROM bid b
+      WHERE b.item_id = old.item_id AND b.bid_amount >= ALL(
+        SELECT b1.bid_amount FROM bid b1
+        WHERE b1.item_id=old.item_id
+      )
+    LOOP
+      UPDATE item SET highest_bid_id = curr_bid.bid_id
+      WHERE item_id = old.item_id;
+
+      RAISE NOTICE 'Updated highest_bid_id to %', curr_bid.bid_id;
+
+      RETURN old;
+    END LOOP;
+
+    UPDATE item SET highest_bid_id = NULL where item_id = old.item_id;
+    RAISE NOTICE 'Set highest_bid_id to NULL';
+
+    RETURN old;
+  END
+$next_highest_bid$
 LANGUAGE plpgsql;
 
 /*============================
@@ -87,3 +116,6 @@ CREATE TRIGGER before_bid_insert BEFORE INSERT ON bid
 
 CREATE TRIGGER after_bid_insert AFTER INSERT ON bid
   FOR EACH ROW EXECUTE PROCEDURE update_highest_bid();
+
+CREATE TRIGGER after_bid_delete AFTER DELETE ON bid
+  FOR EACH ROW EXECUTE PROCEDURE next_highest_bid();
