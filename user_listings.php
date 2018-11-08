@@ -27,6 +27,7 @@
 
 <?php
 session_start();
+$_SESSION['current_page'] = $_SERVER['REQUEST_URI'];
 include "connect.php";
 if (!isset($_SESSION['key'])) {
   header("Location: ./login.php");
@@ -95,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           ?>
 
             <div class="col-sm-12 col-md-8 col-lg-9">
-                <div class="page-content">
+                <div style="width:950px">
                     <div class="inner-box">
                       <?= $flash ?>
                         <div class="dashboard-box">
@@ -104,6 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                         <div class="dashboard-wrapper">
                             <nav class="nav-table">
                               <?php
+                              date_default_timezone_set('Asia/Singapore');
                               $time_now = date('Y/m/d H:i:s');
                               $query = "SELECT item_id FROM item WHERE username='$uname'";
                               $all_ids = pg_fetch_all(pg_query($connection, $query));
@@ -125,18 +127,18 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                               ?>
 
                                 <ul>
-                                    <li <?= empty($_GET['show']) ? " class=\"active\"" : "" ?>><a
+                                    <li<?= empty($_GET['show']) ? " class=\"active\"" : "" ?>><a
                                                 href="user_listings.php?user=<?= $uname ?>">All Listings
                                             (<?= $all_count ?>) </a></li>
-                                    <li <?= $_GET['show'] == "active" ? " class=\"active\"" : "" ?>><a
+                                    <li<?= $_GET['show'] == "active" ? " class=\"active\"" : "" ?>><a
                                                 href="user_listings.php?show=active&user=<?= $uname ?>">Active
                                             (<?= $active_count ?>) </a>
                                     </li>
-                                    <li <?= $_GET['show'] == "closed" ? " class=\"active\"" : "" ?>><a
+                                    <li<?= $_GET['show'] == "closed" ? " class=\"active\"" : "" ?>><a
                                                 href="user_listings.php?show=closed&user=<?= $uname ?>">Closed
                                             (<?= $closed_count ?>) </a>
                                     </li>
-                                    <li <?= $_GET['show'] == "rented" ? " class=\"active\"" : "" ?>><a
+                                    <li<?= $_GET['show'] == "rented" ? " class=\"active\"" : "" ?>><a
                                                 href="user_listings.php?show=rented&user=<?= $uname ?>">Rented
                                             (<?= $rented_count ?>) </a>
                                     </li>
@@ -151,7 +153,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     <th>Ad Status</th>
                                     <th>Price</th>
                                     <th>Bidders</th>
-                                    <th>Action</th>
+                                    <th style="padding-left: 40px">Action</th>
                                   <?php if ($is_owner) { ?>
                                       <th>Highest Bidder</th>
                                   <?php } ?>
@@ -234,8 +236,65 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                         </div>
                                     </td>
                                   <?php if ($is_owner) { ?>
+
                                       <td data-title="Highest">
-                                          <h3><?= $row['highest_bidder'] ? $row['highest_bidder'] : "No bidders!" ?></h3>
+                                          <?php if (isset($row['highest_bidder'])) {
+                                              ?>
+                                              <!-- User Contact Information Modal -->
+                                              <div class="modal fade" id="bidwinner<?php echo $i;?>" tabindex="-1" role="dialog" aria-labelledby="myModalLabel"
+                                                   aria-hidden="true">
+                                                  <?php
+                                                  $winner_username = pg_escape_string($row['highest_bidder']);
+                                                  $query = "SELECT full_name, email, phone FROM account where username='" . $winner_username . "'";
+                                                  $query_result = pg_query($connection, $query) or die('Query unsuccessful:' . pg_last_error());
+                                                  $details = pg_fetch_assoc($query_result);
+
+                                                  ?>
+                                                  <div class="modal-dialog h-100 d-flex flex-column justify-content-center my-0" role="document">
+                                                      <div class="modal-content">
+                                                          <div class="modal-header text-center">
+                                                              <span class="modal-title w-100 font-weight-bold" style="font-size: larger">Contact Information</span>
+                                                              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                                                  <span aria-hidden="true">&times;</span>
+                                                              </button>
+                                                          </div>
+
+                                                          <div class="modal-body mx-3">
+                                                              <div class="form-group">
+                                                                  <div class="input-icon">
+                                                                      <i class="lni-user">
+                                                                      </i>
+                                                                      <label class="control-label">Name</label>
+                                                                      <input type="text" id="username" name="username" class="form-control"
+                                                                             value="<?php echo $details['full_name']?>" readonly>
+                                                                  </div>
+                                                              </div>
+                                                              <div class="form-group">
+                                                                  <div class="input-icon">
+                                                                      <i class="lni-envelope">
+                                                                      </i>
+                                                                      <label class="control-label">Email</label>
+                                                                      <input type="text" class="form-control"
+                                                                             value="<?php echo $details['email']?>" readonly>
+                                                                  </div>
+                                                              </div>
+                                                              <div class="form-group">
+                                                                  <div class="input-icon">
+                                                                      <i class="lni-phone">
+                                                                      </i>
+                                                                      <label class="control-label">Phone</label>
+                                                                      <input type="text" class="form-control"
+                                                                             value="<?php echo $details['phone']?>" readonly>
+                                                                  </div>
+                                                              </div>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </div>
+
+                                           <span style="margin-left: -5px" class="tg-btn" data-toggle="modal" data-target="#bidwinner<?php echo $i;?>">
+                                                  <i class="lni-phone-handset"></i><?= $row['highest_bidder'] ?></span>
+                                          <?php } ?>
                                       </td>
                                   <?php } ?>
                                 </tr>

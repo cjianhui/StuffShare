@@ -13,7 +13,7 @@
           if (isset($_SESSION['key'])) {
               $username = pg_escape_string($connection, $_SESSION['key']);
           }
-          $current_page = $_SERVER['REQUEST_URI']
+          $current_page = $_SERVER['REQUEST_URI'];
           ?>
           
           <div class="navbar-header">

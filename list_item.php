@@ -21,11 +21,16 @@
     <link rel="stylesheet" type="text/css" href="./assets/css/main.css">
 
     <link rel="stylesheet" type="text/css" href="./assets/css/responsive.css">
+    <link rel="stylesheet" type="text/css" href="./assets/css/upload.css">
+    <link rel="stylesheet" type="text/css" href="./assets/css/fontawesome.min.css">
+
+
     <link rel="stylesheet" id="colors" href="./assets/css/green.css" type="text/css">
 </head>
 
 <?php
 session_start();
+$_SESSION['current_page'] = $_SERVER['REQUEST_URI'];
 include "connect.php";
 if (!isset($_SESSION['key'])) {
   header("Location: ./login.php");
@@ -64,7 +69,6 @@ if (!isset($_SESSION['key'])) {
                   VALUES('" . $item_name . "','" . $time_created . "','" . $price . "','" . $start_time . "','" . $end_time . "',
                         '" . $category . "','" . $desc . "','" . $img_name . "','" . $borrow_duration . "','" . $address . "',
                         '" . $username . "')";
-      // echo($query);
       $result = pg_query($connection, $query);
       $success_message = "<div class='alert alert-success text-center'><strong>Listing Created!</strong> Redirecting.. </div>";
 
@@ -89,10 +93,10 @@ include "header.php";
         <div class="row">
             <div class="col-md-12">
                 <div class="breadcrumb-wrapper">
-                    <h2 class="product-title">Profile Settings</h2>
+                    <h2 class="product-title">List Item</h2>
                     <ol class="breadcrumb">
-                        <li><a href="account-profile-setting.html#">Home /</a></li>
-                        <li class="current">Profile Settings</li>
+                        <li><a href="index.php">Home /</a></li>
+                        <li class="current">List Item</li>
                     </ol>
                 </div>
             </div>
@@ -188,35 +192,38 @@ include "header.php";
                                                placeholder="Describe your item" type="text">
                                     </div>
 
-                                    <label class="tg-fileuploadlabel" for="tg-photogallery">
-                                        <span>Drop files anywhere to upload</span>
-                                        <span>Or</span>
-                                        <span class="btn btn-common">Select Files</span>
-                                        <span>Maximum upload file size: 500 KB</span>
-                                        <input id="tg-photogallery" class="tg-fileinput" type="file" name="file"
-                                               accept="image/*">
-                                    </label>
+                                    <label class="control-label">Upload Image</label>
+                                    <div class="upload">
+                                        <div class="avatar-upload">
+                                            <div class="avatar-edit">
+                                                <input type='file' id="imageUpload" name="file" accept="image/*" />
+                                                <label for="imageUpload"></label>
+                                            </div>
+                                            <div class="avatar-preview">
+                                                <div id="imagePreview">
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                     <button class="btn btn-common" name="item_form" type="submit">Post Ad</button>
+                                </form>
                             </div>
                         </div>
                     </div>
-                    </form>
+
                 </div>
             </div>
         </div>
     </div>
 </div>
-</div>
-</div>
-</div>
-</div>
+
 
 
 <?php
 include "footer.php";
 ?>
 
-<a href="account-profile-setting.html#" class="back-to-top" style="display: none;">
+<a href="index.php#" class="back-to-top" style="display: none;">
     <i class="lni-chevron-up"></i>
 </a>
 
@@ -237,4 +244,20 @@ include "footer.php";
 <script src="./assets/js/main.js"></script>
 <script src="./assets/js/form-validator.min.js"></script>
 <script src="./assets/js/contact-form-script.min.js"></script>
-<script src="./assets/js/summernote.js"></script>
+
+<script>
+    function readURL(input) {
+        if (input.files && input.files[0]) {
+            var reader = new FileReader();
+            reader.onload = function(e) {
+                $('#imagePreview').css('background-image', 'url('+e.target.result +')');
+                $('#imagePreview').hide();
+                $('#imagePreview').fadeIn(650);
+            }
+            reader.readAsDataURL(input.files[0]);
+        }
+    }
+    $("#imageUpload").change(function() {
+        readURL(this);
+    });
+</script>

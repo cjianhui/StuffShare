@@ -120,7 +120,9 @@ if (!isset($_SESSION['key'])) {
                                     $bid_start = $row['bid_start'];
                                     $bid_end = $row['bid_end'];
                                     $type = $row["type"];
-
+                                    $query_item = "SELECT * FROM item WHERE item_id=" . $item_id;
+                                    $item_result = pg_query($connection, $query_item);
+                                    $details = pg_fetch_assoc($item_result);
 
                                     echo("
                                     <tr data-category=\"active\">
@@ -145,9 +147,63 @@ if (!isset($_SESSION['key'])) {
                                     </td>
                                     <td data-title=\"Action\">
                                         <div class=\"btns-actions\">
-                                            <a class=\"btn-action btn-view\" href=\"./listing_detail.php?id=$item_id\"><i class=\"lni-eye\"></i></a>
-                                            <a class=\"btn-action btn-edit\" href=\"/offermessages.html#\"><i class=\"lni-pencil\"></i></a>
-                                            <a class=\"btn-action btn-delete\" href=\"/offermessages.html#\"><i class=\"lni-trash\"></i></a>
+                                            <a class=\"btn-action btn-view\" data-toggle=\"modal\" data-target=\"#item_info$i\"><i class=\"lni-eye\"></i></a>
+                                            <!-- User Contact Information Modal -->
+                                              <div class=\"modal fade\" id=\"item_info$i\" tabindex=\"-1\" role=\"dialog\" aria-labelledby=\"myModalLabel\"
+                                                   aria-hidden=\"true\">
+                                                  
+                                                  <div class=\"modal-dialog d-flex flex-column justify-content-center my-0\" role=\"document\">
+                                                      <div class=\"modal-content\">
+                                                          <div class=\"modal-header text-center\">
+                                                              <span class=\"modal-title w-100 font-weight-bold\" style=\"font-size: larger\">Item Details</span>
+                                                              <button type=\"button\" class=\"close\" data-dismiss=\"modal\" aria-label=\"Close\">
+                                                                  <span aria-hidden=\"true\">&times;</span>
+                                                              </button>
+                                                          </div>
+
+                                                          <div class=\"modal-body mx-3\">
+                                                          <div class=\"item\" style=\"padding-bottom:10px;\" align=\"center\">
+                                                               <div class=\"product-img\">
+                                                                    <img style=\"border-radius:10px\" class=\"img-fluid\" width=\"250px\" height=\"200px\" src=\"./assets/img/items/{$details['img_src']}\" alt=\"\">
+                                                               </div>
+                                                          </div>
+                                                              <div class=\"form-group\">
+                                                                  <div class=\"input-icon\">
+                                                                      <i class=\"lni-tag\">
+                                                                      </i>
+                                                                      <label class=\"control-label\">Name</label>
+                                                                      <input type=\"text\" id=\"username\" name=\"username\" class=\"form-control\"
+                                                                             value=\"{$details['item_name']}\" readonly>
+                                                                  </div>
+                                                              </div>
+                                                              <div class=\"form-group\">
+                                                                  <div class=\"input-icon\">
+                                                                      <i class=\"lni-user\">
+                                                                      </i>
+                                                                      <label class=\"control-label\">Owner</label>
+                                                                      <input type=\"text\" class=\"form-control\"
+                                                                             value=\"{$details['username']}\" readonly>
+                                                                  </div>
+                                                              </div>
+                                                              <div class=\"form-group\">
+                                                                  <div class=\"input-icon\">
+                                                                      <i class=\"lni-files\">
+                                                                      </i>
+                                                                      <label class=\"control-label\">Description</label>
+                                                                      <textarea class=\"form-control\" readonly>{$details['description']}</textarea>
+                                                                  </div>
+                                                              </div>
+                                                              <div class=\"form-group\">
+                                                                  <div class=\"input-icon\">
+                                                                      <i class=\"lni-map-marker\"></i>
+                                                                      <label class=\"control-label\">Meetup Location</label>
+                                                                      <input type=\"text\" class=\"form-control\" readonly value=\"{$details['address']}\">
+                                                                  </div>
+                                                              </div>
+                                                          </div>
+                                                      </div>
+                                                  </div>
+                                              </div>
                                         </div>
                                     </td>
                                 </tr>");
@@ -186,6 +242,13 @@ if (!isset($_SESSION['key'])) {
         </div>
     </div>
 </div>
+
+
+<?php
+    $query_item = "SELECT * FROM item WHERE item_id=" . $current_item;
+    $item_result = pg_query($connection, $query_item);
+    $details = pg_fetch_assoc($item_result);
+?>
 
 <a href="/offermessages.html#" class="back-to-top" style="display: block;">
     <i class="lni-chevron-up"></i>

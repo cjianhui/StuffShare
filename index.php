@@ -21,6 +21,7 @@
 </head>
   <?php
     session_start();
+    $_SESSION['current_page'] = $_SERVER['REQUEST_URI'];
     include './connect.php';
 
     $query = "SELECT type, COUNT(*) FROM item GROUP BY type";

@@ -4,7 +4,6 @@
 <head>
     <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 
-
     <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 
     <link rel="stylesheet" type="text/css" href="./assets/css/bootstrap.min.css">
@@ -31,56 +30,39 @@ include "connect.php";
 if (!isset($_SESSION['key'])) {
   header("Location: ./login.php");
 } elseif (isset($_POST['item_form'])) {
-  $username = $_SESSION['key'];
+    $username = pg_escape_string($connection, $_POST['username']);
+    $fullname = pg_escape_string($connection, $_POST['fullname']);
+    $email = pg_escape_string($connection, $_POST['email']);
+    $phonenumber = (int)pg_escape_string($connection, $_POST['phonenumber']);
+    $role = $_POST['role'];
+    $password = pg_escape_string($connection, $_POST['password']);
 
-  $item_name = pg_escape_string($connection, $_POST['item_name']);
-  $category = pg_escape_string($connection, $_POST['category']);
-
-  $start_time = $_POST['bid_start'] === date("Y-m-d") ? date("Y-m-d H:i:s") : pg_escape_string($connection, $_POST['bid_start']) . " 00:00:00";
-  $end_time = pg_escape_string($connection, $_POST['bid_end']) . " 23:59:59";
-
-  $borrow_duration = $_POST['borrow_duration'];
-  $price = $_POST['price'];
-  $address = pg_escape_string($connection, $_POST['address']);
-  $desc = pg_escape_string($connection, $_POST['desc']);
-
-  $time_created = date("Y-m-d H:i:s");
-
-  $target_dir = './assets/img/items/';
-  $image_file_type = strtolower(pathinfo($_FILES["file"]["name"], PATHINFO_EXTENSION));
-  $img_name = time() . '.' . $image_file_type;
-  $target_dest = $target_dir . $img_name;
-
-  if ($end_time <= $start_time) {
-    $date_error_msg = "<div class='alert alert-danger text-center'><strong>Start date cannot be after end date!</strong> </div>";
-  } else if ($_FILES["file"]["size"] > 500000) {
-    $file_size_error_msg = "<div class='alert alert-danger text-center'><strong>File is too large!</strong> </div>";
-  } else if ($image_file_type !== "jpg" && $image_file_type !== "png" && $image_file_type !== "jpeg") {
-    $file_type_error_msg = "<div class='alert alert-danger text-center'><strong>Only JPG/JPEG/PNG supported!</strong> </div>";
-  } else {
-    if (move_uploaded_file($_FILES["file"]["tmp_name"], $target_dest)) {
-      // echo("File has been uploaded to " . $target_dest);
-      $query = "INSERT INTO item(item_name, time_created, start_price, bid_start, bid_end,
-                                  type, description, img_src, borrow_duration, address, username)
-                  VALUES('" . $item_name . "','" . $time_created . "','" . $price . "','" . $start_time . "','" . $end_time . "',
-                        '" . $category . "','" . $desc . "','" . $img_name . "','" . $borrow_duration . "','" . $address . "',
-                        '" . $username . "')";
-      // echo($query);
-      $result = pg_query($connection, $query);
-      $success_message = "<div class='alert alert-success text-center'><strong>Listing Created!</strong> Redirecting.. </div>";
-
-      $query_input = "SELECT item_id FROM item WHERE username='" . $username . "' AND time_created >= ALL(SELECT time_created FROM item WHERE username='" . $username . "')";
-      $input_result = pg_query($connection, $query_input);
-      $row = pg_fetch_assoc($input_result);
-
-      header("refresh:2; url=./listing_detail.php?id=" . $row['item_id']);
+    $username_query = "SELECT username FROM account where username='" . $username . "'";
+    $email_query = "SELECT email FROM account where email='" . $email . "'";
+    $username_result = pg_query($connection, $username_query);
+    $username_num_results = pg_num_rows($username_result);
+    $email_result = pg_query($connection, $email_query);
+    $email_num_results = pg_num_rows($email_result);
+    if ($username_num_results >= 1) {
+        $display = "<div class='alert alert-danger text-center'><strong>The username (" . $username . ") has already been taken</strong></div>";
+        unset($username);
+    } elseif ($email_num_results >= 1) {
+        $display = "<div class='alert alert-danger text-center'><strong>The email (" . $email . ") has already been taken</strong></div>";
+        unset($username);
     } else {
-      echo("File upload error");
-    }
-  }
-}
+        $signup_query = "insert into account( username, password, role, full_name, phone, email) values('" . $username . "','" . hash(sha256, $password) . "','". $role . "','" . $fullname . "','" . $phonenumber . "', '" . $email . "')";
+        $signup_result = pg_query($connection, $signup_query);
 
-include "header.php";
+        if ($signup_result) {
+            // Sign up successful
+            $display = "<div class='alert alert-success text-center'><strong>Account Created Successfully!</strong></div>";
+            header("refresh:2; url=./view_users.php");
+        } else {
+            $display = "<div class='alert alert-danger text-center'><strong>Something seems to be wrong, please try later</strong></div>";
+            unset($username);
+        }
+    }
+}
 
 ?>
 
@@ -90,10 +72,10 @@ include "header.php";
         <div class="row">
             <div class="col-md-12">
                 <div class="breadcrumb-wrapper">
-                    <h2 class="product-title">Profile Settings</h2>
+                    <h2 class="product-title">Create User</h2>
                     <ol class="breadcrumb">
-                        <li><a href="account-profile-setting.html#">Home /</a></li>
-                        <li class="current">Profile Settings</li>
+                        <li><a href="admin_dashboard.php#">Home /</a></li>
+                        <li class="current">Create User</li>
                     </ol>
                 </div>
             </div>
@@ -101,7 +83,7 @@ include "header.php";
     </div>
 </div>
 
-
+<?php echo $display ?>
 <div id="content" class="section-padding">
     <div class="container">
         <div class="row">
@@ -119,7 +101,7 @@ include "header.php";
                                 <h2 class="dashbord-title">Create a User</h2>
                             </div>
                             <div class="dashboard-wrapper">
-                                <form class="login-form" data-toggle="validator" role="form" action="signup.php" method="post">
+                                <form name='item_form' class="login-form" enctype='multipart/form-data' method="post" >
                                     <div class="form-group has-feedback">
                                         <div class="form-group">
                                             <div class="input-icon">
@@ -160,6 +142,16 @@ include "header.php";
                                             <div class="help-block with-errors">
                                             </div>
                                         </div>
+                                        <div class="form-group mb-3 tg-inputwithicon">
+                                            <label class="control-label">Role</label>
+                                            <div class="tg-select form-control">
+                                                <select name="role" required="">
+                                                    <option value="" hidden disabled selected>Select Role</option>
+                                                    <option value="user">User</option>
+                                                    <option value="admin">Admin</option>
+                                                </select>
+                                            </div>
+                                        </div>
                                         <div class="form-group">
                                             <div class="input-icon">
                                                 <label class="control-label">Password</label>
@@ -171,7 +163,7 @@ include "header.php";
                                         </div>
                                         <div class="form-group">
                                             <div class="input-icon">
-                                                <label class="control-label">Retype Password</label>
+                                                <label class="control-label">Confirm Password</label>
                                                 <input type="password" class="form-control" id="confirm_password"
                                                     data-match="#password" data-match-error="Whoops, these don't match"
                                                     placeholder="Retype Password" required>
@@ -182,7 +174,7 @@ include "header.php";
                                         <div class="form-group mb-3">
                                         </div>
                                         <div class="text-center">
-                                            <button class="btn btn-common log-btn" name="signup" type="submit">Create
+                                            <button class="btn btn-common log-btn" name="item_form" type="submit">Create
                                             </button>
                                         </div>
                                     </div>
@@ -195,14 +187,9 @@ include "header.php";
         </div>
     </div>
 </div>
-</div>
 
 
-<?php
-include "footer.php";
-?>
-
-<a href="account-profile-setting.html#" class="back-to-top" style="display: none;">
+<a href="create_user.php##" class="back-to-top" style="display: none;">
     <i class="lni-chevron-up"></i>
 </a>
 

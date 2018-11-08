@@ -30,13 +30,17 @@ include "connect.php";
 if (!isset($_SESSION['key'])) {
     header("Location: ./login.php");
 } else {
-
     $page_size = 5;
     $num_pages_shown = 3;
     $curr_start_number = 0;
+    if (isset($_GET["search"])) {
+        $search = $_GET["search"];
+        $query = "SELECT * FROM account 
+          WHERE LOWER(username) LIKE LOWER('%".$search."%') OR LOWER(full_name) LIKE LOWER('%".$search."%') ";
+    } else {
+        $query = "SELECT * FROM account";
+    }
     $query_params = parse_url($url, PHP_URL_QUERY);
-
-    $query = "SELECT * FROM account";
     $result = pg_query($connection, $query);
     $total_users = pg_num_rows($result);
     $total_num_pages = ceil($total_users / $page_size);
@@ -80,17 +84,23 @@ if (!isset($_SESSION['key'])) {
                         <div class="dashboard-box">
                             <span>
                                 <h2 class="dashbord-title">All Users</h2>
-                                <a class="tg-btn" href="./create_user.php">
-                                    <i class="lni-plus"></i>&nbsp;&nbsp;Create New User
-                                </a>
                             </span>
                         </div>
                         <div class="admin-filter">
+                                <form class="form-inline md-form mr-auto mb-2" method="GET">
+                                    <input class="form-control form-control-sm ml-3 w-50" name="search" type="text" placeholder="Search" aria-label="Search">
+                                    <button class="tg-btn" type="submit">Search</button>
+                                    <a class="tg-btn" href="./create_user.php">
+                                        <i class="lni-plus"></i>&nbsp;&nbsp;Create New User
+                                    </a>
+                                </form>
+                        </div>
+                        <div class="admin-filter">
                             <div class="short-name">
-						    <span>Showing (<?php if ($total_num_pages == 0) {
-                                echo "0";
+						    <span><?php if ($total_num_pages == 0) {
+                                echo "No such user present!";
                             } else {
-                                echo (1 + ($page_no - 1) * $page_size) . " - " . ($page_no * $page_size) . " out of " . $total_users . " total users)";
+                                echo "Showing (" . (1 + ($page_no - 1) * $page_size) . " - " . ($page_no * $page_size) . " out of " . $total_users . " total users)";
                             } ?></span>
                             </div>
                         </div>
@@ -109,8 +119,13 @@ if (!isset($_SESSION['key'])) {
                                 </thead>
                                 <tbody>
                                 <?php
-
-                                $query = "SELECT * FROM account LIMIT $page_size OFFSET $page_size*($page_no-1)";
+                                if (isset($_GET['search'])) {
+                                    $query = "SELECT * FROM account 
+          WHERE LOWER(username) LIKE LOWER('%".$search."%') OR LOWER(full_name) LIKE LOWER('%".$search."%') 
+          LIMIT $page_size OFFSET $page_size*($page_no-1)";
+                                } else {
+                                    $query = "SELECT * FROM account LIMIT $page_size OFFSET $page_size*($page_no-1)";
+                                }
                                 $result = pg_query($connection, $query);
 
                                 for ($i = 0; $i < min(6, pg_num_rows($result)); $i++) {
@@ -139,8 +154,7 @@ if (!isset($_SESSION['key'])) {
                                     </td>
                                     <td data-title=\"Action\">
                                         <div class=\"btns-actions\">
-                                            <a class=\"btn-action btn-edit\" href=\"/offermessages.html#\"><i class=\"lni-pencil\"></i></a>
-                                            <a class=\"btn-action btn-delete\" href=\"/offermessages.html#\"><i class=\"lni-trash\"></i></a>
+                                            <a class=\"btn-action btn-edit\" href=\"./edit_user.php?username=$username\"><i class=\"lni-pencil\"></i></a>
                                         </div>
                                     </td>
                                 </tr>");

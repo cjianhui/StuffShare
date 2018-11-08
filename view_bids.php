@@ -40,14 +40,29 @@ if (!isset($_SESSION['key'])) {
     $result = pg_query($connection, $query);
     $total_bids = pg_num_rows($result);
     $total_num_pages = ceil($total_bids / $page_size);
+
     if (isset($_GET['page_no'])) {
         $page_no = $_GET['page_no'];
     } else {
         $page_no = 1;
     }
+
+    if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+        $delete_item = "DELETE FROM bid WHERE bid_id=" . $_POST['delete_id'];
+        $delete = pg_query($connection, $delete_item);
+
+    if ($delete) {
+        $message = "<div class='alert alert-success text-center' role='alert'>Deletion successful!</div>";
+        header("refresh:1; url=./view_bids.php");
+    } else {
+        $message = "<div class='alert alert-danger text-center' role='alert'>Unable to delete item!</div>";
+    }
+    }
+
 }
 
 ?>
+
 
 <div class="page-header" style="background: url(assets/img/banner1.jpg);">
     <div class="container">
@@ -65,6 +80,7 @@ if (!isset($_SESSION['key'])) {
     </div>
 </div>
 
+<?php echo $message ?>
 <div id="content" class="section-padding">
     <div class="container">
         <div class="row">
@@ -104,44 +120,58 @@ if (!isset($_SESSION['key'])) {
                                 </thead>
                                 <tbody>
                                 <?php
-
+                                date_default_timezone_set('Asia/Singapore');
+                                $time_now = date('Y/m/d H:i:s');
                                 $query = "SELECT b.bid_id, b.time_created, b.bid_amount, b.username, b.item_id, i.item_name FROM bid b, item i where b.item_id = i.item_id LIMIT $page_size OFFSET $page_size*($page_no-1)";
                                 $result = pg_query($connection, $query);
 
                                 for ($i = 0; $i < min(6, pg_num_rows($result)); $i++) {
                                     $row = pg_fetch_assoc($result);
+                                    $bid_id = $row["bid_id"];
                                     $bidder = $row["username"];
                                     $item_id = $row['item_id'];
                                     $item_name = $row['item_name'];
                                     $bid_amount = $row['bid_amount'];
                                     $time_created = $row['time_created'];
 
+                                    $query_item = "SELECT bid_end FROM item where item_id=" . $item_id;
+                                    $item_result = pg_query($connection, $query_item);
+                                    $item_detail = pg_fetch_assoc($item_result);
+                                    $item_bid_end = $item_detail["bid_end"];
 
-                                    echo("
-                                    <tr data-category=\"active\">
-                                    <td data-title=\"Bidder\">
-                                        <h3>$bidder</h3>
+                                ?>
+
+                                    <tr data-category="active">
+                                    <td data-title="Bidder">
+                                        <h3><?php echo $bidder?></h3>
                                     </td>
-                                    <td data-title=\"Item Name\">$item_name</td>
-                                    <td data-title=\"Item Id\">
-                                        <h3>$item_id</h3>
+                                    <td data-title="Item Name"><?php echo $item_name?></td>
+                                    <td data-title="Item Id">
+                                        <h3><?php echo $item_id?></h3>
                                     </td>
-                                    <td data-title=\"Bid Amount\">
-                                        <h3>$bid_amount</h3>
+                                    <td data-title="Bid Amount">
+                                        <h3><?php echo $bid_amount?></h3>
                                     </td>
-                                    <td data-title=\"Time of Bid\">
-                                        <h3>$time_created</h3>
+                                    <td data-title="Time of Bid">
+                                        <h3><?php echo $time_created?></h3>
                                     </td>
-                                    <td data-title=\"Action\">
-                                        <div class=\"btns-actions\">
-                                            <a class=\"btn-action btn-view\" href=\"./listing_detail.php?id=$item_id\"><i class=\"lni-eye\"></i></a>
-                                            <a class=\"btn-action btn-edit\" href=\"/offermessages.html#\"><i class=\"lni-pencil\"></i></a>
-                                            <a class=\"btn-action btn-delete\" href=\"/offermessages.html#\"><i class=\"lni-trash\"></i></a>
+                                    <td data-title="Action">
+                                        <div class="btns-actions">
+                                            <?php
+                                            if ((date('Y/m/d H:i:s', strtotime($item_bid_end)) < $time_now)) {
+                                                ?>
+                                                <form method="POST" action="view_bids.php">
+                                                    <input type="hidden" name="delete_id" value="<?php echo $bid_id ?>"/>
+                                                    <button class="btn-action btn-delete lni-trash shadow-none"
+                                                            style="border-style: none; cursor: pointer"
+                                                            title="Delete Listing"></button>
+
+                                                </form>
+                                            <?php } ?>
                                         </div>
                                     </td>
-                                </tr>");
-                                }
-                                ?>
+                                </tr>
+                                <?php } ?>
                                 </tbody>
                             </table>
                             <?php
