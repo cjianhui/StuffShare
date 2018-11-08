@@ -139,7 +139,7 @@ if (!isset($_SESSION['key'])) {
                                     </td>
                                     <td data-title=\"Action\">
                                         <div class=\"btns-actions\">
-                                            <a class=\"btn-action btn-edit\" href=\"/offermessages.html#\"><i class=\"lni-pencil\"></i></a>
+                                            <a class=\"btn-action btn-edit\" href=\"./edit_user.php?username=$username\"><i class=\"lni-pencil\"></i></a>
                                             <a class=\"btn-action btn-delete\" href=\"/offermessages.html#\"><i class=\"lni-trash\"></i></a>
                                         </div>
                                     </td>

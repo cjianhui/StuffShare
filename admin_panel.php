@@ -41,7 +41,6 @@ if (!isset($_SESSION['key'])) {
         $new_email = pg_escape_string($connection, $_POST['email']);
         $new_phonenumber = pg_escape_string($connection, $_POST['phonenumber']);
         $new_password = pg_escape_string($connection, $_POST['password']);
-
         $query = "SELECT email FROM account where email='" . $new_email ."' AND username != '".$username."'";
         $result = pg_query($connection, $query);
         $num_results = pg_num_rows($result);
@@ -49,7 +48,7 @@ if (!isset($_SESSION['key'])) {
         if ($num_results >= 1) {
             $message = "<div class='alert alert-danger text-center'><strong>The email (" . $new_email . ") has already been taken</strong></div>";
         } else {
-            if(isset($new_password)) // if changing password
+            if(!empty($new_password)) // if changing password
             {
                 $update_query = "UPDATE account SET full_name='".$new_fullname."', email='".$new_email."', password='".hash(sha256, $new_password)."'
 			WHERE username = '".$username."'";
@@ -108,7 +107,7 @@ if (!isset($_SESSION['key'])) {
                         <div class="dashboard-box">
                             <h2 class="dashbord-title">Public Profile</h2>
                         </div>
-                        <form class="dashboard-wrapper" role="form" action="user_home.php" method="post">
+                        <form class="dashboard-wrapper" role="form" action="admin_panel.php" method="post">
                             <div class="form-group mb-3">
                                 <label class="control-label">Name</label>
                                 <input class="form-control input-md" name="fullname" value="<?php echo $row[0]?>" type="text">
@@ -137,7 +136,7 @@ if (!isset($_SESSION['key'])) {
     </div>
 </div>
 
-<a href="./user_home.php#" class="back-to-top" style="display: none;">
+<a href="./admin_panel.php#" class="back-to-top" style="display: none;">
     <i class="lni-chevron-up"></i>
 </a>
 
