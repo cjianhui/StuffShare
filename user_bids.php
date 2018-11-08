@@ -63,11 +63,11 @@
                 <div class="dashboard-box">
                     <?php
                     $time_now = date('Y/m/d H:i:s');
-                    $query = "SELECT item_id FROM bid WHERE username='$uname'";
+                    $query = "SELECT DISTINCT item_id FROM bid WHERE username='$uname'";
                     $all_ids = pg_fetch_all(pg_query($connection, $query));
                     $all_count = $all_ids ? count($all_ids) : 0;
 
-                    $query = "SELECT i.item_id FROM item i, bid b WHERE b.username='$uname' AND
+                    $query = "SELECT DISTINCT i.item_id FROM item i, bid b WHERE b.username='$uname' AND
                       i.item_id=b.item_id AND i.bid_end >'$time_now'";
                     $active_ids = pg_fetch_all(pg_query($connection, $query));
                     $active_count = $active_ids ? count($active_ids) : 0;
@@ -110,6 +110,7 @@
                         <th>Photo</th>
                         <th>Title</th>
                         <th>Category</th>
+                        <th>Ad Status</th>
                         <th>Bid Amount</th>
                         <th>Action</th>
                       </tr>
@@ -117,7 +118,26 @@
                     <tbody>
                       <tr data-category="active">
                       <?php
-                        $query = "SELECT * FROM item i, bid b WHERE b.username='".$uname."' AND b.item_id=i.item_id";
+                        switch ($_GET['show']) {
+                          case "active":
+                            $target_ids = array_map('current', $active_ids);
+                            break;
+                          case "won":
+                            $target_ids = array_map('current', $won_ids);
+                            break;
+                          case "lost":
+                            $target_ids = array_map('current', $lost_ids);
+                            break;
+                          default:
+                            $target_ids = array_map('current', $all_ids);
+                        }
+                        $query = "SELECT i.img_src, i.item_name, i.type, i.bid_end, i.item_id, x.maxprice FROM ( 
+                          SELECT item_id, MAX(bid_amount) AS maxprice
+                          FROM bid
+                          WHERE item_id IN (" . implode(",", $target_ids) . ") 
+                          GROUP BY item_id) as x
+                        INNER JOIN item i ON i.item_id=x.item_id";
+                        echo($query);
                         $result = pg_query($connection,$query);
                         for ($i=0; $i<pg_num_rows($result); $i++) {
                           $row = pg_fetch_assoc($result);
@@ -125,11 +145,23 @@
                           <td class="photo"><img class="img-fluid" src="./assets/img/items/<?= $row['img_src'];?>" alt=""></td>
                           <td data-title="Title">
                             <h3><?= $row['item_name'];?></h3>
-                            <!-- <span>Ad ID: ng3D5hAMHPajQrM</span> -->
                           </td>
                           <td data-title="Category"><span class="adcategories"><?= $row['type'];?></span></td>
-                          <td data-title="Price">
-                            <h3><?= $row['bid_amount'];?>$</h3>
+                          <td data-title="Ad Status">
+                            <?php
+
+                            if (date('Y/m/d H:i:s', strtotime($row['bid_end'])) > $time_now) {
+                              echo "<span class=\"adstatus adstatusactive\">active</span>";
+                            } elseif ($row['bidders'] == 0) {
+                              echo "<span class=\"adstatus adstatusdeleted\">closed</span>";
+                            } else {
+                              echo "<span class=\"adstatus adstatusexpired\">rented</span>";
+                            }
+                            ?>
+
+                          </td>
+                          <td data-title="Your Bid">
+                            <h3><?= $row['maxprice'];?>$</h3>
                           </td>
                           <td data-title="Action">
                             <div class="btns-actions">

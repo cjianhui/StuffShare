@@ -184,9 +184,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
                                   $result = pg_query($connection, $query);
 
-                                  for ($i = 0;
-                                  $i < pg_num_rows($result);
-                                  $i++) {
+                                  for ($i = 0; $i < pg_num_rows($result); $i++) {
                                   $row = pg_fetch_assoc($result);
                                   $row['bidders'] = $row['bidders'] ? $row['bidders'] : 0;
                                   ?>
