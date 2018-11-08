@@ -34,9 +34,14 @@ if (!isset($_SESSION['key'])) {
     $page_size = 5;
     $num_pages_shown = 3;
     $curr_start_number = 0;
+    if (isset($_GET["search"])) {
+        $search = $_GET["search"];
+        $query = "SELECT * FROM bid
+          WHERE LOWER(username) LIKE LOWER('%".$search."%')";
+    } else {
+        $query = "SELECT * FROM bid";
+    }
     $query_params = parse_url($url, PHP_URL_QUERY);
-
-    $query = "SELECT * FROM bid";
     $result = pg_query($connection, $query);
     $total_bids = pg_num_rows($result);
     $total_num_pages = ceil($total_bids / $page_size);
@@ -96,13 +101,18 @@ if (!isset($_SESSION['key'])) {
                             <h2 class="dashbord-title">All Bids</h2>
                         </div>
                         <div class="admin-filter">
+                            <form class="form-inline md-form mr-auto mb-2" method="GET">
+                                <input class="form-control form-control-sm ml-3 w-50" name="search" type="text" placeholder="Search Bidder" aria-label="Search">
+                                <button class="tg-btn" type="submit">Search</button>
+                            </form>
+                        </div>
+                        <div class="admin-filter">
                             <div class="short-name">
-						    <span>Showing (<?php if ($total_num_pages == 0) {
-                                    echo "0";
+						    <span><?php if ($total_num_pages == 0) {
+                                    echo "No bids found!";
                                 } else {
-                                    echo (1 + ($page_no - 1) * $page_size) . " - " . ($total_bids < $page_no*$page_size ? $total_bids : ($page_no * $page_size)) . " out of " . $total_bids . " total bids)";
+                                    echo "Showing (" . (1 + ($page_no - 1) * $page_size) . " - " . ($page_no * $page_size) . " out of " . $total_bids . " total bids)";
                                 } ?></span>
-                            </div>
                         </div>
 
                         <div class="dashboard-wrapper">
@@ -120,9 +130,14 @@ if (!isset($_SESSION['key'])) {
                                 </thead>
                                 <tbody>
                                 <?php
+                                if (isset($_GET['search'])) {
+                                    $query = "SELECT b.bid_id, b.time_created, b.bid_amount, b.username, b.item_id, i.item_name FROM bid b, item i where b.item_id = i.item_id AND LOWER(b.username) LIKE LOWER('%".$search."%') 
+                                    LIMIT $page_size OFFSET $page_size*($page_no-1)";
+                                } else {
+                                    $query = "SELECT b.bid_id, b.time_created, b.bid_amount, b.username, b.item_id, i.item_name FROM bid b, item i where b.item_id = i.item_id LIMIT $page_size OFFSET $page_size*($page_no-1)";
+                                }
                                 date_default_timezone_set('Asia/Singapore');
                                 $time_now = date('Y/m/d H:i:s');
-                                $query = "SELECT b.bid_id, b.time_created, b.bid_amount, b.username, b.item_id, i.item_name FROM bid b, item i where b.item_id = i.item_id LIMIT $page_size OFFSET $page_size*($page_no-1)";
                                 $result = pg_query($connection, $query);
 
                                 for ($i = 0; $i < min(6, pg_num_rows($result)); $i++) {
