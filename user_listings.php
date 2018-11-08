@@ -181,7 +181,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     "WHERE i.item_id in (" . implode(",", $target_ids) . ") " .
                                     "GROUP BY i.img_src, i.item_name, i.type, i.start_price, i.item_id, b1.username, b1.bid_amount " .
                                     "ORDER BY i.time_created";
-                                  echo $query;
+                                //   echo $query;
 
                                   $result = pg_query($connection, $query);
 
@@ -240,7 +240,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                     </td>
                                   <?php if ($is_owner) { ?>
                                       <td data-title="Highest">
-                                          <h3><?= $row['highest_bidder'] ?></h3>
+                                          <h3><?= $row['highest_bidder'] ? $row['highest_bidder'] : "No bidders!" ?></h3>
                                       </td>
                                   <?php } ?>
                                 </tr>
