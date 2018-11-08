@@ -112,8 +112,8 @@ if (!isset($_SESSION['key'])) {
                                     <th>Username</th>
                                     <th>Full Name</th>
                                     <th>Role</th>
-                                    <th>Phone</th>
                                     <th>Email</th>
+                                    <th>Phone</th>
                                     <th>Actions</th>
                                 </tr>
                                 </thead>
