@@ -137,7 +137,19 @@
                               <!-- <span>Ad ID: ng3D5hAMHPajQrM</span> -->
                             </td>
                             <td data-title="Category"><span class="adcategories"><?= $row['type'] ?></span></td>
-                            <td data-title="Ad Status"><span class="adstatus adstatusactive">active</span></td>
+                            <td data-title="Ad Status">
+                              <?php
+
+                              if (date('Y/m/d H:i:s', strtotime($row['bid_end'])) > date('Y/m/d H:i:s')) {
+                                echo "<span class=\"adstatus adstatussold\">active</span>";
+                              } elseif ($row['highest_bid_id'] == NULL) {
+                                echo "<span class=\"adstatus adstatusdeleted\">closed</span>";
+                              } else {
+                                echo "<span class=\"adstatus adstatusactive\">rented</span>";
+                              }
+                              ?>
+
+                            </td>
                             <td data-title="Price">
                               <h3><?= $row['start_price'] ?>$</h3>
                             </td>

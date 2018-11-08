@@ -137,7 +137,8 @@
                           WHERE item_id IN (" . implode(",", $target_ids) . ") 
                           GROUP BY item_id) as x
                         INNER JOIN item i ON i.item_id=x.item_id
-                        INNER JOIN bid b ON i.highest_bid_id=b.bid_id";
+                        INNER JOIN bid b ON i.highest_bid_id=b.bid_id
+                        ORDER BY i.time_created";
                         $result = pg_query($connection,$query);
                         for ($i=0; $i<pg_num_rows($result); $i++) {
                           $row = pg_fetch_assoc($result);

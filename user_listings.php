@@ -198,11 +198,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
                                       <?php
 
                                       if (date('Y/m/d H:i:s', strtotime($row['bid_end'])) > $time_now) {
-                                        echo "<span class=\"adstatus adstatusactive\">active</span>";
+                                        echo "<span class=\"adstatus adstatussold\">active</span>";
                                       } elseif ($row['bidders'] == 0) {
                                         echo "<span class=\"adstatus adstatusdeleted\">closed</span>";
                                       } else {
-                                        echo "<span class=\"adstatus adstatusexpired\">rented</span>";
+                                        echo "<span class=\"adstatus adstatusactive\">rented</span>";
                                       }
                                       ?>
 
