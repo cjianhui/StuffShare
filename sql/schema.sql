@@ -43,17 +43,6 @@ CREATE TABLE bid (
 Create Functions
 ============================*/
 
-CREATE OR REPLACE FUNCTION update_highest_bid() RETURNS TRIGGER AS $update_highest_bid$
-  BEGIN
-    UPDATE item SET highest_bid_id = new.bid_id where item_id = new.item_id;
-
-    RAISE NOTICE 'Updated highest_bid_id to %', new.bid_id;
-
-	  RETURN new;
-  END
-$update_highest_bid$
-LANGUAGE plpgsql;
-
 CREATE OR REPLACE FUNCTION check_valid_bid() RETURNS TRIGGER AS $check_valid_bid$
   DECLARE
     target RECORD;
@@ -77,6 +66,32 @@ CREATE OR REPLACE FUNCTION check_valid_bid() RETURNS TRIGGER AS $check_valid_bid
     RETURN new;
   END
 $check_valid_bid$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION update_highest_bid() RETURNS TRIGGER AS $update_highest_bid$
+  BEGIN
+    UPDATE item SET highest_bid_id = new.bid_id where item_id = new.item_id;
+
+    RAISE NOTICE 'Updated highest_bid_id to %', new.bid_id;
+
+	  RETURN new;
+  END
+$update_highest_bid$
+LANGUAGE plpgsql;
+
+CREATE OR REPLACE FUNCTION check_open_bidding() RETURNS TRIGGER AS $check_open_bidding$
+  DECLARE
+    target RECORD;
+  BEGIN
+    SELECT i.item_id, i.bid_end FROM item i INTO target WHERE i.item_id = old.item_id;
+
+    IF target.bid_end < CURRENT_TIMESTAMP THEN
+      RAISE EXCEPTION 'Unable to delete closed bid';
+    END IF;
+
+    RETURN old;
+  END
+$check_open_bidding$
 LANGUAGE plpgsql;
 
 CREATE OR REPLACE FUNCTION next_highest_bid() RETURNS TRIGGER AS $next_highest_bid$
@@ -123,6 +138,9 @@ CREATE TRIGGER before_bid_insert BEFORE INSERT ON bid
 
 CREATE TRIGGER after_bid_insert AFTER INSERT ON bid
   FOR EACH ROW EXECUTE PROCEDURE update_highest_bid();
+
+CREATE TRIGGER before_bid_delete before DELETE ON bid
+  FOR EACH ROW EXECUTE PROCEDURE check_open_bidding();
 
 CREATE TRIGGER after_bid_delete AFTER DELETE ON bid
   FOR EACH ROW EXECUTE PROCEDURE next_highest_bid();
