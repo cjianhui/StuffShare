@@ -80,38 +80,23 @@ $now = date('Y-m-d H:i:s');
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
-  if ($row['bid_end'] < $now) {
-    // Bid has closed
-    $flash = "<div class='alert alert-danger text-center' role='alert'>Bid has closed!</div>";
-
-  } elseif (empty($_POST['bid_amt'])) {
+  if (empty($_POST['bid_amt'])) {
     // Empty bid
     $flash = "<div class='alert alert-danger text-center' role='alert'>Bid amount not indicated!</div>";
 
-  } elseif ($_POST['bid_amt'] <= $curr_min_bid) {
-    // Min amount not met
-    $flash = "<div class='alert alert-danger text-center' role='alert'>Min. bid amount not met!</div>";
-
-  } elseif ($_SESSION['key'] == $row['username']) {
-    // Bid own item
-    $flash = "<div class='alert alert-danger text-center' role='alert'>Unable to bid own item</div>";
-
-  } elseif ($_POST['bid_amt'] > $curr_min_bid) {
-
+  } else {
     $insert_bid = "INSERT INTO bid VALUES(DEFAULT,'" . $now . "'," . $_POST['bid_amt'] . ",'" . $_SESSION['key'] . "'," . $_GET['id'] . ")";
     $write = pg_query($connection, $insert_bid);
 
     if ($write) {
       $flash = "<div class='alert alert-success text-center' role='alert'>Bid of $" . $_POST['bid_amt'] . " submitted!</div>";
     } else {
-      $flash = "<div class='alert alert-danger text-center' role='alert'>Invalid format submitted!</div>";
+      preg_match("/:.+/",pg_last_error($connection),$match);
+      $error_msg = ltrim($match[0], ':');
+      $flash = "<div class='alert alert-danger text-center' role='alert'>$error_msg</div>";
+
     }
-
-  } else {
-    $flash = "<div class='alert alert-danger text-center' role='alert'>Invalid format submitted!</div>";
   }
-
-  echo pg_last_error($connection);
 }
 ?>
 
