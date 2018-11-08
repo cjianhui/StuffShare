@@ -78,7 +78,12 @@ if (!isset($_SESSION['key'])) {
                 <div class="page-content">
                     <div class="inner-box">
                         <div class="dashboard-box">
-                            <h2 class="dashbord-title">All Users</h2>
+                            <span>
+                                <h2 class="dashbord-title">All Users</h2>
+                                <a class="tg-btn" href="./create_user.php">
+                                    <i class="lni-plus"></i>&nbsp;&nbsp;Create New User
+                                </a>
+                            </span>
                         </div>
                         <div class="admin-filter">
                             <div class="short-name">

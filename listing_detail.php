@@ -73,15 +73,32 @@ $curr_min_bid = empty($bids['max_bid']) ? $row['start_price'] : $bids[max_bid];
 ?>
 
 <?php
+
 $flash = "";
+date_default_timezone_set('Asia/Singapore');
+$now = date('Y-m-d H:i:s');
+
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-  if (empty($_POST['bid_amt'])) {
-    $flash = "<div class='alert alert-danger text-center' role='alert'>Invalid bid submitted!</div>";
+
+  if ($row['bid_end'] < $now) {
+    // Bid has closed
+    $flash = "<div class='alert alert-danger text-center' role='alert'>Bid has closed!</div>";
+
+  } elseif (empty($_POST['bid_amt'])) {
+    // Empty bid
+    $flash = "<div class='alert alert-danger text-center' role='alert'>Bid amount not indicated!</div>";
+
+  } elseif ($_POST['bid_amt'] <= $curr_min_bid) {
+    // Min amount not met
+    $flash = "<div class='alert alert-danger text-center' role='alert'>Min. bid amount not met!</div>";
+
+  } elseif ($_SESSION['key'] == $row['username']) {
+    // Bid own item
+    $flash = "<div class='alert alert-danger text-center' role='alert'>Unable to bid own item</div>";
 
   } elseif ($_POST['bid_amt'] > $curr_min_bid) {
-    date_default_timezone_set('Asia/Singapore');
 
-    $insert_bid = "INSERT INTO bid VALUES(DEFAULT,'" . date('d/m/Y H:i:s') . "'," . $_POST['bid_amt'] . ",'" . $_SESSION['key'] . "'," . $_GET['id'] . ")";
+    $insert_bid = "INSERT INTO bid VALUES(DEFAULT,'" . $now . "'," . $_POST['bid_amt'] . ",'" . $_SESSION['key'] . "'," . $_GET['id'] . ")";
     $write = pg_query($connection, $insert_bid);
 
     if ($write) {
@@ -90,12 +107,11 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
       $flash = "<div class='alert alert-danger text-center' role='alert'>Invalid format submitted!</div>";
     }
 
-  } elseif ($_POST['bid_amt'] <= $curr_min_bid) {
-    $flash = "<div class='alert alert-danger text-center' role='alert'>Min. bid amount not met!</div>";
-
   } else {
     $flash = "<div class='alert alert-danger text-center' role='alert'>Invalid format submitted!</div>";
   }
+
+  echo pg_last_error($connection);
 }
 ?>
 
@@ -163,11 +179,11 @@ $count = pg_fetch_assoc($count_result);
 
                                 <input name="username" type="hidden" value="<?= $row['username'] ?>"/>
                                 <input name="bid_amt" type="number" class="form-control"
-                                       min=<?= ceil($curr_min_bid) + 1 ?> placeholder="<?= ceil($curr_min_bid) + 1 ?>
+                                       min=<?= floor($curr_min_bid + 1) ?> placeholder="<?= floor($curr_min_bid + 1) ?>
                                        onwards">
                                 <span class="input-group-btn">
                                   <?php
-                                  if (date('d/m/Y H:i:s', strtotime($row['bid_end'])) < date('d/m/Y H:i:s')) {
+                                  if (date('Y/m/d H:i:s', strtotime($row['bid_end'])) < date('Y/m/d H:i:s')) {
                                     echo "<button class=\"btn btn-common btn-secondary\" type=\"submit\" disabled>Closed!</button>";
                                   } else {
                                     echo "<button class=\"btn btn-common btn-reply\" type=\"submit\">Bid It!</button>";
@@ -179,7 +195,8 @@ $count = pg_fetch_assoc($count_result);
                     </div>
 
                     <div class="advertisement mb-2">
-                        <strong>more from </strong><a href="user_listings.php?user=<?= $row['username'] ?>"><?= $row['username'] ?></a><strong>?</strong>
+                        <strong>more from </strong><a
+                                href="user_listings.php?user=<?= $row['username'] ?>"><?= $row['username'] ?></a><strong>?</strong>
                     </div>
                 </div>
             </div>

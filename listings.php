@@ -98,14 +98,6 @@
 			<div class="row">
 				<div class="col-lg-3 col-md-12 col-xs-12 page-sidebar">
 					<aside>
-						
-						<!-- <div class="widget widget_search">
-							<form role="search" id="search-form">
-								<input type="search" class="form-control" autocomplete="off" name="s" placeholder="Search..." id="search-input" value="">
-								<button type="submit" id="search-submit" class="search-btn"><i class="lni-search"></i></button>
-							</form>
-						</div> -->
-						
 						<div class="widget categories">
 							<h4 class="widget-title">All Categories</h4>
 							<ul class="categories-list">
@@ -113,7 +105,7 @@
 									<a href="./listings.php?category=Electronics">
 										<i class="lni-dinner"></i>
 										Electronics <span class="category-counter">(<?php 
-											$query = "SELECT * FROM item WHERE type='Electronics'";
+											$query = "SELECT * FROM item WHERE type='Electronics' AND bid_end>'".date('Y/m/d H:i:s')."'";
 											$result = pg_query($connection,$query);
 											echo pg_num_rows($result);
 											?>)</span>
@@ -123,7 +115,7 @@
 									<a href="./listings.php?category=Tools">
 										<i class="lni-control-panel"></i>
 										Tools <span class="category-counter">(<?php 
-											$query = "SELECT * FROM item WHERE type='Tools'";
+											$query = "SELECT * FROM item WHERE type='Tools' AND bid_end>'".date('Y/m/d H:i:s')."'";
 											$result = pg_query($connection,$query);
 											echo pg_num_rows($result);
 											?>)</span>
@@ -133,7 +125,7 @@
 									<a href="./listings.php?category=Appliances">
 										<i class="lni-github"></i>
 										Appliances <span class="category-counter">(<?php 
-											$query = "SELECT * FROM item WHERE type='Appliances'";
+											$query = "SELECT * FROM item WHERE type='Appliances' AND bid_end>'".date('Y/m/d H:i:s')."'";
 											$result = pg_query($connection,$query);
 											echo pg_num_rows($result);
 											?>)</span>
@@ -143,7 +135,7 @@
 									<a href="./listings.php?category=Furniture">
 										<i class="lni-coffee-cup"></i>
 										Furniture <span class="category-counter">(<?php 
-											$query = "SELECT * FROM item WHERE type='Furniture'";
+											$query = "SELECT * FROM item WHERE type='Furniture' AND bid_end>'".date('Y/m/d H:i:s')."'";
 											$result = pg_query($connection,$query);
 											echo pg_num_rows($result);
 											?>)</span>
@@ -153,7 +145,7 @@
 									<a href="./listings.php?category=Books">
 										<i class="lni-home"></i>
 										Books <span class="category-counter">(<?php 
-											$query = "SELECT * FROM item WHERE type='Books'";
+											$query = "SELECT * FROM item WHERE type='Books' AND bid_end>'".date('Y/m/d H:i:s')."'";
 											$result = pg_query($connection,$query);
 											echo pg_num_rows($result);
 											?>)</span>
@@ -163,7 +155,7 @@
 									<a href="./listings.php?category=Music">
 										<i class="lni-pencil"></i>
 										Music <span class="category-counter">(<?php 
-											$query = "SELECT * FROM item WHERE type='Music'";
+											$query = "SELECT * FROM item WHERE type='Music' AND bid_end>'".date('Y/m/d H:i:s')."'";
 											$result = pg_query($connection,$query);
 											echo pg_num_rows($result);
 											?>)</span>
@@ -173,7 +165,7 @@
 									<a href="./listings.php?category=Sports">
 										<i class="lni-display"></i>
 										Sports <span class="category-counter">(<?php 
-											$query = "SELECT * FROM item WHERE type='Sports'";
+											$query = "SELECT * FROM item WHERE type='Sports' AND bid_end>'".date('Y/m/d H:i:s')."'";
 											$result = pg_query($connection,$query);
 											echo pg_num_rows($result);
 											?>)</span>
@@ -196,13 +188,13 @@
 						<?php 
 							if ((!isset($_GET["category"]) || $_GET["category"] == "none") && (!isset($_GET["customword"]) || $_GET["customword"] == "")) {
 								// if no search query param
-								$query = "SELECT * FROM item";
+								$query = "SELECT * FROM item WHERE bid_end > '".date('Y/m/d H:i:s')."'";
 								$temp_result = pg_query($connection,$query);
 								$total_rows_from_query = pg_num_rows($temp_result);
 								$total_num_pages = ceil($total_rows_from_query/$page_size);
 								// echo $query;
 								// query for display; offset for pagination
-								$query = "SELECT * FROM item ORDER BY time_created DESC OFFSET $page_size*($page_no-1)";
+								$query = "SELECT * FROM item WHERE bid_end > '".date('Y/m/d H:i:s')."' ORDER BY time_created DESC OFFSET $page_size*($page_no-1)";
 								$result = pg_query($connection,$query);
 							}
 							else {
@@ -212,11 +204,13 @@
 								
 								if ($category != "none") {
 									$query_search = "SELECT * FROM item 
-										WHERE type='".$category."' AND (LOWER(description) LIKE LOWER('%".$customword."%') OR LOWER(item_name) LIKE LOWER('%".$customword."%'))";							
+										WHERE type='".$category."' AND (LOWER(description) LIKE LOWER('%".$customword."%') OR LOWER(item_name) LIKE LOWER('%".$customword."%'))
+										AND bid_end > '".date('Y/m/d H:i:s')."'";
 								}
 								else {
 									$query_search = "SELECT * FROM item 
-										WHERE LOWER(description) LIKE LOWER('%".$customword."%') OR LOWER(item_name) LIKE LOWER('%".$customword."%')";
+										WHERE LOWER(description) LIKE LOWER('%".$customword."%') OR LOWER(item_name) LIKE LOWER('%".$customword."%') 
+										AND bid_end > '".date('Y/m/d H:i:s')."'";
 								}
 								$temp_result = pg_query($connection,$query_search);
 								$total_rows_from_query = pg_num_rows($temp_result);
@@ -226,11 +220,13 @@
 								if ($category != "none") {
 									$query_search = "SELECT * FROM item 
 										WHERE type='".$category."' AND (LOWER(description) LIKE LOWER('%".$customword."%') OR LOWER(item_name) LIKE LOWER('%".$customword."%'))
+										AND bid_end > '".date('Y/m/d H:i:s')."'
 										ORDER BY time_created DESC LIMIT 6 OFFSET $page_size*($page_no-1)";
 									}
 								else {
 									$query_search = "SELECT * FROM item 
 										WHERE LOWER(description) LIKE LOWER('%".$customword."%') OR LOWER(item_name) LIKE LOWER('%".$customword."%')
+										AND bid_end > '".date('Y/m/d H:i:s')."'
 										ORDER BY time_created DESC LIMIT 6 OFFSET $page_size*($page_no-1)";
 								}
 								// echo $query_search;

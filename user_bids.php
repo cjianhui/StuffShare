@@ -40,7 +40,7 @@
             <div class="breadcrumb-wrapper">
               <h2 class="product-title">My Bids</h2>
               <ol class="breadcrumb">
-                <li><a href="/user_bids.html#">Home /</a></li>
+                <li>Home /</li>
                 <li class="current">My Bids</li>
               </ol>
             </div>
