@@ -117,7 +117,8 @@
                           <th>Action</th>
                         </tr>
                       </thead>
-                      <?php 
+                      <?php
+                      $time_now = date('Y/m/d H:i:s');
                       $query = "SELECT * FROM item WHERE username='$uname' ORDER BY time_created DESC LIMIT 5";
                       $result = pg_query($connection,$query);
                       for ($i=0; $i<min(pg_num_rows($result), 5); $i++) {
@@ -140,7 +141,7 @@
                             <td data-title="Ad Status">
                               <?php
 
-                              if (date('Y/m/d H:i:s', strtotime($row['bid_end'])) > date('Y/m/d H:i:s')) {
+                              if (date('Y/m/d H:i:s', strtotime($row['bid_end'])) > $time_now) {
                                 echo "<span class=\"adstatus adstatussold\">active</span>";
                               } elseif ($row['highest_bid_id'] == NULL) {
                                 echo "<span class=\"adstatus adstatusdeleted\">closed</span>";
@@ -155,9 +156,18 @@
                             </td>
                             <td data-title="Action">
                               <div class="btns-actions">
-                                <a class="btn-action btn-view" href="./dashboard.html#"><i class="lni-eye"></i></a>
-                                <a class="btn-action btn-edit" href="./dashboard.html#"><i class="lni-pencil"></i></a>
-                                <a class="btn-action btn-delete" href="./dashboard.html#"><i class="lni-trash"></i></a>
+                                <a class="btn-action btn-view" href="./listing_detail.php?id=<?= $row['item_id']; ?>"><i class="lni-eye"></i></a>
+                                <?php
+                                if ((date('Y/m/d H:i:s', strtotime($row['bid_end'])) > $time_now) && $uname==$row['username']) {
+                                  ?>
+                                    <form method="POST" action="user_listings.php?show=<?= $_GET['show'] ?>">
+                                        <input type="hidden" name="delete_id" value="<?= $row['item_id'] ?>"/>
+                                        <button class="btn-action btn-delete lni-trash shadow-none"
+                                                style="border-style: none; cursor: pointer"
+                                                title="Delete Listing"></button>
+
+                                    </form>
+                                <?php } ?>
                               </div>
                             </td>
                             <?php } ?>
