@@ -96,7 +96,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
           ?>
 
             <div class="col-sm-12 col-md-8 col-lg-9">
-                <div class="page-content">
+                <div style="width:950px">
                     <div class="inner-box">
                       <?= $flash ?>
                         <div class="dashboard-box">
