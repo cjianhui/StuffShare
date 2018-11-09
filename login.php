@@ -52,7 +52,7 @@ if (isset($_SESSION['key'])) {
 
     if ($num_results < 1) {
         unset($username);
-        $message = "<div class='alert alert-danger text-center'><strong>Wrong email or password!</strong> </div>";
+        $message = "<div class='alert alert-danger text-center'><strong>Wrong username or password!</strong> </div>";
     } else { // login success
         $_SESSION['key'] = $username;
 
