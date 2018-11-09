@@ -121,10 +121,10 @@ if (!isset($_SESSION['key'])) {
                                 <?php
                                 if (isset($_GET['search'])) {
                                     $query = "SELECT * FROM account 
-          WHERE LOWER(username) LIKE LOWER('%".$search."%') OR LOWER(full_name) LIKE LOWER('%".$search."%') 
+          WHERE LOWER(username) LIKE LOWER('%".$search."%') OR LOWER(full_name) LIKE LOWER('%".$search."%') ORDER BY username
           LIMIT $page_size OFFSET $page_size*($page_no-1)";
                                 } else {
-                                    $query = "SELECT * FROM account LIMIT $page_size OFFSET $page_size*($page_no-1)";
+                                    $query = "SELECT * FROM account ORDER BY username LIMIT $page_size OFFSET $page_size*($page_no-1)";
                                 }
                                 $result = pg_query($connection, $query);
 
