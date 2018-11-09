@@ -111,7 +111,7 @@
                         <th>Photo</th>
                         <th>Title</th>
                         <th>Category</th>
-                        <th>Ad Status</th>
+                        <th>Bid Status</th>
                         <th>Bid Amount</th>
                         <th>Action</th>
                       </tr>
@@ -167,7 +167,7 @@
 
                           </td>
                           <td data-title="Your Bid">
-                            <h3><?= $row['maxprice'];?>$</h3>
+                            <h3>$<?= $row['maxprice'];?></h3>
                           </td>
                           <td data-title="Action">
                             <div class="btns-actions">

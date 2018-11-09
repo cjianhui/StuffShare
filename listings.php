@@ -254,9 +254,6 @@
 										<div class="col-xs-12 col-sm-12 col-md-6 col-lg-6">
 											<div class="featured-box">
 												<figure>
-													<div class="icon">
-														<i class="lni-heart"></i>
-													</div>
 													<a href="./listing_detail.php?id=<?=$row['item_id']; ?>">
 														<img class="img-fluid" src="./assets/img/items/<?= $row['img_src']; ?>" alt="">
 													</a>

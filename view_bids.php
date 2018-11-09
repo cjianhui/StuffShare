@@ -124,6 +124,8 @@ if (!isset($_SESSION['key'])) {
                                     <th>Item Id</th>
                                     <th>Bid Amount</th>
                                     <th>Time of Bid</th>
+                                    <th>End of Bid</th>
+                                    <th>Bid Status</th>
                                     <th>Action</th>
 
                                 </tr>
@@ -165,10 +167,22 @@ if (!isset($_SESSION['key'])) {
                                         <h3><?php echo $item_id?></h3>
                                     </td>
                                     <td data-title="Bid Amount">
-                                        <h3><?php echo $bid_amount?></h3>
+                                        <h3>$<?php echo $bid_amount?></h3>
                                     </td>
                                     <td data-title="Time of Bid">
                                         <h3><?php echo $time_created?></h3>
+                                    </td>
+                                    <td data-title="Time of Bid">
+                                            <h3><?php echo $item_bid_end?></h3>
+                                    </td>
+                                    <td data-title=Bid Status">
+                                        <?php
+                                        if (date('Y/m/d H:i:s', strtotime($item_bid_end)) < $time_now) {
+                                            echo "<span class=\"adstatus adstatussold\">active</span>";
+                                            } else {
+                                            echo "<span class=\"adstatus adstatusexpired\">closed</span>";
+                                        }
+                                        ?>
                                     </td>
                                     <td data-title="Action">
                                         <div class="btns-actions">
