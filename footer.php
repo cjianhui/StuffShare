@@ -58,7 +58,7 @@
               </li>
             </ul>
             <ul class="footer-social">
-              <li><a class="github" href="https://github.com/CS2102-T11/stuffshare"><i class="lni-github"></i></a></li>
+              <li><a class="github" href="https://github.com/CS2102-T11/stuffshare" taget="_blank"><i class="lni-github"></i></a></li>
             </ul>
           </div>
         </div>
