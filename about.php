@@ -50,10 +50,13 @@
         <div class="row">
           <div class="col-md-6 col-lg-6 col-xs-12">
             <div class="about-wrapper">
-              <h2 class="intro-title">Lorem Ipsum Dolor Sit Amet, Consectetur Adipisicing Elit Sed Do</h2>
-              <p class="intro-desc">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Suscipit nostrum, doloremque quaerat sit tempora eius est reiciendis accusamus magnam quae. Explicabo dolore officia, iure a ullam aliquam nemo excepturi, repellat. uod ut delectus ad tempora.
+              <h2 class="intro-title">Welcome! We are the StuffShare team!</h2>
+              <p class="intro-desc">Share your items to get allowance for more!
               </p>
-              <p>Lorem ipsum dolor sit amet, consectetur adipisicing elit. Nisi laboriosam sit nam animi, distinctio maiores possimus! Suscipit officiis reiciendis vitae omnis eligendi? Tempora at ullam repudiandae, magnam nemo fuga omnis.</p>
+              <p> At StuffShare, we aim to provide a clean and friendly platform for bidders and auctioners to share their items with others. We ensure that all items can be safely shared.
+                  We help you to list items that you wish to share with others, and look for items you wish to borrow. You can navigate easily through our rich catalogue of product, 
+                  offer bids and enjoy the convenience of it all from the comfort of your own home.
+              </p>
             </div>
           </div>
           <div class="col-md-6 col-lg-6 col-xs-12">
@@ -70,61 +73,50 @@
           <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
             <div id="testimonials" class="owl-carousel owl-theme" style="opacity: 1; display: block;">
               <div class="owl-wrapper-outer"><div class="owl-wrapper" style="width: 5550px; left: 0px; display: block; transition: all 800ms ease 0s; transform: translate3d(-1110px, 0px, 0px);"><div class="owl-item" style="width: 555px;"><div class="item">
-                <div class="testimonial-item">
+                <div class="testimonial-item" style="height: 160px;">
                   <div class="img-thumb">
-                    <img src="./assets/img/img1.png" alt="">
+                    <img src="./assets/img/thumb1.PNG" alt="" style="height:80px; width:80px;">
                   </div>
                   <div class="content">
-                    <h2><a href="about.html#">John Doe</a></h2>
-                    <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo quidem, excepturi facere magnam illum, at accusantium doloremque odio.</p>
-                    <h3>Developer at of <a href="about.html#">xyz company</a></h3>
+                    <h2><a href="l#">Chan Jian Hui</a></h2>
+                    <p class="description">Developer</p>
+                    <!-- <h3>Developer</h3> -->
                   </div>
                 </div>
               </div></div><div class="owl-item" style="width: 555px;"><div class="item">
-                <div class="testimonial-item">
+                <div class="testimonial-item" style="height: 160px;">
                   <div class="img-thumb">
-                    <img src="./assets/img/img2.png" alt="">
+                    <img src="./assets/img/thumb3.PNG" alt="" style="height:80px; width:80px;">
                   </div>
                   <div class="content">
-                    <h2><a href="about.html#">Jessica</a></h2>
-                    <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo quidem, excepturi facere magnam illum, at accusantium doloremque odio.</p>
-                    <h3>Developer at of <a href="about.html#">xyz company</a></h3>
+                    <h2><a href="l#">Eldric Lim</a></h2>
+                    <p class="description">Developer</p>
+                    <!-- <h3>Developer</h3> -->
                   </div>
                 </div>
               </div></div><div class="owl-item" style="width: 555px;"><div class="item">
-                <div class="testimonial-item">
+                <div class="testimonial-item" style="height: 160px;">
                   <div class="img-thumb">
-                    <img src="./assets/img/img3.png" alt="">
+                    <img src="./assets/img/thumb2.PNG" alt="" style="height:80px; width:80px;">
                   </div>
                   <div class="content">
-                    <h2><a href="about.html#">Johnny Zeigler</a></h2>
-                    <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo quidem, excepturi facere magnam illum, at accusantium doloremque odio.</p>
-                    <h3>Developer at of <a href="about.html#">xyz company</a></h3>
+                    <h2><a href="#">Zachary Tang</a></h2>
+                    <p class="description">Developer</p>
+                    <!-- <h3>Developer</h3> -->
                   </div>
                 </div>
               </div></div><div class="owl-item" style="width: 555px;"><div class="item">
-                <div class="testimonial-item">
+                <div class="testimonial-item" style="height: 160px;">
                   <div class="img-thumb">
-                    <img src="./assets/img/img1.png" alt="">
+                    <img src="./assets/img/thumb4.PNG" alt="" style="height:80px; width:80px;">
                   </div>
                   <div class="content"> 
-                    <h2><a href="about.html#">John Doe</a></h2>
-                    <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo quidem, excepturi facere magnam illum, at accusantium doloremque odio.</p>
-                    <h3>Developer at of <a href="about.html#">xyz company</a></h3>
+                    <h2><a href="#">Marlene Koh</a></h2>
+                    <p class="description">Developer</p>
+                    <!-- <h3>Developer</h3> -->
                   </div>
                 </div>
-              </div></div><div class="owl-item" style="width: 555px;"><div class="item">
-                <div class="testimonial-item">
-                  <div class="img-thumb">
-                    <img src="./assets/img/img2.png" alt="">
-                  </div>
-                  <div class="content">
-                    <h2><a href="about.html#">Jessica</a></h2>
-                    <p class="description">Lorem ipsum dolor sit amet, consectetur adipisicing elit. Explicabo quidem, excepturi facere magnam illum, at accusantium doloremque odio.</p>
-                    <h3>Developer at of <a href="about.html#">xyz company</a></h3>
-                  </div>
-                </div>
-              </div></div></div></div>
+              </div>
               
               
               
@@ -136,7 +128,7 @@
       </section>
       
       
-      <section class="services section-padding">
+      <!-- <section class="services section-padding">
         <div class="container">
           <div class="row">
             
@@ -213,7 +205,7 @@
             </div>
           </div>
         </div>
-      </section>
+      </section> -->
       
       
       <?php
