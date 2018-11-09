@@ -194,7 +194,7 @@ if (!isset($_SESSION['key'])) {
                                                     <input type="hidden" name="delete_id" value="<?php echo $bid_id ?>"/>
                                                     <button class="btn-action btn-delete lni-trash shadow-none"
                                                             style="border-style: none; cursor: pointer"
-                                                            title="Delete Listing"></button>
+                                                            title="Delete Bids"></button>
 
                                                 </form>
                                             <?php } ?>
