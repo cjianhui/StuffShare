@@ -53,7 +53,7 @@
       owl.owlCarousel({
         navigation: false,
         pagination: true,
-        slideSpeed: 1000,
+        slideSpeed: 100,
         stopOnHover: true,
         autoPlay: true,
         items: 2,
@@ -70,7 +70,7 @@
     $("#new-products").owlCarousel({
         navigation: false,
         pagination: true,
-        slideSpeed: 1000,
+        slideSpeed: 100,
         stopOnHover: true,
         autoPlay: false,
         items: 4,
