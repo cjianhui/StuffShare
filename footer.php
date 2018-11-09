@@ -2,18 +2,29 @@
 <html>
 <footer>
   
-  <section class="footer-Content">
+  <section class="footer-Content" id="footer">
     <div class="container">
       <div class="row">
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 col-mb-12">
           <div class="widget">
             <h3 class="block-title">About Us</h3>
             <div class="textwidget">
-              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit. Quisque lobortis tincidunt est, et euismod purus suscipit quis. Etiam euismod ornare elementum. Sed ex est, consectetur eget facilisis sed, auctor ut purus.</p>
+              <p>We are Stuff Sharing Group 11! Enjoy the sharing experience with us - <i>Together we have more!</i></p>
             </div>
           </div>
         </div>
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 col-mb-12">
+          <div class="widget">
+            <h3 class="block-title">Our Team</h3>
+            <ul class="menu">
+              <li><a href="https://github.com/cjianhui" target="_blank">Chan Jian Hui</a></li>
+              <li><a href="https://github.com/eldriclim" target="_blank">Eldric Lim</a></li>
+              <li><a href="https://github.com/zacharytang" target="_blank">Zachary Tang</a></li>
+              <li><a href="https://github.com/marlenekoh" target="_blank">Marlene Koh</a></li>
+            </ul>
+          </div>
+        </div>
+        <!-- <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 col-mb-12">
           <div class="widget">
             <h3 class="block-title">Useful Links</h3>
             <ul class="menu">
@@ -24,8 +35,8 @@
               <li><a href="#">Using This Platform</a></li>
             </ul>
           </div>
-        </div>
-        <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 col-mb-12">
+        </div> -->
+        <!-- <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 col-mb-12">
           <div class="widget">
             <h3 class="block-title">Help &amp; Support</h3>
             <ul class="menu">
@@ -36,10 +47,10 @@
               <li><a href="#">Contact us</a></li>
             </ul>
           </div>
-        </div>
+        </div> -->
         <div class="col-lg-3 col-md-6 col-sm-6 col-xs-6 col-mb-12">
           <div class="widget">
-            <h3 class="block-title">Contact Information</h3>
+            <h3 class="block-title">Contact Us</h3>
             <ul class="contact-footer">
               <li>
                 <strong>Address :</strong><span>1900 Pico Blvd, New York</span>
@@ -48,7 +59,7 @@
                 <strong>Phone :</strong><span>+48 123 456 789</span>
               </li>
               <li>
-                <strong>E-mail :</strong><span><a href="#">info@example.com</a></span>
+                <strong>E-mail :</strong><span>info@example.com</span>
               </li>
             </ul>
             <ul class="footer-social">

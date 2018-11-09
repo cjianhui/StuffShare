@@ -38,7 +38,7 @@
                 </a>
               </li>
               <li class="nav-item <?php echo ($current_page == "/stuffshare/contact.html" ? "active" : "");?>">
-                <a class="nav-link" href="./contact.html">
+                <a class="nav-link" href="#footer">
                   Contact
                 </a>
               </li>
