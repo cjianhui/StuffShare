@@ -178,9 +178,9 @@ if (!isset($_SESSION['key'])) {
                                     </td>
                                     <td data-title=Bid Status">
                                         <?php
-                                        if (date('Y/m/d H:i:s', strtotime($item_bid_end)) < $time_now) {
+                                            if (date('Y/m/d H:i:s', strtotime($item_bid_end)) > $time_now) {
                                             echo "<span class=\"adstatus adstatussold\">active</span>";
-                                            } else {
+                                        } else {
                                             echo "<span class=\"adstatus adstatusexpired\">closed</span>";
                                         }
                                         ?>
@@ -188,7 +188,7 @@ if (!isset($_SESSION['key'])) {
                                     <td data-title="Action">
                                         <div class="btns-actions">
                                             <?php
-                                            if ((date('Y/m/d H:i:s', strtotime($item_bid_end)) < $time_now)) {
+                                            if ((date('Y/m/d H:i:s', strtotime($item_bid_end)) > $time_now)) {
                                                 ?>
                                                 <form method="POST" action="view_bids.php">
                                                     <input type="hidden" name="delete_id" value="<?php echo $bid_id ?>"/>
