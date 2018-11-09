@@ -154,12 +154,6 @@
 								</li>
 							</ul>
 						</div>
-						<div class="widget">
-							<h4 class="widget-title">Advertisement</h4>
-							<div class="add-box">
-								<img class="img-fluid" src="./img/css/img1.jpg" alt="">
-							</div>
-						</div>
 					</aside>
 				</div>
 				<div class="col-lg-9 col-md-12 col-xs-12 page-content">
