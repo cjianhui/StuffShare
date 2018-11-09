@@ -71,62 +71,69 @@
       <div class="container">
         <div class="row">
           <div class="col-lg-12 col-md-12 col-sm-12 col-xs-12">
-            <div id="testimonials" class="owl-carousel owl-theme" style="opacity: 1; display: block;">
-              <div class="owl-wrapper-outer"><div class="owl-wrapper" style="width: 5550px; left: 0px; display: block; transition: all 800ms ease 0s; transform: translate3d(-1110px, 0px, 0px);"><div class="owl-item" style="width: 555px;"><div class="item">
-                <div class="testimonial-item" style="height: 160px;">
-                  <div class="img-thumb">
-                    <img src="./assets/img/thumb1.PNG" alt="" style="height:80px; width:80px;">
-                  </div>
-                  <div class="content">
-                    <h2><a href="l#">Chan Jian Hui</a></h2>
-                    <p class="description">Developer</p>
-                    <!-- <h3>Developer</h3> -->
-                  </div>
-                </div>
-              </div></div><div class="owl-item" style="width: 555px;"><div class="item">
-                <div class="testimonial-item" style="height: 160px;">
-                  <div class="img-thumb">
-                    <img src="./assets/img/thumb3.PNG" alt="" style="height:80px; width:80px;">
-                  </div>
-                  <div class="content">
-                    <h2><a href="l#">Eldric Lim</a></h2>
-                    <p class="description">Developer</p>
-                    <!-- <h3>Developer</h3> -->
-                  </div>
-                </div>
-              </div></div><div class="owl-item" style="width: 555px;"><div class="item">
-                <div class="testimonial-item" style="height: 160px;">
-                  <div class="img-thumb">
-                    <img src="./assets/img/thumb2.PNG" alt="" style="height:80px; width:80px;">
-                  </div>
-                  <div class="content">
-                    <h2><a href="#">Zachary Tang</a></h2>
-                    <p class="description">Developer</p>
-                    <!-- <h3>Developer</h3> -->
-                  </div>
-                </div>
-              </div></div><div class="owl-item" style="width: 555px;"><div class="item">
-                <div class="testimonial-item" style="height: 160px;">
-                  <div class="img-thumb">
-                    <img src="./assets/img/thumb4.PNG" alt="" style="height:80px; width:80px;">
-                  </div>
-                  <div class="content"> 
-                    <h2><a href="#">Marlene Koh</a></h2>
-                    <p class="description">Developer</p>
-                    <!-- <h3>Developer</h3> -->
+            <div id="testimonials" style="opacity: 1; display: flex;">
+              <div style="width: 400px; margin: 5px;">
+                <div class="item">
+                  <div class="testimonial-item" style="height: 160px;">
+                    <div class="img-thumb">
+                      <img src="./assets/img/thumb1.PNG" alt="" style="height:80px; width:80px;">
+                    </div>
+                    <div class="content">
+                      <h2><a href="#">Chan Jian Hui</a></h2>
+                      <p class="description">Developer</p>
+                      <!-- <h3>Developer</h3> -->
+                    </div>
                   </div>
                 </div>
               </div>
-              
-              
-              
-              
-              <div class="owl-controls clickable"><div class="owl-pagination"><div class="owl-page"><span class=""></span></div><div class="owl-page active"><span class=""></span></div><div class="owl-page"><span class=""></span></div></div></div></div>
+              <div style="width: 400px; margin: 5px;">
+                <div class="item">
+                  <div class="testimonial-item" style="height: 160px;">
+                    <div class="img-thumb">
+                      <img src="./assets/img/thumb3.PNG" alt="" style="height:80px; width:80px;">
+                    </div>
+                    <div class="content">
+                      <h2><a href="#">Eldric Lim</a></h2>
+                      <p class="description">Developer</p>
+                      <!-- <h3>Developer</h3> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div style="width: 400px; margin: 5px;">
+                <div class="item">
+                  <div class="testimonial-item" style="height: 160px;">
+                    <div class="img-thumb">
+                      <img src="./assets/img/thumb2.PNG" alt="" style="height:80px; width:80px;">
+                    </div>
+                    <div class="content">
+                      <h2><a href="#">Zachary Tang</a></h2>
+                      <p class="description">Developer</p>
+                      <!-- <h3>Developer</h3> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <br/>
+              <div style="width: 400px; margin: 5px;">
+                <div class="item">
+                  <div class="testimonial-item" style="height: 160px;">
+                    <div class="img-thumb">
+                      <img src="./assets/img/thumb4.PNG" alt="" style="height:80px; width:80px;">
+                    </div>
+                    <div class="content">
+                      <h2><a href="#">Marlene Koh</a></h2>
+                      <p class="description">Developer</p>
+                      <!-- <h3>Developer</h3> -->
+                    </div>
+                  </div>
+                </div>
+              </div>
             </div>
           </div>
         </div>
-      </section>
-      
+      </div>
+    </section>
       
       <!-- <section class="services section-padding">
         <div class="container">
