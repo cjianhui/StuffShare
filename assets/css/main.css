@@ -1,7 +1,8 @@
 @import "https://fonts.googleapis.com/css?family=Quicksand:300,400,500,700";
 html{
-    overflow-x:hidden
+    overflow-x:hidden;
 }
+
 body{
     background:#fff;
     font-size:14px;
@@ -462,7 +463,9 @@ a.back-to-top:hover,a.back-to-top:focus{
     outline:none
 }
 .navbar{
-    padding:0
+    padding:0;
+
+    padding-right: 0px !important;
 }
 .navbar li.active a.nav-link{
     color:#fff!important;
@@ -3271,4 +3274,10 @@ footer .menu li a:hover{
     color:#00cc67
 }
 
+.modal-open[style] {
+    padding-right: 0 !important;
+}
 
+.modal-open-header[style] {
+    padding-right: 0 !important;
+}
