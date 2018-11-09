@@ -557,7 +557,8 @@ a.back-to-top:hover,a.back-to-top:focus{
 }
 .tg-btn:hover{
     color:#fff!important;
-    background:#02ab55
+    background:#02ab55;
+    cursor: pointer;
 }
 .tg-btn i{
     margin-right:3px
@@ -1968,7 +1969,8 @@ a.back-to-top:hover,a.back-to-top:focus{
     text-align:center;
     -webkit-transition:all .4s ease-in-out;
     -moz-transition:all .4s ease-in-out;
-    transition:all .4s ease-in-out
+    transition:all .4s ease-in-out;
+    cursor: pointer;
 }
 .btns-actions .btn-action i{
     display:block;
