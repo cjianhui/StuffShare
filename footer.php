@@ -9,7 +9,8 @@
           <div class="widget">
             <h3 class="block-title">About Us</h3>
             <div class="textwidget">
-              <p>We are Stuff Sharing Group 11! Enjoy the sharing experience with us - <i>Together we have more!</i></p>
+              <p>We are Stuff Sharing Group 11! <br>
+                  Enjoy the sharing experience with us - <i>Together we have more!</i></p>
             </div>
           </div>
         </div>
@@ -53,20 +54,11 @@
             <h3 class="block-title">Contact Us</h3>
             <ul class="contact-footer">
               <li>
-                <strong>Address :</strong><span>1900 Pico Blvd, New York</span>
-              </li>
-              <li>
-                <strong>Phone :</strong><span>+48 123 456 789</span>
-              </li>
-              <li>
-                <strong>E-mail :</strong><span>info@example.com</span>
+                <strong>Address :</strong><span>21 Lower Kent Ridge Rd, Singapore 119077</span>
               </li>
             </ul>
             <ul class="footer-social">
-              <li><a class="facebook" href="#"><i class="lni-facebook-filled"></i></a></li>
-              <li><a class="twitter" href="#"><i class="lni-twitter-filled"></i></a></li>
-              <li><a class="linkedin" href="#"><i class="lni-linkedin-fill"></i></a></li>
-              <li><a class="google-plus" href="#"><i class="lni-google-plus"></i></a></li>
+              <li><a class="github" href="https://github.com/CS2102-T11/stuffshare"><i class="lni-github"></i></a></li>
             </ul>
           </div>
         </div>

@@ -100,6 +100,7 @@ CREATE OR REPLACE FUNCTION next_highest_bid() RETURNS TRIGGER AS $next_highest_b
   BEGIN
 
     FOR curr_bid IN
+      -- query returns either 0 or 1 row
       SELECT b.bid_id
       FROM bid b
       WHERE b.item_id = old.item_id AND b.bid_amount >= ALL(

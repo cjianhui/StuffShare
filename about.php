@@ -79,7 +79,7 @@
                       <img src="./assets/img/thumb1.PNG" alt="" style="height:80px; width:80px;">
                     </div>
                     <div class="content">
-                      <h2><a href="#">Chan Jian Hui</a></h2>
+                      <h2><a href="https://github.com/cjianhui">Chan Jian Hui</a></h2>
                       <p class="description">Developer</p>
                       <!-- <h3>Developer</h3> -->
                     </div>
@@ -93,7 +93,7 @@
                       <img src="./assets/img/thumb3.PNG" alt="" style="height:80px; width:80px;">
                     </div>
                     <div class="content">
-                      <h2><a href="#">Eldric Lim</a></h2>
+                      <h2><a href="https://github.com/eldriclim">Eldric Lim</a></h2>
                       <p class="description">Developer</p>
                       <!-- <h3>Developer</h3> -->
                     </div>
@@ -107,7 +107,7 @@
                       <img src="./assets/img/thumb2.PNG" alt="" style="height:80px; width:80px;">
                     </div>
                     <div class="content">
-                      <h2><a href="#">Zachary Tang</a></h2>
+                      <h2><a href="https://github.com/zacharytang">Zachary Tang</a></h2>
                       <p class="description">Developer</p>
                       <!-- <h3>Developer</h3> -->
                     </div>
@@ -122,7 +122,7 @@
                       <img src="./assets/img/thumb4.PNG" alt="" style="height:80px; width:80px;">
                     </div>
                     <div class="content">
-                      <h2><a href="#">Marlene Koh</a></h2>
+                      <h2><a href="https://github.com/marlenekoh">Marlene Koh</a></h2>
                       <p class="description">Developer</p>
                       <!-- <h3>Developer</h3> -->
                     </div>

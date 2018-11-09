@@ -71,11 +71,27 @@
                         <div class="dashboardbox">
                           <div class="icon"><i class="lni-write"></i></div>
                           <div class="contentbox">
-                            <h2><a href="./dashboard.html#">Total Items Posted</a></h2>
-                            <h3><?php 
-                              $query = "SELECT * FROM item WHERE username='$uname'";
+                            <?php 
+                              $query = "SELECT item_id FROM item WHERE username='$uname'";
                               $result = pg_query($connection,$query);
-                              echo pg_num_rows($result);
+                              $all_ids = pg_fetch_all(pg_query($connection, $query));
+                              $total_items_posted = pg_num_rows($result);
+                              $target_ids = array_map('current', $all_ids);
+
+                              $query = "SELECT * FROM bid WHERE username='$uname'";
+                              $result = pg_query($connection,$query);
+                              $total_bids = pg_num_rows($result);
+
+                              $query = "SELECT b.bid_id ".
+                              "FROM item i LEFT OUTER JOIN bid b on i.item_id=b.item_id " .
+                              "WHERE i.item_id in (".implode(",", $target_ids).")";
+                              
+                              $result = pg_query($connection,$query);
+                              $total_bidders = pg_num_rows($result);
+                            ?>
+                            <h2><a href="<?='./user_listings.php?show=&user='.$uname?>">Total Items Posted</a></h2>
+                            <h3><?php 
+                              echo $total_items_posted
                               ?> Items Posted</h3>
                             </div>
                           </div>
@@ -84,9 +100,10 @@
                           <div class="dashboardbox">
                             <div class="icon"><i class="lni-add-files"></i></div>
                             <div class="contentbox">
-                              <!-- TODO -->
-                              <h2><a href="./dashboard.html#">Featured Items</a></h2> 
-                              <h3>80 Items Posted</h3>
+                              <h2><a href="./user_bids.php">My Bids</a></h2> 
+                              <h3><?php 
+                                echo $total_bids;
+                              ?> Bids Made</h3>
                             </div>
                           </div>
                         </div>
@@ -94,86 +111,15 @@
                           <div class="dashboardbox">
                             <div class="icon"><i class="lni-support"></i></div>
                             <div class="contentbox">
-                              <h2><a href="./dashboard.html#">Offers / Messages</a></h2>
-                              <h3>2040 Messages</h3>
+                              <h2><a href="<?='./user_listings.php?show=&user='.$uname?>">Offers / Messages</a></h2>
+                              <h3><?php 
+                                echo $total_bidders;
+                              ?> Offers</h3>
                             </div>
                           </div>
                         </div>
                       </div>
                     </div>
-                    <table class="table dashboardtable tablemyads">
-                      <thead>
-                        <tr>
-                          <!-- <th>
-                            <span class="checkbox">
-                              <input id="checkedall" type="checkbox" name="myads" value="checkall">
-                              <label for="checkedall"></label>
-                            </span>
-                          </th> -->
-                          <th>Photo</th>
-                          <th>Title</th>
-                          <th>Category</th>
-                          <th>Item Status</th>
-                          <th>Price</th>
-                          <th>Action</th>
-                        </tr>
-                      </thead>
-                      <?php
-                      $time_now = date('Y/m/d H:i:s');
-                      $query = "SELECT * FROM item WHERE username='$uname' ORDER BY time_created DESC LIMIT 5";
-                      $result = pg_query($connection,$query);
-                      for ($i=0; $i<min(pg_num_rows($result), 5); $i++) {
-                        $row = pg_fetch_assoc($result); 
-                        ?>
-                        <tbody>
-                          <tr data-category="active">
-                            <!-- <td>
-                              <span class="checkbox">
-                                <input id="adone" type="checkbox" name="myads" value="myadone">
-                                <label for="adone"></label>
-                              </span>
-                            </td> -->
-                            <td class="photo"><img class="img-fluid" src="./assets/img/items/<?= $row['img_src'] ?>" alt=""></td>
-                            <td data-title="Title">
-                              <h3><?= $row['item_name'] ?></h3>
-                              <!-- <span>Ad ID: ng3D5hAMHPajQrM</span> -->
-                            </td>
-                            <td data-title="Category"><span class="adcategories"><?= $row['type'] ?></span></td>
-                            <td data-title="Ad Status">
-                              <?php
-
-                              if (date('Y/m/d H:i:s', strtotime($row['bid_end'])) > $time_now) {
-                                echo "<span class=\"adstatus adstatussold\">active</span>";
-                              } elseif ($row['highest_bid_id'] == NULL) {
-                                echo "<span class=\"adstatus adstatusdeleted\">closed</span>";
-                              } else {
-                                echo "<span class=\"adstatus adstatusactive\">rented</span>";
-                              }
-                              ?>
-
-                            </td>
-                            <td data-title="Price">
-                              <h3><?= $row['start_price'] ?>$</h3>
-                            </td>
-                            <td data-title="Action">
-                              <div class="btns-actions">
-                                <a class="btn-action btn-view" href="./listing_detail.php?id=<?= $row['item_id']; ?>"><i class="lni-eye"></i></a>
-                                <?php
-                                if ((date('Y/m/d H:i:s', strtotime($row['bid_end'])) > $time_now) && $uname==$row['username']) {
-                                  ?>
-                                    <form method="POST" action="user_listings.php?show=<?= $_GET['show'] ?>">
-                                        <input type="hidden" name="delete_id" value="<?= $row['item_id'] ?>"/>
-                                        <button class="btn-action btn-delete lni-trash shadow-none"
-                                                style="border-style: none; cursor: pointer"
-                                                title="Delete Listing"></button>
-
-                                    </form>
-                                <?php } ?>
-                              </div>
-                            </td>
-                            <?php } ?>
-                            </tbody>
-                          </table>
                         </div>
                       </div>
                     </div>
