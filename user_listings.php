@@ -23,7 +23,7 @@
     <link rel="stylesheet" type="text/css" href="./assets/css/responsive.css">
     <link rel="stylesheet" id="colors" href="./assets/css/green.css" type="text/css">
 </head>
-<body data-gr-c-s-loaded="true">
+<body data-gr-c-s-loaded="true" class="modal-open-header">
 
 <?php
 session_start();
