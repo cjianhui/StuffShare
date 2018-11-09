@@ -37,6 +37,7 @@ if (!isset($_SESSION['key'])) {
 
     if (isset($_GET["search"])) {
         $search = $_GET["search"];
+        $search_params = "search=".$_GET["search"];
         $query = "SELECT * FROM item 
           WHERE LOWER(item_name) LIKE LOWER('%".$search."%') OR LOWER(username) LIKE LOWER('%".$search."%') ";
     } else {
@@ -89,7 +90,7 @@ if (!isset($_SESSION['key'])) {
                         </div>
                         <div class="admin-filter">
                             <form class="form-inline md-form mr-auto mb-2" method="GET">
-                                <input class="form-control form-control-sm ml-3 w-50" name="search" type="text" placeholder="Search Item or Item Owner" aria-label="Search">
+                                <input class="form-control form-control-sm ml-3 w-50" name="search" type="text" placeholder="Search Item Name or Item Owner" aria-label="Search">
                                 <button class="tg-btn" type="submit">Search</button>
                             </form>
                         </div>

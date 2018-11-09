@@ -35,6 +35,7 @@ if (!isset($_SESSION['key'])) {
     $curr_start_number = 0;
     if (isset($_GET["search"])) {
         $search = $_GET["search"];
+        $search_params = "search=".$_GET["search"];
         $query = "SELECT * FROM account 
           WHERE LOWER(username) LIKE LOWER('%".$search."%') OR LOWER(full_name) LIKE LOWER('%".$search."%') ";
     } else {
