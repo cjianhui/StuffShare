@@ -27,11 +27,23 @@
       include "connect.php";
       if (!isset($_SESSION['key'])) {
         header("Location: ./login.php");
+      } else {
+          $uname = $_SESSION['key'];
+          
+          if ($_SERVER['REQUEST_METHOD'] === 'POST') {
+            $delete_bid = "DELETE FROM bid WHERE bid_id=" . $_POST['delete_id'];
+            $delete = pg_query($connection, $delete_bid);
+
+            if ($delete) {
+                $message = "<div class='alert alert-success text-center' role='alert'>Deletion successful!</div>";
+                header("refresh:1; url=./user_bids.php");
+            } else {
+                $message = "<div class='alert alert-danger text-center' role='alert'>Unable to delete bid!</div>";
+            }
+          }
       }
-      $uname = $_SESSION['key'];
       include "header.php";
     ?>
-    
     
     <div class="page-header" style="background: url(assets/img/banner1.jpg);">
       <div class="container">
@@ -49,6 +61,7 @@
       </div>
     </div>
     
+<?php echo $message ?>
     <div id="content" class="section-padding">
       <div class="container">
         <div class="row">
@@ -141,8 +154,14 @@
                         INNER JOIN bid b ON i.highest_bid_id=b.bid_id
                         ORDER BY i.time_created";
                         $result = pg_query($connection,$query);
+                        
                         for ($i=0; $i<pg_num_rows($result); $i++) {
                           $row = pg_fetch_assoc($result);
+
+                          $bid_id_query = "SELECT bid_id FROM bid WHERE username='".$uname."' AND item_id=".$row['item_id']." ORDER BY time_created";
+                          $bid_id_result = pg_query($connection,$bid_id_query);
+                          $bid_id_row = pg_fetch_assoc($bid_id_result);
+
                           ?>
                           <td class="photo"><img class="img-fluid" src="./assets/img/items/<?= $row['img_src'];?>" alt=""></td>
                           <td data-title="Title">
@@ -172,6 +191,18 @@
                           <td data-title="Action">
                             <div class="btns-actions">
                               <a class="btn-action btn-view" title="View Listing" href="./listing_detail.php?id=<?= $row['item_id']; ?>"><i class="lni-eye"></i></a>
+                              <?php
+
+                              if ((date('Y/m/d H:i:s', strtotime($row['bid_end'])) > $time_now)) {
+                                    ?>
+                                    <form method="POST" action="user_bids.php">
+                                        <input type="hidden" name="delete_id" value="<?php echo $bid_id_row['bid_id'] ?>"/>
+                                        <button class="btn-action btn-delete lni-trash shadow-none"
+                                                style="border-style: none; cursor: pointer"
+                                                title="Delete Bid"></button>
+
+                                  </form>
+                              <?php } ?>
                             </div>
                           </td>
                         </tr>
