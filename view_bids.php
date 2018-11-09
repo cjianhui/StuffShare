@@ -36,6 +36,7 @@ if (!isset($_SESSION['key'])) {
     $curr_start_number = 0;
     if (isset($_GET["search"])) {
         $search = $_GET["search"];
+        $search_params = "search=".$search;
         $query = "SELECT * FROM bid
           WHERE LOWER(username) LIKE LOWER('%".$search."%')";
     } else {
@@ -53,14 +54,14 @@ if (!isset($_SESSION['key'])) {
     }
 
     if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-        $delete_item = "DELETE FROM bid WHERE bid_id=" . $_POST['delete_id'];
-        $delete = pg_query($connection, $delete_item);
+        $delete_bid = "DELETE FROM bid WHERE bid_id=" . $_POST['delete_id'];
+        $delete = pg_query($connection, $delete_bid);
 
     if ($delete) {
         $message = "<div class='alert alert-success text-center' role='alert'>Deletion successful!</div>";
         header("refresh:1; url=./view_bids.php");
     } else {
-        $message = "<div class='alert alert-danger text-center' role='alert'>Unable to delete item!</div>";
+        $message = "<div class='alert alert-danger text-center' role='alert'>Unable to delete bid!</div>";
     }
     }
 

@@ -217,30 +217,6 @@
 						?>
 						<span>Showing (<?= min(1+($page_no-1)*$page_size, $total_rows_from_query)." - ".min($page_no*$page_size, $total_rows_from_query); ?> products of <?= $total_rows_from_query ?> products)</span>
 						</div>
-						<div class="Show-item">
-							<span>Show Items</span>
-							<form class="woocommerce-ordering" method="post">
-								<label>
-									<!-- TODO: fix sort -->
-									<select name="order" class="orderby">
-										<option selected="selected" value="menu-order">6 items</option>
-										<option value="popularity">popularity</option>
-										<option value="popularity">Average ration</option>
-										<option value="popularity">newness</option>
-										<option value="popularity">price</option>
-									</select>
-								</label>
-							</form>
-						</div>
-						<ul class="nav nav-tabs">
-							<li class="nav-item">
-								<a class="nav-link" data-toggle="tab" href="category.html#grid-view"><i class="lni-grid"></i></a>
-							</li>
-							<li class="nav-item">
-								<a class="nav-link active" data-toggle="tab" href="category.html#list-view"><i class="lni-list"></i></a>
-							</li>
-						</ul>
-					</div>
 												
 					<div class="adds-wrapper">
 						<div class="tab-content">

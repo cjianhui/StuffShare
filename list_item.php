@@ -95,7 +95,7 @@ include "header.php";
                 <div class="breadcrumb-wrapper">
                     <h2 class="product-title">List Item</h2>
                     <ol class="breadcrumb">
-                        <li><a href="index.php">Home /</a></li>
+                        <li><a href="./index.php">Home /</a></li>
                         <li class="current">List Item</li>
                     </ol>
                 </div>
