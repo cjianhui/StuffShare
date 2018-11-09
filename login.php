@@ -29,7 +29,18 @@ session_start();
 include "connect.php";
 
 if (isset($_SESSION['key'])) {
-    header("Location: ./user_home.php");
+    $username = $_SESSION['key'];
+    $query = "SELECT username, role FROM account where username='".$username."'";
+    $result = pg_query($connection, $query);
+    $row = pg_fetch_assoc($result);
+
+    if ($row['role']=='admin') {
+        header("Location: ./admin_dashboard.php");
+    }
+    else {
+        header("Location: ./user_home.php");
+    }
+    
 } elseif (isset($_POST['login'])) {
     $username = pg_escape_string($connection, $_POST['username']);
     $password = pg_escape_string($connection, $_POST['password']);
