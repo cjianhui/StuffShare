@@ -125,7 +125,7 @@ $count = pg_fetch_assoc($count_result);
                                             <img class="img-fluid" src="./assets/img/items/<?= $row['img_src'] ?>"
                                                  alt="">
                                         </div>
-                                        <span class="price">$<?= $curr_min_bid ?>+</span>
+                                        <span class="price">$<?= $curr_min_bid+1 ?></span>
                                     </div>
                                 </div>
                             </div>
@@ -146,7 +146,7 @@ $count = pg_fetch_assoc($count_result);
 
                         <ul class="advertisement mb-4">
                             <li><strong>Opening bid: </strong><?= $row['bid_start'] ?></li>
-                            <li><strong>Closing bid: </strong><?= $row['bid_end'] ?></li>
+                            <li><strong>Closing bid: </strong><?= explode(" ",$row['bid_end'])[0] ?></li>
                         </ul>
                     </div>
 
