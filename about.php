@@ -35,7 +35,7 @@
             <div class="breadcrumb-wrapper">
               <h2 class="product-title">About Us</h2>
               <ol class="breadcrumb">
-                <li><a href="about.html#">Home /</a></li>
+                <li><a href="./index.php">Home /</a></li>
                 <li class="current">About Us</li>
               </ol>
             </div>

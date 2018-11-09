@@ -53,7 +53,7 @@ include "header.php";
                 <div class="breadcrumb-wrapper">
                     <h2 class="product-title">Item Details</h2>
                     <ol class="breadcrumb">
-                        <li><a href="/ads-details.html#">Home /</a></li>
+                        <li><a href="./index.php">Home /</a></li>
                         <li class="current">Item Details</li>
                     </ol>
                 </div>
