@@ -101,7 +101,7 @@
 						<div class="widget categories">
 							<h4 class="widget-title">All Categories</h4>
 							<?php
-								$query = "SELECT type, COUNT(*) FROM item GROUP BY type";
+								$query = "SELECT type, COUNT(*) FROM item WHERE bid_end > '".date('Y/m/d H:i:s')."' GROUP BY type";
 								$result = pg_query($connection, $query);
 
 								for ($i = 0; $i < pg_num_rows($result); $i++) {
