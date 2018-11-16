@@ -21,7 +21,7 @@ https://bitnami.com/tag/postgresql
 5. Login to your postgres server with the credentials you entered during installation. Click `SQL` on the top left corner. Copy all the contents from `schema.sql` and paste it into the window and click `Execute`. This will create the neccessary tables for this website.
 5. You can now access this website via this URL: `localhost:<your-port-number>/stuffshare`.
 
-# Deploying to Heroku
+## Deploying to Heroku
 1. Register for a Heroku account and install [Heroku CLI](https://devcenter.heroku.com/articles/heroku-cli)
 2. Login to heroku: `heroku login`
 3. Create heroku project: `heroku create`
